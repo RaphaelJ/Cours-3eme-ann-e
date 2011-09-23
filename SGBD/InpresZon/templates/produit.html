@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block titre %}{% block titre-page %}
+    {% if recherche %}
+        
+    {% else %}    
+        Catalogue
+    {% endif %}
+{% endblock %}{% endblock %}
+
+{% block contenu %}
+    <ul>
+    {% for p in produits %}
+        <li><a href="{{ url produit p.ean }}">
+            {{ p.titre|escape }} -
+            Prix: {{ p.prix|escape }} {{ p.devise|escape }}
+        </a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}

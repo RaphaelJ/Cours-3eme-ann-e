@@ -1,22 +1,22 @@
 [
     {
-        "model": "site.Pays",
+        "model": "be.Pays",
         "pk": 1,
         "fields": { "nom": "Grande Bretagne" }
     },
     {
-        "model": "site.Pays",
+        "model": "be.Pays",
         "pk": 2,
         "fields": { "nom": "France" }
     },
     {
-        "model": "site.Pays",
+        "model": "be.Pays",
         "pk": 4,
         "fields": { "nom": "Belgique" }
     },
 
     {
-        "model": "site.Utilisateur",
+        "model": "be.Utilisateur",
         "pk": 1,
         "fields": {
             "login": "John",
@@ -33,20 +33,10 @@
     },
 
     {
-        "model": "site.Artiste",
+        "model": "be.Livre",
         "pk": 1,
         "fields": {
-            "nom": "Lennon",
-            "prenom": "john",
-            "nationalite": "Anglais"
-        }
-    },
-
-    {
-        "model": "site.Editeur",
-        "pk": 1,
-        "fields": {
-            "nom": "Universal Music"
+            ""
         }
     }
 ]

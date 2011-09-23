@@ -58,7 +58,7 @@ class Produit(models.Model):
         ('EN', "Anglais"),
     )
     
-    #ean = models.BigIntegerField(primary_key=True)
+    ean = models.BigIntegerField(primary_key=True)
     titre = models.CharField(max_length=40)
     description = models.TextField()
     langue = models.CharField(max_length=2, choices=LANGUES)
@@ -73,7 +73,7 @@ class Produit(models.Model):
 
 class Livre(Produit):
     isbn = models.CharField(max_length=13, primary_key=True)
-    auteur = models.ManyToManyField('Artiste', related_name="livres")
+    auteurs = models.ManyToManyField('Artiste', related_name="livres")
     editeur = models.ForeignKey('Editeur', related_name="livres")
     
     reliure = models.CharField(max_length=40)

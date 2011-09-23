@@ -94,6 +94,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'be.urls'
 
+FIXTURE_DIRS = ('fixtures/', )
+
 TEMPLATE_DIRS = (
     '../templates'
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".

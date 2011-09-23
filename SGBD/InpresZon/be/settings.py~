@@ -94,6 +94,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'be.urls'
 
+FIXTURE_DIRS = ('fixtures/', )
+
 TEMPLATE_DIRS = (
     '../templates'
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -113,7 +115,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     
-    InpresZon.site,
+    'InpresZon.site',
 )
 
 # A sample logging configuration. The only tangible logging
