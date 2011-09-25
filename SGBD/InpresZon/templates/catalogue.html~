@@ -1,19 +1,23 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block titre %}{% block titre-page %}
     {% if recherche %}
-        Rechercher « {{ recherche }} » dans le catalogue
+        {% blocktrans %}
+            Rechercher « {{ recherche }} » dans le catalogue
+        {% endblocktrans %}
     {% else %}    
-        Catalogue
+        {% trans "Catalogue" %}
     {% endif %}
 {% endblock %}{% endblock %}
 
 {% block contenu %}
     <ul>
     {% for p in produits %}
-        <li><a href="{{ url produit p.id }}">
-            {{ p.titre|escape }} -
-            Prix: {{ p.prix|escape }} {{ p.devise|escape }}
+        <li><a href="{% url produit p.ean %}">
+            {% blocktrans with titre=p.titre|escape prix=p.prix|escape devise=p.devise|escape %}
+                {{ titre }} - {{ prix }} {{ devise }}
+            {% endblocktrans %}
         </a></li>
     {% endfor %}
     </ul>

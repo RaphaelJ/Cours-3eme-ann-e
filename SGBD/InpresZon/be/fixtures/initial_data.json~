@@ -48,39 +48,5 @@
         "fields": {
             "nom": "Universal Music"
         }
-    },
-
-    {
-        "model": "site.Produit",
-        "pk": 1,
-        "fields": {
-            "titre": "Imagine",
-            "description": "Imagine",
-            "langue": "EN",
-            "prix": 12,
-            "devise": "EUR",
-            "auteurs": [1],
-            "label": 1,
-            "support": "CD",
-            "disques": 1,
-            "publication": "1980-05-03"
-        }
-    },
-
-    {
-        "model": "site.Musique",
-        "pk": 1,
-        "fields": {
-            "titre": "Imagine",
-            "description": "Imagine",
-            "langue": "EN",
-            "prix": 12,
-            "devise": "EUR",
-            "auteurs": [1],
-            "label": 1,
-            "support": "CD",
-            "disques": 1,
-            "publication": "1980-05-03"
-        }
     }
 ]

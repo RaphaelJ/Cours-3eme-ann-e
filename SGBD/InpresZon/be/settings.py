@@ -23,7 +23,7 @@ DATABASES = {
 
 TIME_ZONE = 'Europe/Brussels'
 
-LANGUAGE_CODE = 'fr-BE'
+LANGUAGE_CODE = 'fr_FR'
 
 SITE_ID = 1
 
@@ -104,11 +104,11 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
+    #'django.contrib.auth',
+    #'django.contrib.contenttypes',
+    #'django.contrib.sessions',
+    #'django.contrib.sites',
+    #'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
@@ -117,6 +117,12 @@ INSTALLED_APPS = (
     
     'InpresZon.site',
 )
+
+AUTHENTICATION_BACKENDS = (
+    'InpresZon.site.auth_backend.PLSQLBackend',
+)
+
+SESSION_ENGINE = 'InpresZon.site.session_backend'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block titre %}{% block titre-page %}
+    {% trans "Connexion" %}
+{% endblock %}{% endblock %}
+
+{% block contenu %}
+    <form action="" method="post">
+        {{ form.as_ul }}
+        {% csrf_token %}
+        <input type="submit" />
+    </form>
+{% endblock %}

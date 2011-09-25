@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,6 +8,11 @@
     <link type="text/css" rel="stylesheet" href="" media="all" />
 </head>
 <body>
+    <ul class="menu">
+        <li><a href="{% url catalogue %}">{% trans "Catalogue" %}</a></li>
+        <li><a href="{% url caddie %}">{% trans "Caddie" %}</a></li>
+    </ul>
+
     <h1>{% block titre-page %}{% endblock %}</h1>
     
     {% block contenu %}{% endblock %}

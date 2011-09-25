@@ -1,45 +1,47 @@
 # -*- coding: UTF-8 -*-
 
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 DEVISES = (
-    ('USD', "dollars américains"),
-    ('EUR', "euros"),
-    ('GBP', "livres sterling"),
+    ('USD', _(u"dollars américains")),
+    ('EUR', _(u"euros")),
+    ('GBP', _(u"livres sterling")),
 )
 
 MODES_PAIEMENT = (
-    ("CRED", "Carte de crédit"),
-    ("BANQ", "Virement bancaire"),
+    ("CRED", _(u"Carte de crédit")),
+    ("BANQ", _(u"Virement bancaire")),
 )
 
 MODES_LIVRAISON = (
-    ("TRAN", "Paquet postal"),
-    ("ENTR", "Réception à l'entrepôt'"),
+    ("TRAN", _(u"Paquet postal")),
+    ("ENTR", _(u"Réception à l'entrepôt'")),
 )
 
 # Utilisateurs
 
 class Utilisateur(models.Model):
-    login = models.CharField(max_length=40, primary_key=True)
-    mot_de_passe = models.CharField(max_length=40)
+    login = models.CharField(max_length=30, primary_key=True)
+    mot_de_passe = models.CharField(max_length=64) # SHA-1 + sel
     email = models.EmailField(unique=True)
+    admin = models.BooleanField(default=False)
     
-    nom = models.CharField(max_length=40)
-    prenom = models.CharField(max_length=40)
+    nom = models.CharField(max_length=30)
+    prenom = models.CharField(max_length=30)
     date_inscription = models.DateTimeField(auto_now_add=True)
     
-    adresse = models.CharField(max_length=255, null=True)
-    ville = models.CharField(max_length=40, null=True)
-    code_postal = models.CharField(max_length=10, null=True)
-    pays = models.ForeignKey('Pays', related_name="utilisateurs", null=True)
+    adresse = models.CharField(max_length=255, blank=True)
+    ville = models.CharField(max_length=30, blank=True)
+    code_postal = models.CharField(max_length=10, blank=True)
+    pays = models.ForeignKey('Pays', related_name="utilisateurs", blank=True)
 
     mode_paiement = models.CharField(
-        max_length=4, choices=MODES_PAIEMENT, null=True
+        max_length=4, choices=MODES_PAIEMENT, blank=True
     )
     
     mode_livraison = models.CharField(
-        max_length=4, choices=MODES_LIVRAISON, null=True
+        max_length=4, choices=MODES_LIVRAISON, blank=True
     )  
     
     caddie = models.ManyToManyField('Produit', through='CaddieProduit')
@@ -47,19 +49,34 @@ class Utilisateur(models.Model):
     class Meta:
         ordering = ['login']
 
+class Session(models.Model):
+    """
+    Stoque les information sur une session d'un visiteur.
+    Les données sont stockées dans un dictionnaire sérialisé et sont
+    accessibles via une clé génerée et stockée dans un cookie sur le navigateur
+    du visiteur.
+    """
+    cle = models.CharField(max_length=40, primary_key=True)
+    donnees = models.TextField()
+    expiration = models.DateTimeField(db_index=True)
+
 class Pays(models.Model):
-    nom = models.CharField(max_length=40, primary_key=True)
+    nom = models.CharField(max_length=30, primary_key=True)
 
 # Catalogue
+
+LIVRE = "LIVRE"
+FILM = "FILM"
+MUSIQUE = "MUSIQUE"
     
 class Produit(models.Model):
     LANGUES = (
-        ('FR', "Français"),
-        ('EN', "Anglais"),
+        ('FR', _(u"Français")),
+        ('EN', _(u"Anglais")),
     )
     
     ean = models.BigIntegerField(primary_key=True)
-    titre = models.CharField(max_length=40)
+    titre = models.CharField(max_length=30)
     description = models.TextField()
     langue = models.CharField(max_length=2, choices=LANGUES)
     
@@ -71,65 +88,81 @@ class Produit(models.Model):
     class Meta:
         ordering = ['titre']
 
+    @property
+    def type_produit(self):
+        try:
+            self.livre
+            return LIVRE
+        except:
+            try:
+                self.film
+                return FILM
+            except:
+                try:
+                    self.musique
+                    return MUSIQUE
+                except:
+                    return None
+
 class Livre(Produit):
-    isbn = models.CharField(max_length=13, primary_key=True)
+    isbn = models.CharField(max_length=13, unique=True)
     auteurs = models.ManyToManyField('Artiste', related_name="livres")
     editeur = models.ForeignKey('Editeur', related_name="livres")
     
-    reliure = models.CharField(max_length=40)
+    reliure = models.CharField(max_length=30)
     pages = models.IntegerField(null=True)
     publication = models.DateField(null=True)
     num_edition = models.IntegerField(null=True)
     
 class Film(Produit):   
     SUPPORTS = (
-        ('DVD', "DVD"),
-        ('BLR', "Blue-Ray"),
-        ('NUM', "En ligne (numérique)"),
-        ('AUT', "Autre"),
+        ('DVD', u"DVD"),
+        ('BLR', u"Blue-Ray"),
+        ('NUM', _(u"En ligne (contenu numérique)")),
+        ('AUT', _(u"Autre")),
     )
     
     NOTATIONS = (
-        ('G', "Tout public"),
-        ('PG', "Surveillance parentale recommandée"),
-        ('PG-13', "13 ans ou plus"),
-        ('R', "Enfants de moins de 17 ans accompagnés"),
-        ('NC-17', "17 ans ou plus"),
+        ('G', _(u"Tout public")),
+        ('PG', _(u"Surveillance parentale recommandée")),
+        ('PG-13', _(u"13 ans ou plus")),
+        ('R', _(u"Enfants de moins de 17 ans accompagnés")),
+        ('NC-17', _(u"17 ans ou plus")),
     )
     
     acteurs = models.ManyToManyField('Artiste', related_name="films_acteur")
     realisateurs = models.ManyToManyField('Artiste', related_name="films_realisateur")
     studio = models.ForeignKey('Editeur', related_name="films")
     
-    support = models.CharField(max_length=4, choices=SUPPORTS, null=True)
+    support = models.CharField(max_length=4, choices=SUPPORTS, blank=True)
     disques = models.IntegerField(null=True)
-    notation = models.CharField(max_length=5, choices=NOTATIONS, null=True)
+    notation = models.CharField(max_length=5, choices=NOTATIONS, blank=True)
     duree = models.IntegerField(null=True) # Durée du film en secondes
 
 class Musique(Produit):
     SUPPORTS = (
-        ('CD', "CD audio"),
-        ('NUM', "En ligne (numérique)"),
-        ('AUT', "Autre"),
+        ('CD', _(u"CD audio")),
+        ('NUM', _(u"En ligne (numérique)")),
+        ('AUT', _(u"Autre")),
     )
     
     auteurs = models.ManyToManyField('Artiste', related_name="musiques")
     label = models.ForeignKey('Editeur', related_name="musiques", null=True)
     
-    support = models.CharField(max_length=4, choices=SUPPORTS, null=True)
+    support = models.CharField(max_length=4, choices=SUPPORTS, blank=True)
     disques = models.IntegerField(null=True)
     publication = models.DateField(null=True)
 
 class Artiste(models.Model):
-    nom = models.CharField(max_length=40)
-    prenom = models.CharField(max_length=40)
+    nom = models.CharField(max_length=30)
+    prenom = models.CharField(max_length=30, blank=True)
     nationalite = models.ForeignKey(Pays, related_name="artistes")
         
     class Meta:
         ordering = ['prenom', 'nom']
 
 class Editeur(models.Model):
-    nom = models.CharField(max_length=40)
+    nom = models.CharField(max_length=30)
     
     class Meta:
         ordering = ['nom']
@@ -146,7 +179,7 @@ class CaddieProduit(models.Model):
         
 class ListeEnvies(models.Model):
     utilisateur = models.ForeignKey('Utilisateur')
-    nom = models.CharField(max_length=40)  
+    nom = models.CharField(max_length=30)
     produits = models.ManyToManyField(Produit, through='ListeEnviesProduit')
     
 class ListeEnviesProduit(models.Model):
@@ -163,15 +196,15 @@ class Commande(models.Model):
     
     # Adresse de livraison
     adresse = models.CharField(max_length=255)
-    ville = models.CharField(max_length=40)
+    ville = models.CharField(max_length=30)
     code_postal = models.CharField(max_length=10)
     pays = models.ForeignKey(Pays, related_name="livraisons")
     
 class CommandePaquet(models.Model):
     STATUS = (
-        ('ATTEN', "En attente du transporteur"),
-        ('TRANS', "En cours de livraison"),
-        ('LIVRE', "Livraison effectuée"),
+        ('ATTEN', _(u"En attente du transporteur")),
+        ('TRANS', _(u"En cours de livraison")),
+        ('LIVRE', _(u"Livraison effectuée")),
     )
     
     commande = models.ForeignKey('Commande')
