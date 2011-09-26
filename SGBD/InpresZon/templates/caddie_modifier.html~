@@ -2,13 +2,15 @@
 {% load i18n %}
 
 {% block titre %}{% block titre-page %}
-    {% trans "Connexion" %}
+    {% blocktrans with titre=caddie_produit.produit.titre %}
+        Modifier un article ({{ titre }})
+    {% endblocktrans %}
 {% endblock %}{% endblock %}
 
 {% block contenu %}
     <form action="" method="post">
         {{ form.as_ul }}
         {% csrf_token %}
-        <input type="submit" value="{% trans "Connexion" %}" />
+        <input type="submit" value="{% trans "Modifier" %}" />s
     </form>
 {% endblock %}

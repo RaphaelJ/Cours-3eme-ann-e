@@ -21,6 +21,9 @@ MODES_LIVRAISON = (
 
 # Utilisateurs
 
+class Pays(models.Model):
+    nom = models.CharField(max_length=30, primary_key=True)
+
 class Utilisateur(models.Model):
     login = models.CharField(max_length=30, primary_key=True)
     mot_de_passe = models.CharField(max_length=64) # SHA-1 + sel
@@ -34,7 +37,7 @@ class Utilisateur(models.Model):
     adresse = models.CharField(max_length=255, blank=True)
     ville = models.CharField(max_length=30, blank=True)
     code_postal = models.CharField(max_length=10, blank=True)
-    pays = models.ForeignKey('Pays', related_name="utilisateurs", blank=True)
+    pays = models.ForeignKey(Pays, related_name="utilisateurs", blank=True)
 
     mode_paiement = models.CharField(
         max_length=4, choices=MODES_PAIEMENT, blank=True
@@ -60,10 +63,21 @@ class Session(models.Model):
     donnees = models.TextField()
     expiration = models.DateTimeField(db_index=True)
 
-class Pays(models.Model):
-    nom = models.CharField(max_length=30, primary_key=True)
-
 # Catalogue
+
+class Artiste(models.Model):
+    nom = models.CharField(max_length=30)
+    prenom = models.CharField(max_length=30, blank=True)
+    nationalite = models.ForeignKey(Pays, related_name="artistes")
+        
+    class Meta:
+        ordering = ['prenom', 'nom']
+
+class Editeur(models.Model):
+    nom = models.CharField(max_length=30, primary_key=True)
+    
+    class Meta:
+        ordering = ['nom']
 
 LIVRE = "LIVRE"
 FILM = "FILM"
@@ -106,8 +120,8 @@ class Produit(models.Model):
 
 class Livre(Produit):
     isbn = models.CharField(max_length=13, unique=True)
-    auteurs = models.ManyToManyField('Artiste', related_name="livres")
-    editeur = models.ForeignKey('Editeur', related_name="livres")
+    auteurs = models.ManyToManyField(Artiste, related_name="livres")
+    editeur = models.ForeignKey(Editeur, related_name="livres")
     
     reliure = models.CharField(max_length=30)
     pages = models.IntegerField(null=True)
@@ -130,9 +144,9 @@ class Film(Produit):
         ('NC-17', _(u"17 ans ou plus")),
     )
     
-    acteurs = models.ManyToManyField('Artiste', related_name="films_acteur")
-    realisateurs = models.ManyToManyField('Artiste', related_name="films_realisateur")
-    studio = models.ForeignKey('Editeur', related_name="films")
+    acteurs = models.ManyToManyField(Artiste, related_name="films_acteur")
+    realisateurs = models.ManyToManyField(Artiste, related_name="films_realisateur")
+    studio = models.ForeignKey(Editeur, related_name="films")
     
     support = models.CharField(max_length=4, choices=SUPPORTS, blank=True)
     disques = models.IntegerField(null=True)
@@ -146,44 +160,34 @@ class Musique(Produit):
         ('AUT', _(u"Autre")),
     )
     
-    auteurs = models.ManyToManyField('Artiste', related_name="musiques")
-    label = models.ForeignKey('Editeur', related_name="musiques", null=True)
+    auteurs = models.ManyToManyField(Artiste, related_name="musiques")
+    label = models.ForeignKey(Editeur, related_name="musiques", null=True)
     
     support = models.CharField(max_length=4, choices=SUPPORTS, blank=True)
     disques = models.IntegerField(null=True)
     publication = models.DateField(null=True)
-
-class Artiste(models.Model):
-    nom = models.CharField(max_length=30)
-    prenom = models.CharField(max_length=30, blank=True)
-    nationalite = models.ForeignKey(Pays, related_name="artistes")
-        
-    class Meta:
-        ordering = ['prenom', 'nom']
-
-class Editeur(models.Model):
-    nom = models.CharField(max_length=30)
-    
-    class Meta:
-        ordering = ['nom']
         
 # Caddies, listes d'envies, commandes et livraisons
     
 class CaddieProduit(models.Model):
-    utilisateur = models.ForeignKey('Utilisateur')
+    utilisateur = models.ForeignKey(Utilisateur)
     produit = models.ForeignKey(Produit)
     quantite = models.IntegerField(default=1)
-    
+
+    @property
+    def prix_total(self):
+        return self.quantite * self.produit.prix
+        
     class Meta:
         unique_together = ('utilisateur', 'produit')
         
 class ListeEnvies(models.Model):
-    utilisateur = models.ForeignKey('Utilisateur')
+    utilisateur = models.ForeignKey(Utilisateur)
     nom = models.CharField(max_length=30)
     produits = models.ManyToManyField(Produit, through='ListeEnviesProduit')
     
 class ListeEnviesProduit(models.Model):
-    liste = models.ForeignKey('ListeEnvies')
+    liste = models.ForeignKey(ListeEnvies)
     produit = models.ForeignKey(Produit)
     
     quantite = models.IntegerField(default=1)
@@ -192,7 +196,7 @@ class ListeEnviesProduit(models.Model):
         unique_together = ('liste', 'produit')
     
 class Commande(models.Model):    
-    utilisateur = models.ForeignKey('Utilisateur')
+    utilisateur = models.ForeignKey(Utilisateur)
     
     # Adresse de livraison
     adresse = models.CharField(max_length=255)
@@ -207,7 +211,7 @@ class CommandePaquet(models.Model):
         ('LIVRE', _(u"Livraison effectuée")),
     )
     
-    commande = models.ForeignKey('Commande')
+    commande = models.ForeignKey(Commande)
     
     status = models.CharField(max_length=5, choices=STATUS)
     status_change = models.DateTimeField(auto_now=True)
@@ -215,7 +219,7 @@ class CommandePaquet(models.Model):
     produits = models.ManyToManyField(Produit, through='CommandeProduit')
     
 class CommandeProduit(models.Model):
-    paquet = models.ForeignKey('CommandePaquet')
+    paquet = models.ForeignKey(CommandePaquet)
     produit = models.ForeignKey(Produit)
     quantite = models.IntegerField(default=1)
     

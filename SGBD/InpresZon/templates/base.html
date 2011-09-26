@@ -10,7 +10,12 @@
 <body>
     <ul class="menu">
         <li><a href="{% url catalogue %}">{% trans "Catalogue" %}</a></li>
-        <li><a href="{% url caddie %}">{% trans "Caddie" %}</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="{% url caddie %}">{% trans "Caddie" %}</a></li>
+            <li><a href="{% url connexion %}">{% trans "Déconnexion" %}</a></li>
+        {% else %}
+            <li><a href="{% url connexion %}">{% trans "Connexion" %}</a></li>
+        {% endif %}
     </ul>
 
     <h1>{% block titre-page %}{% endblock %}</h1>

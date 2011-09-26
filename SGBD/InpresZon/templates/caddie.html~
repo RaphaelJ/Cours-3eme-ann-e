@@ -25,8 +25,8 @@
                 <td>
                     {{ cp.quantite }}
                 </td>
-                <td>{{ cp.produit.prix }} {{ cp.produit.devise }}</td>
-                <td>{{ cp.prix_total }} {{ cp.produit.devise }}</td>
+                <td>{{ cp.produit.prix }}</td>
+                <td>{{ cp.prix_total }}</td>
                 <td><a href="{% url caddie-modifier cp.produit.ean %}">
                     {% trans "Modifier la quantité" %}
                 </a></td>   

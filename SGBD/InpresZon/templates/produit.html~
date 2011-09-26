@@ -10,8 +10,8 @@
         {% blocktrans with prix=produit.prix|escape devise=produit.devise|escape stock=produit.stock%}
             {{ prix }} {{ devise }} ({{stock}} exemplaire(s) en stock)
         {% endblocktrans %}
-        <a href="{% url ajout-panier produit.ean %}">
-            {% trans "Ajouter au panier" %}
+        <a href="{% url caddie-ajout produit.ean %}">
+            {% trans "Ajouter au caddie" %}
         </a>
     </p>
 

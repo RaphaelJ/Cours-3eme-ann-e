@@ -20,7 +20,7 @@
         "pk": 1,
         "fields": {
             "login": "John",
-            "mot_de_passe": "john",
+            "mot_de_passe": "5753a498f025464d72e088a9d5d6e872592d5f91",
             "email": "john.lennon@abbeyroad.uk",
             "nom": "Lennon",
             "prenom": "John",

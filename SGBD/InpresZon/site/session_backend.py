@@ -21,8 +21,8 @@ class SessionStore(DBStore):
                 cle = self.session_key,
                 expiration__gt=datetime.datetime.now()
             )
-            d= self.decode(force_unicode(s.donnees))
-            print (d)
+            d = self.decode(force_unicode(s.donnees))
+            print ("Données: "+ str(d))
             return d
         except (Session.DoesNotExist, SuspiciousOperation):
             self.create()
@@ -43,7 +43,6 @@ class SessionStore(DBStore):
         entry).
         """
         a = self._get_session(no_load=must_create)
-        print (a)
         
         obj = Session(
             cle = self.session_key,
