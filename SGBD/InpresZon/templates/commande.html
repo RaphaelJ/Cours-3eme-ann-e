@@ -40,4 +40,14 @@
         {% endfor %}
         </ul>
     </p>
+
+    <form method="post" action="">
+        <ul>
+            {{ form.as_ul }}
+        </ul>
+        {% csrf_token %}
+        <input type="submit"
+               value="{% trans "Valider la commande et effecter le paiement" %}"
+        />
+    </form>
 {% endblock %}

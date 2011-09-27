@@ -4,7 +4,7 @@ from django.forms import ModelForm, CharField, PasswordInput, ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from auth_backend import crypt_mdp
-from models import Utilisateur, CaddieProduit
+from models import Utilisateur, CaddieProduit, Commande
 
 class UtilisateurForm(ModelForm):
     """ Formulaire permettant l'inscription d'un utilisateur """
@@ -46,3 +46,12 @@ class CaddieProduitForm(ModelForm):
     
     class Meta:
         model = CaddieProduit
+
+class ConfirmationCommande(ModelForm):
+    """
+    Formulaire permettant de valider la commande. Propose l'adresse de
+    livraison et le moyen de paiement.
+    """
+
+    class Meta:
+        model = Commande

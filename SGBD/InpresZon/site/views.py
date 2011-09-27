@@ -169,7 +169,13 @@ def commande(request):
         return redirect('caddie')
     elif not _en_stock(cps): # Certains articles ne sont pas en stock
         return redirect('caddie')
-    elif request.method == 'POST': # Validation de la commande
-        pass
-    else: # Demande de confirmation de la commande
-        pass
+    else:
+        if request.method == 'POST': # Validation de la commande
+            pass
+        else: # Demande de confirmation de la commande
+            
+        
+        return render_to_response("commande.html", {
+            'caddie_produits': cps,
+            'form': form,
+        }, context_instance=RequestContext(request))
