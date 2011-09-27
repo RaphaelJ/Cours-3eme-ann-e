@@ -7,8 +7,13 @@
 
 {% block contenu %}
     <form action="" method="post">
-        {{ form.as_ul }}
+        <ul>
+            {{ form.as_ul }}
+        </ul>
         {% csrf_token %}
         <input type="submit" value="{% trans "Connexion" %}" />
     </form>
+    <a href="{% url inscription %}?next={{ next }}">
+        {% trans "Pas encore inscrit ?" %}
+    </a>
 {% endblock %}

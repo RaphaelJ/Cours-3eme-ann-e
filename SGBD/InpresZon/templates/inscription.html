@@ -2,9 +2,7 @@
 {% load i18n %}
 
 {% block titre %}{% block titre-page %}
-    {% blocktrans with titre=caddie_produit.produit.titre|escape %}
-        Modifier un article ({{ titre }})
-    {% endblocktrans %}
+    {% trans "Inscription" %}
 {% endblock %}{% endblock %}
 
 {% block contenu %}
@@ -13,6 +11,6 @@
             {{ form.as_ul }}
         </ul>
         {% csrf_token %}
-        <input type="submit" value="{% trans "Modifier" %}" />
+        <input type="submit" value="{% trans "M'inscrire" %}" />
     </form>
 {% endblock %}

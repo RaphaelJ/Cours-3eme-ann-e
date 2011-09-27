@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block titre %}{% block titre-page %}
+    {% trans "Aperçu de ma commande" %}
+{% endblock %}{% endblock %}
+
+{% block contenu %}
+    <table>
+        <thead>
+            <tr>
+                <th>{% trans "Produit" %}</th>
+                <th>{% trans "Quantité" %}</th>
+                <th>{% trans "Prix unitaire" %}</th>
+                <th>{% trans "Prix total" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cp in caddie_produits %}
+            <tr>
+                <td><a href="{% url produit cp.produit.ean %}">
+                    {{ cp.produit.titre|escape }}
+                </a></td>
+                <td>
+                    {{ cp.quantite }}
+                </td>
+                <td>{{ cp.produit.prix }} {{ cp.produit.devise }}</td>
+                <td>{{ cp.prix_total }} {{ cp.produit.devise }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <p>
+        <strong>{% trans "Prix total:" %}</strong>
+        <ul>
+        {% for devise, total_devise in total.items %}
+            <li>{{ total_devise }} {{ devise }}</li>
+        {% endfor %}
+        </ul>
+    </p>
+{% endblock %}

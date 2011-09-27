@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block titre %}{% block titre-page %}
+    {{ title }}
+{% endblock %}{% endblock %}
+
+{% block contenu %}
+    {% trans "Déconnexion réussie" %}
+{% endblock %}

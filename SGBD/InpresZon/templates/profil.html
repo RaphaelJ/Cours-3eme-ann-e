@@ -2,9 +2,7 @@
 {% load i18n %}
 
 {% block titre %}{% block titre-page %}
-    {% blocktrans with titre=caddie_produit.produit.titre|escape %}
-        Modifier un article ({{ titre }})
-    {% endblocktrans %}
+    {% trans "Profil utilisateur" %}
 {% endblock %}{% endblock %}
 
 {% block contenu %}

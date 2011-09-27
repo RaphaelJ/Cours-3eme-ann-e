@@ -42,6 +42,7 @@ class SessionStore(DBStore):
         create a *new* entry (as opposed to possibly updating an existing
         entry).
         """
+        
         a = self._get_session(no_load=must_create)
         
         obj = Session(

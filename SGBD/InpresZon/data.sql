@@ -32,6 +32,9 @@ SELECT * FROM site_film;
 SELECT * FROM site_produit;
 
 SELECT * FROM site_utilisateur;
+DELETE FROM site_utilisateur WHERE login = 'Paul';
+
+SELECT * FROM site_session;
 
 SELECT * FROM site_livre_auteurs;
 SELECT * FROM site_session;

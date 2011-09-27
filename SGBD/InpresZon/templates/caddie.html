@@ -6,44 +6,63 @@
 {% endblock %}{% endblock %}
 
 {% block contenu %}
-    <table>
-        <thead>
-            <tr>
-                <th>{% trans "Produit" %}</th>
-                <th>{% trans "Quantité" %}</th>
-                <th>{% trans "Prix unitaire" %}</th>
-                <th>{% trans "Prix total" %}</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for cp in caddie_produits %}
-            <tr>
-                <td><a href="{% url produit cp.produit.ean %}">
-                    {{ cp.produit.titre }}
-                </a></td>
-                <td>
-                    {{ cp.quantite }}
-                </td>
-                <td>{{ cp.produit.prix }} {{ cp.produit.devise }}</td>
-                <td>{{ cp.prix_total }} {{ cp.produit.devise }}</td>
-                <td><a href="{% url caddie-modifier cp.produit.ean %}">
-                    {% trans "Modifier la quantité" %}
-                </a></td>   
-                <td><a href="{% url caddie-supprimer cp.produit.ean %}">
-                    {% trans "Supprimer" %}
-                </a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% if caddie_produits|length > 0 %}
+        <table>
+            <thead>
+                <tr>
+                    <th>{% trans "Produit" %}</th>
+                    <th>{% trans "Quantité" %}</th>
+                    <th>{% trans "Prix unitaire" %}</th>
+                    <th>{% trans "Prix total" %}</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for cp in caddie_produits %}
+                <tr>
+                    <td><a href="{% url produit cp.produit.ean %}">
+                        {{ cp.produit.titre|escape }}
+                    </a></td>
+                    <td>
+                        {{ cp.quantite }}
+                        {% if not cp.en_stock %}
+                            (non disponible en stock)
+                        {% endif %}
+                    </td>
+                    <td>{{ cp.produit.prix }} {{ cp.produit.devise }}</td>
+                    <td>{{ cp.prix_total }} {{ cp.produit.devise }}</td>
+                    <td><a href="{% url caddie-modifier cp.produit.ean %}">
+                        {% trans "Modifier la quantité" %}
+                    </a></td>
+                    <td><a href="{% url caddie-supprimer cp.produit.ean %}">
+                        {% trans "Supprimer" %}
+                    </a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <p>
-        <strong>{% trans "Prix total:" %}</strong>
-        <ul>
-        {% for devise, total_devise in total.items %}
-            <li>{{ total_devise }} {{ devise }}</li>
-        {% endfor %}
-        </ul>
-    </p>
+        <p>
+            <strong>{% trans "Prix total:" %}</strong>
+            <ul>
+            {% for devise, total_devise in total.items %}
+                <li>{{ total_devise }} {{ devise }}</li>
+            {% endfor %}
+            </ul>
+
+            {% if en_stock %}
+                <a href="{% url commande %}">{% trans "Passer commande" %}</a>
+            {% else %}
+                {% blocktrans %}
+                    Vous ne pouvez pas passer commande car certains articles
+                    ne sont pas disponibles dans les stocks
+                {% endblocktrans %}
+            {% endif %}
+        </p>
+    {% else %}
+        <p>
+            {% trans "Votre caddie est vide." %}
+        </p>
+    {% endif %}
 {% endblock %}

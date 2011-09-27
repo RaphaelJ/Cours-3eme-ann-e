@@ -10,11 +10,18 @@
 <body>
     <ul class="menu">
         <li><a href="{% url catalogue %}">{% trans "Catalogue" %}</a></li>
+
         {% if user.is_authenticated %}
             <li><a href="{% url caddie %}">{% trans "Caddie" %}</a></li>
-            <li><a href="{% url connexion %}">{% trans "Déconnexion" %}</a></li>
+            <li><a href="{% url profil %}">{% trans "Profil" %}</a></li>
+            <li><a href="{% url deconnexion %}">
+                {% blocktrans with login=user.username %}
+                    Déconnexion ({{ login }})
+                {% endblocktrans %}
+            </a></li>
         {% else %}
             <li><a href="{% url connexion %}">{% trans "Connexion" %}</a></li>
+            <li><a href="{% url inscription %}">{% trans "Inscription" %}</a></li>
         {% endif %}
     </ul>
 

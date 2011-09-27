@@ -6,21 +6,24 @@ from django.contrib.auth.models import User, check_password
 
 from models import Utilisateur
 
+def crypt_mdp(mot_de_passe):
+    """ Retourne la valeur hexadécimale du hash SHA1 du mot de passe """
+    return sha.new(mot_de_passe).hexdigest()
+
 class PLSQLBackend():
     """ Utilise les procédures PL/SQL pour autentifier l'utilisateur """
     supports_inactive_user = False
 
     def authenticate(self, username=None, password=None):
         try:
-            hash_pass = sha.new(password).hexdigest()
-            print (hash_pass)
-            u = Utilisateur.objects.get(login=username, mot_de_passe=hash_pass)
+            u = Utilisateur.objects.get(
+                login=username, mot_de_passe=crypt_mdp(password)
+            )
             return construire_user(u)
         except Utilisateur.DoesNotExist:
             return None
 
     def get_user(self, user_id):
-        print ("user id: "+ str(user_id))
         try:
             u = Utilisateur.objects.get(login=user_id)
             return construire_user(u)

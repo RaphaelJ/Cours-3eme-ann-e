@@ -23,16 +23,19 @@ MODES_LIVRAISON = (
 
 class Pays(models.Model):
     nom = models.CharField(max_length=30, primary_key=True)
+    
+    def __unicode__(self):
+        return self.nom
 
 class Utilisateur(models.Model):
     login = models.CharField(max_length=30, primary_key=True)
     mot_de_passe = models.CharField(max_length=64) # SHA-1 + sel
     email = models.EmailField(unique=True)
-    admin = models.BooleanField(default=False)
+    admin = models.BooleanField(default=False, editable=False)
     
     nom = models.CharField(max_length=30)
     prenom = models.CharField(max_length=30)
-    date_inscription = models.DateTimeField(auto_now_add=True)
+    date_inscription = models.DateTimeField(auto_now_add=True, editable=False)
     
     adresse = models.CharField(max_length=255, blank=True)
     ville = models.CharField(max_length=30, blank=True)
@@ -47,7 +50,9 @@ class Utilisateur(models.Model):
         max_length=4, choices=MODES_LIVRAISON, blank=True
     )  
     
-    caddie = models.ManyToManyField('Produit', through='CaddieProduit')
+    caddie = models.ManyToManyField(
+        'Produit', through='CaddieProduit', editable=False
+    )
     
     class Meta:
         ordering = ['login']
@@ -170,25 +175,31 @@ class Musique(Produit):
 # Caddies, listes d'envies, commandes et livraisons
     
 class CaddieProduit(models.Model):
-    utilisateur = models.ForeignKey(Utilisateur)
-    produit = models.ForeignKey(Produit)
+    utilisateur = models.ForeignKey(Utilisateur, editable=False)
+    produit = models.ForeignKey(Produit, editable=False)
     quantite = models.IntegerField(default=1)
 
     @property
     def prix_total(self):
         return self.quantite * self.produit.prix
+
+    @property
+    def en_stock(self):
+        return self.quantite <= self.produit.stock
         
     class Meta:
         unique_together = ('utilisateur', 'produit')
         
 class ListeEnvies(models.Model):
-    utilisateur = models.ForeignKey(Utilisateur)
+    utilisateur = models.ForeignKey(Utilisateur, editable=False)
     nom = models.CharField(max_length=30)
-    produits = models.ManyToManyField(Produit, through='ListeEnviesProduit')
+    produits = models.ManyToManyField(
+        Produit, through='ListeEnviesProduit', editable=False
+    )
     
 class ListeEnviesProduit(models.Model):
-    liste = models.ForeignKey(ListeEnvies)
-    produit = models.ForeignKey(Produit)
+    liste = models.ForeignKey(ListeEnvies, editable=False)
+    produit = models.ForeignKey(Produit, editable=False)
     
     quantite = models.IntegerField(default=1)
     
@@ -196,7 +207,7 @@ class ListeEnviesProduit(models.Model):
         unique_together = ('liste', 'produit')
     
 class Commande(models.Model):    
-    utilisateur = models.ForeignKey(Utilisateur)
+    utilisateur = models.ForeignKey(Utilisateur, editable=False)
     
     # Adresse de livraison
     adresse = models.CharField(max_length=255)
@@ -211,12 +222,14 @@ class CommandePaquet(models.Model):
         ('LIVRE', _(u"Livraison effectuée")),
     )
     
-    commande = models.ForeignKey(Commande)
+    commande = models.ForeignKey(Commande, editable=False)
     
     status = models.CharField(max_length=5, choices=STATUS)
-    status_change = models.DateTimeField(auto_now=True)
+    status_change = models.DateTimeField(auto_now=True, editable=False)
        
-    produits = models.ManyToManyField(Produit, through='CommandeProduit')
+    produits = models.ManyToManyField(
+        Produit, through='CommandeProduit', editable=False
+    )
     
 class CommandeProduit(models.Model):
     paquet = models.ForeignKey(CommandePaquet)
