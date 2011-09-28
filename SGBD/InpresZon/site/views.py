@@ -118,7 +118,6 @@ def caddie_ajout(request, ean):
     
     return redirect('caddie')
     
-    
 @login_required
 def caddie_supprimer(request, ean):
     """
@@ -171,7 +170,7 @@ def commande(request):
         return redirect('caddie')
     else:
         if request.method == 'POST': # Validation de la commande
-            pass
+            
         else: # Demande de confirmation de la commande
             
         

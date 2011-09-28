@@ -1,0 +1,1 @@
+/usr/bin/c++   -g    CMakeFiles/ferryinpres.dir/main.cpp.o  -o ferryinpres -rdynamic 

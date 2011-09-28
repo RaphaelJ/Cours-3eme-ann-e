@@ -95,6 +95,7 @@ class Produit(models.Model):
     )
     
     ean = models.BigIntegerField(primary_key=True)
+    amazon_asin = models.CharField(max_length=)
     titre = models.CharField(max_length=30)
     description = models.TextField()
     langue = models.CharField(max_length=2, choices=LANGUES)
@@ -186,10 +187,10 @@ class CaddieProduit(models.Model):
     @property
     def en_stock(self):
         return self.quantite <= self.produit.stock
-        
+    
     class Meta:
         unique_together = ('utilisateur', 'produit')
-        
+
 class ListeEnvies(models.Model):
     utilisateur = models.ForeignKey(Utilisateur, editable=False)
     nom = models.CharField(max_length=30)
@@ -226,11 +227,11 @@ class CommandePaquet(models.Model):
     
     status = models.CharField(max_length=5, choices=STATUS)
     status_change = models.DateTimeField(auto_now=True, editable=False)
-       
+    
     produits = models.ManyToManyField(
         Produit, through='CommandeProduit', editable=False
     )
-    
+
 class CommandeProduit(models.Model):
     paquet = models.ForeignKey(CommandePaquet)
     produit = models.ForeignKey(Produit)
