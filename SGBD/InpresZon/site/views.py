@@ -8,7 +8,7 @@ from django.template import RequestContext
 
 from auth_backend import crypt_mdp
 from forms import UtilisateurForm, ProfilForm, CaddieProduitForm
-from models import Produit, CaddieProduit
+from models import Produit, CaddieProduit, Commande, CommandePaquet
 
 def catalogue(request):
     """ Affiche tous les éléments du catalogue """
@@ -62,6 +62,10 @@ def profil(request):
     return render_to_response("profil.html", {
         'form': form,
     }, context_instance=RequestContext(request))
+
+@login_required
+def adresses(request):
+    pass
 
 def _cadie_produits_total(utilisateur):
     """
@@ -170,7 +174,7 @@ def commande(request):
         return redirect('caddie')
     else:
         if request.method == 'POST': # Validation de la commande
-            
+            form = models.
         else: # Demande de confirmation de la commande
             
         

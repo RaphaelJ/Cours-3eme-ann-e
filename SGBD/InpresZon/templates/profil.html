@@ -13,4 +13,8 @@
         {% csrf_token %}
         <input type="submit" value="{% trans "Modifier" %}" />
     </form>
+
+    <p>
+        <a href="{% url adresses %}">{% trans "Gérer les adresses" %}</a>
+    </p>
 {% endblock %}

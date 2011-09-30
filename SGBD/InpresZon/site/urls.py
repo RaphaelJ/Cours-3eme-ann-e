@@ -14,6 +14,8 @@ urlpatterns = patterns('',
         'template_name': 'connexion.html'
     }, name="connexion"),
     url(r'^utilisateur/profil/$', views.profil, name="profil"),
+    url(r'^utilisateur/adresses/$', views.adresses, name="adresses"),
+    url(r'^utilisateur/adresse/(\d+)/$', views.adresse, name="adresse"),
     url(r'^utilisateur/deconnexion/$', logout, {
         'template_name': 'deconnexion.html',
         'next_page': '/utilisateur/connexion/',

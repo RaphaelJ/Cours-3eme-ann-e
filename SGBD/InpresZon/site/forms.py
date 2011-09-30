@@ -38,8 +38,8 @@ class CaddieProduitForm(ModelForm):
         """ Vérifie que la quantité introduite est positive et non nulle """
         quantite = self.cleaned_data['quantite']
         if quantite <= 0:
-            raise ValidationError(_
-                (u"La quantité du produit doit être suppérieure à zéro")
+            raise ValidationError(
+                _(u"La quantité du produit doit être supérieure à zéro")
             )
         
         return quantite
@@ -47,10 +47,9 @@ class CaddieProduitForm(ModelForm):
     class Meta:
         model = CaddieProduit
 
-class ConfirmationCommande(ModelForm):
+class Adresse(ModelForm):
     """
-    Formulaire permettant de valider la commande. Propose l'adresse de
-    livraison et le moyen de paiement.
+    Formulaire permettant d'entrer une nouvelle adresse
     """
 
     class Meta:

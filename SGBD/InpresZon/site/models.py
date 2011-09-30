@@ -27,6 +27,12 @@ class Pays(models.Model):
     def __unicode__(self):
         return self.nom
 
+class Adresse(models.Model):
+    adresse = models.CharField(max_length=255)
+    ville = models.CharField(max_length=30)
+    code_postal = models.CharField(max_length=10)
+    pays = models.ForeignKey(Pays, related_name="adresses")
+
 class Utilisateur(models.Model):
     login = models.CharField(max_length=30, primary_key=True)
     mot_de_passe = models.CharField(max_length=64) # SHA-1 + sel
@@ -36,18 +42,15 @@ class Utilisateur(models.Model):
     nom = models.CharField(max_length=30)
     prenom = models.CharField(max_length=30)
     date_inscription = models.DateTimeField(auto_now_add=True, editable=False)
-    
-    adresse = models.CharField(max_length=255, blank=True)
-    ville = models.CharField(max_length=30, blank=True)
-    code_postal = models.CharField(max_length=10, blank=True)
-    pays = models.ForeignKey(Pays, related_name="utilisateurs", blank=True)
+
+    adresses = models.ManyToManyField(Adresse, null=True)
 
     mode_paiement = models.CharField(
-        max_length=4, choices=MODES_PAIEMENT, blank=True
+        max_length=4, choices=MODES_PAIEMENT, blank=True, editable=False
     )
     
     mode_livraison = models.CharField(
-        max_length=4, choices=MODES_LIVRAISON, blank=True
+        max_length=4, choices=MODES_LIVRAISON, blank=True, editable=False
     )  
     
     caddie = models.ManyToManyField(
@@ -95,7 +98,7 @@ class Produit(models.Model):
     )
     
     ean = models.BigIntegerField(primary_key=True)
-    amazon_asin = models.CharField(max_length=)
+    amazon_asin = models.CharField(max_length=10)
     titre = models.CharField(max_length=30)
     description = models.TextField()
     langue = models.CharField(max_length=2, choices=LANGUES)
@@ -209,12 +212,8 @@ class ListeEnviesProduit(models.Model):
     
 class Commande(models.Model):    
     utilisateur = models.ForeignKey(Utilisateur, editable=False)
-    
-    # Adresse de livraison
-    adresse = models.CharField(max_length=255)
-    ville = models.CharField(max_length=30)
-    code_postal = models.CharField(max_length=10)
-    pays = models.ForeignKey(Pays, related_name="livraisons")
+
+    date_commande = models.DateTimeField(auto_now_add=True, editable=False)
     
 class CommandePaquet(models.Model):
     STATUS = (
@@ -224,6 +223,8 @@ class CommandePaquet(models.Model):
     )
     
     commande = models.ForeignKey(Commande, editable=False)
+
+    adresse_livraison = models.ForeignKey(Adresse)
     
     status = models.CharField(max_length=5, choices=STATUS)
     status_change = models.DateTimeField(auto_now=True, editable=False)
