@@ -22,7 +22,8 @@ MODES_LIVRAISON = (
 # Utilisateurs
 
 class Pays(models.Model):
-    nom = models.CharField(max_length=30, primary_key=True)
+    nom_fr = models.CharField(max_length=30)
+    nom_en = models.CharField(max_length=30)
     
     def __unicode__(self):
         return self.nom
@@ -73,32 +74,26 @@ class Session(models.Model):
 
 # Catalogue
 
-class Artiste(models.Model):
-    nom = models.CharField(max_length=30)
-    prenom = models.CharField(max_length=30, blank=True)
-    nationalite = models.ForeignKey(Pays, related_name="artistes")
-        
-    class Meta:
-        ordering = ['prenom', 'nom']
-
-class Editeur(models.Model):
-    nom = models.CharField(max_length=30, primary_key=True)
-    
-    class Meta:
-        ordering = ['nom']
-
 LIVRE = "LIVRE"
 FILM = "FILM"
 MUSIQUE = "MUSIQUE"
+
+class Fournisseur(models.Model):
+    nom = models.CharField(max_length=30)
+    adresse = models.ForeignKey(Adresse)
     
 class Produit(models.Model):
     LANGUES = (
         ('FR', _(u"Français")),
         ('EN', _(u"Anglais")),
     )
+    ORIGINES = (
+        ('BE', _(u"Centrale belge")),
+        ('USA', _(u"Centrale américaine")),
+        ('UK', _(u"Centrale anglaise")),
+    )
     
     ean = models.BigIntegerField(primary_key=True)
-    amazon_asin = models.CharField(max_length=10)
     titre = models.CharField(max_length=30)
     description = models.TextField()
     langue = models.CharField(max_length=2, choices=LANGUES)
@@ -106,10 +101,15 @@ class Produit(models.Model):
     prix = models.DecimalField(max_digits=10, decimal_places=2)
     devise = models.CharField(max_length=3, choices=DEVISES)
     
-    stock = models.IntegerField()
+    stock = models.IntegerField(default=0)
+    devise = models.CharField(max_length=3, choices=DEVISES)
+
+    fournisseur = models.ForeignKey(Fournisseur)
+
+    origine = models.CharField(max_length=3, choices=ORIGINES)
     
     class Meta:
-        ordering = ['titre']
+        ordering = ('titre',)
 
     @property
     def type_produit(self):
@@ -126,6 +126,19 @@ class Produit(models.Model):
                     return MUSIQUE
                 except:
                     return None
+
+class Artiste(models.Model):
+    nom = models.CharField(max_length=30)
+    nationalite = models.ForeignKey(Pays, related_name="artistes", null=True)
+
+    class Meta:
+        ordering = ('nom',)
+
+class Editeur(models.Model):
+    nom = models.CharField(max_length=30, primary_key=True)
+
+    class Meta:
+        ordering = ('nom',)
 
 class Livre(Produit):
     isbn = models.CharField(max_length=13, unique=True)
@@ -154,7 +167,7 @@ class Film(Produit):
     )
     
     acteurs = models.ManyToManyField(Artiste, related_name="films_acteur")
-    realisateurs = models.ManyToManyField(Artiste, related_name="films_realisateur")
+    realisateurs = models.ForeignKey(Artiste, related_name="films_realisateur")
     studio = models.ForeignKey(Editeur, related_name="films")
     
     support = models.CharField(max_length=4, choices=SUPPORTS, blank=True)
@@ -200,6 +213,9 @@ class ListeEnvies(models.Model):
     produits = models.ManyToManyField(
         Produit, through='ListeEnviesProduit', editable=False
     )
+
+    class Meta:
+        unique_together = ('utilisateur', 'nom')
     
 class ListeEnviesProduit(models.Model):
     liste = models.ForeignKey(ListeEnvies, editable=False)
@@ -213,7 +229,25 @@ class ListeEnviesProduit(models.Model):
 class Commande(models.Model):    
     utilisateur = models.ForeignKey(Utilisateur, editable=False)
 
+    adresse_livraison = models.ForeignKey(Adresse)
+
     date_commande = models.DateTimeField(auto_now_add=True, editable=False)
+
+    produits = models.ManyToManyField(
+        Produit, through='CommandeProduit', editable=False
+    )
+
+class CommandeProduit(models.Model):
+    commande = models.ForeignKey(Commande)
+    produit = models.ForeignKey(Produit)
+    quantite = models.IntegerField(default=1)
+
+    # Copie du prix d'achat
+    prix = models.DecimalField(max_digits=10, decimal_places=2)
+    devise = models.CharField(max_length=3, choices=DEVISES)
+
+    class Meta:
+        unique_together = ('commande', 'produit')
     
 class CommandePaquet(models.Model):
     STATUS = (
@@ -223,24 +257,22 @@ class CommandePaquet(models.Model):
     )
     
     commande = models.ForeignKey(Commande, editable=False)
-
-    adresse_livraison = models.ForeignKey(Adresse)
     
     status = models.CharField(max_length=5, choices=STATUS)
-    status_change = models.DateTimeField(auto_now=True, editable=False)
+    status_changement = models.DateTimeField(auto_now=True, editable=False)
     
     produits = models.ManyToManyField(
-        Produit, through='CommandeProduit', editable=False
+        Produit, through='CommandePaquetProduit', editable=False
     )
 
-class CommandeProduit(models.Model):
+class CommandePaquetProduit(models.Model):
     paquet = models.ForeignKey(CommandePaquet)
     produit = models.ForeignKey(Produit)
     quantite = models.IntegerField(default=1)
-    
+
     # Copie du prix d'achat
     prix = models.DecimalField(max_digits=10, decimal_places=2)
     devise = models.CharField(max_length=3, choices=DEVISES)
-    
+
     class Meta:
         unique_together = ('paquet', 'produit')

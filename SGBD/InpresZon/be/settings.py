@@ -15,11 +15,20 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-    'default': {
+    'sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'be.sqlite3',
+    },
+    'oracle': {
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': 'xe',
+        'USER': 'a_user',
+        'PASSWORD': 'a_password',
+        'HOST': '',
+        'PORT': '',
     }
 }
+DATABASES['default'] = DATABASES['sqlite']
 
 TIME_ZONE = 'Europe/Brussels'
 
