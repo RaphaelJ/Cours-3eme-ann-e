@@ -49,9 +49,101 @@ include CMakeFiles/ferryinpres.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/ferryinpres.dir/flags.make
 
+CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o: CMakeFiles/ferryinpres.dir/flags.make
+CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o: ../SocketsUtils.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/SocketsUtils.cpp
+
+CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/SocketsUtils.cpp > CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.i
+
+CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/SocketsUtils.cpp -o CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.s
+
+CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o.requires:
+.PHONY : CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o.requires
+
+CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o.provides: CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o.provides.build
+.PHONY : CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o.provides
+
+CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o.provides.build: CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o
+
+CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o: CMakeFiles/ferryinpres.dir/flags.make
+CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o: ../ServerSocket.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles $(CMAKE_PROGRESS_2)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/ServerSocket.cpp
+
+CMakeFiles/ferryinpres.dir/ServerSocket.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ferryinpres.dir/ServerSocket.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/ServerSocket.cpp > CMakeFiles/ferryinpres.dir/ServerSocket.cpp.i
+
+CMakeFiles/ferryinpres.dir/ServerSocket.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ferryinpres.dir/ServerSocket.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/ServerSocket.cpp -o CMakeFiles/ferryinpres.dir/ServerSocket.cpp.s
+
+CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o.requires:
+.PHONY : CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o.requires
+
+CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o.provides: CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o.provides.build
+.PHONY : CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o.provides
+
+CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o.provides.build: CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o
+
+CMakeFiles/ferryinpres.dir/SocketException.cpp.o: CMakeFiles/ferryinpres.dir/flags.make
+CMakeFiles/ferryinpres.dir/SocketException.cpp.o: ../SocketException.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles $(CMAKE_PROGRESS_3)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/ferryinpres.dir/SocketException.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ferryinpres.dir/SocketException.cpp.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/SocketException.cpp
+
+CMakeFiles/ferryinpres.dir/SocketException.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ferryinpres.dir/SocketException.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/SocketException.cpp > CMakeFiles/ferryinpres.dir/SocketException.cpp.i
+
+CMakeFiles/ferryinpres.dir/SocketException.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ferryinpres.dir/SocketException.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/SocketException.cpp -o CMakeFiles/ferryinpres.dir/SocketException.cpp.s
+
+CMakeFiles/ferryinpres.dir/SocketException.cpp.o.requires:
+.PHONY : CMakeFiles/ferryinpres.dir/SocketException.cpp.o.requires
+
+CMakeFiles/ferryinpres.dir/SocketException.cpp.o.provides: CMakeFiles/ferryinpres.dir/SocketException.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/SocketException.cpp.o.provides.build
+.PHONY : CMakeFiles/ferryinpres.dir/SocketException.cpp.o.provides
+
+CMakeFiles/ferryinpres.dir/SocketException.cpp.o.provides.build: CMakeFiles/ferryinpres.dir/SocketException.cpp.o
+
+CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o: CMakeFiles/ferryinpres.dir/flags.make
+CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o: ../ClientSocket.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles $(CMAKE_PROGRESS_4)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/ClientSocket.cpp
+
+CMakeFiles/ferryinpres.dir/ClientSocket.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ferryinpres.dir/ClientSocket.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/ClientSocket.cpp > CMakeFiles/ferryinpres.dir/ClientSocket.cpp.i
+
+CMakeFiles/ferryinpres.dir/ClientSocket.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ferryinpres.dir/ClientSocket.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/ClientSocket.cpp -o CMakeFiles/ferryinpres.dir/ClientSocket.cpp.s
+
+CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o.requires:
+.PHONY : CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o.requires
+
+CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o.provides: CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o.requires
+	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o.provides.build
+.PHONY : CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o.provides
+
+CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o.provides.build: CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o
+
 CMakeFiles/ferryinpres.dir/main.cpp.o: CMakeFiles/ferryinpres.dir/flags.make
 CMakeFiles/ferryinpres.dir/main.cpp.o: ../main.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles $(CMAKE_PROGRESS_5)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/ferryinpres.dir/main.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ferryinpres.dir/main.cpp.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/main.cpp
 
@@ -74,11 +166,19 @@ CMakeFiles/ferryinpres.dir/main.cpp.o.provides.build: CMakeFiles/ferryinpres.dir
 
 # Object files for target ferryinpres
 ferryinpres_OBJECTS = \
+"CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o" \
+"CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o" \
+"CMakeFiles/ferryinpres.dir/SocketException.cpp.o" \
+"CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o" \
 "CMakeFiles/ferryinpres.dir/main.cpp.o"
 
 # External object files for target ferryinpres
 ferryinpres_EXTERNAL_OBJECTS =
 
+ferryinpres: CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o
+ferryinpres: CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o
+ferryinpres: CMakeFiles/ferryinpres.dir/SocketException.cpp.o
+ferryinpres: CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o
 ferryinpres: CMakeFiles/ferryinpres.dir/main.cpp.o
 ferryinpres: CMakeFiles/ferryinpres.dir/build.make
 ferryinpres: CMakeFiles/ferryinpres.dir/link.txt
@@ -89,6 +189,10 @@ ferryinpres: CMakeFiles/ferryinpres.dir/link.txt
 CMakeFiles/ferryinpres.dir/build: ferryinpres
 .PHONY : CMakeFiles/ferryinpres.dir/build
 
+CMakeFiles/ferryinpres.dir/requires: CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o.requires
+CMakeFiles/ferryinpres.dir/requires: CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o.requires
+CMakeFiles/ferryinpres.dir/requires: CMakeFiles/ferryinpres.dir/SocketException.cpp.o.requires
+CMakeFiles/ferryinpres.dir/requires: CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o.requires
 CMakeFiles/ferryinpres.dir/requires: CMakeFiles/ferryinpres.dir/main.cpp.o.requires
 .PHONY : CMakeFiles/ferryinpres.dir/requires
 

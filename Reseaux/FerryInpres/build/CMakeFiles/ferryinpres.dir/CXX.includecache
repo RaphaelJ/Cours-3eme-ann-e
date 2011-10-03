@@ -6,7 +6,41 @@
 
 #IncludeRegexTransform: 
 
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/main.cpp
-iostream
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/ClientSocket.h
+arpa/inet.h
 -
+sys/socket.h
+-
+unistd.h
+-
+SocketsUtils.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/SocketsUtils.h
+SocketException.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/SocketException.h
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/ServerSocket.cpp
+ServerSocket.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/ServerSocket.h
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/ServerSocket.h
+ClientSocket.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/ClientSocket.h
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/SocketException.h
+string
+-
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/SocketsUtils.cpp
+SocketsUtils.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/SocketsUtils.h
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/SocketsUtils.h
+arpa/inet.h
+-
+sys/socket.h
+-
+unistd.h
+-
+SocketException.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/SocketException.h
 

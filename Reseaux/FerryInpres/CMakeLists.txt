@@ -1,4 +1,6 @@
 project(ferryinpres)
 
-add_executable(ferryinpres SocketException.cpp SocketClient.cpp main.cpp)
+add_executable(ferryinpres SocketsUtils.cpp ServerSocket.cpp SocketException.cpp ClientSocket.cpp main.cpp)
+
+
 
