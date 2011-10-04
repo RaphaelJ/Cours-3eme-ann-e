@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block titre %}{% block titre-page %}
+    {% trans "Mes adresses" %}
+{% endblock %}{% endblock %}
+
+{% block contenu %}
+    {% if adresses|length > 0 %}
+        <ul>
+            {% for adresse in adresses %}
+                <li><strong>{% trans "Adresse" %} :</strong> {{ adresse.adresse }}</li>
+                <li><strong>{% trans "Ville" %} :</strong> {{ adresse.ville }}</li>
+                <li><strong>{% trans "Code postal" %} :</strong> {{ adresse.code_postal }}</li>
+                <li><strong>{% trans "Pays" %} :</strong> {{ adresse.pays.nom }}</li>
+                <li>
+                    <a href="{% url adresse-modifier adresse.id %}">Modifier</a>
+                    <a href="{% url adresse-supprimer adresse.id %}">Supprimer</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>
+            {% trans "Vous n'avez enregistré aucune adresse." %}
+        </p>
+    {% endif %}
+
+    <h2>Ajouter une adresse</h2>
+    <form method="post" action="">
+        <ul>
+            {{ form.as_ul }}
+        </ul>
+        {% csrf_token %}
+        <input type="submit" value="{% trans "Ajouter" %}" />
+    </form>
+
+{% endblock %}

@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 from django.db import models
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 DEVISES = (
@@ -24,6 +25,14 @@ MODES_LIVRAISON = (
 class Pays(models.Model):
     nom_fr = models.CharField(max_length=30)
     nom_en = models.CharField(max_length=30)
+
+    @property
+    def nom(self):
+        """ Donne le nom du pays dans la langue du site """
+        if settings.LANGUAGE_CODE == 'fr_FR':
+            return self.nom_fr
+        else:
+            return self.nom_en
     
     def __unicode__(self):
         return self.nom
@@ -44,7 +53,7 @@ class Utilisateur(models.Model):
     prenom = models.CharField(max_length=30)
     date_inscription = models.DateTimeField(auto_now_add=True, editable=False)
 
-    adresses = models.ManyToManyField(Adresse, null=True)
+    adresses = models.ManyToManyField(Adresse, null=True, editable=False)
 
     mode_paiement = models.CharField(
         max_length=4, choices=MODES_PAIEMENT, blank=True, editable=False

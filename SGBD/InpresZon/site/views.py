@@ -65,6 +65,14 @@ def profil(request):
 
 @login_required
 def adresses(request):
+    """ Liste toutes les adresses enregistrées par l'utilisateur '"""
+
+    return render_to_response("adresses.html", {
+        'adresses': request.user.utilisateur.adresses.all(),
+    }, context_instance=RequestContext(request))
+
+@login_required
+def adresse(request):
     pass
 
 def _cadie_produits_total(utilisateur):
@@ -174,9 +182,9 @@ def commande(request):
         return redirect('caddie')
     else:
         if request.method == 'POST': # Validation de la commande
-            form = models.
+            pass
         else: # Demande de confirmation de la commande
-            
+            pass
         
         return render_to_response("commande.html", {
             'caddie_produits': cps,
