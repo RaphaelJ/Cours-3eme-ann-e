@@ -1,1 +1,1 @@
-/usr/bin/c++   -g    CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o CMakeFiles/ferryinpres.dir/SocketException.cpp.o CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o CMakeFiles/ferryinpres.dir/main.cpp.o  -o ferryinpres -rdynamic 
+/usr/bin/c++   -g -Wall -g    CMakeFiles/ferryinpres.dir/main.o  -o ferryinpres -rdynamic -L/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets Sockets/libSockets.a -lpthread 

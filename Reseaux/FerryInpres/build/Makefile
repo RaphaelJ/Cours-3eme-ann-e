@@ -111,125 +111,33 @@ ferryinpres/fast:
 	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/build
 .PHONY : ferryinpres/fast
 
-ClientSocket.o: ClientSocket.cpp.o
-.PHONY : ClientSocket.o
+#=============================================================================
+# Target rules for targets named Sockets
+
+# Build rule for target.
+Sockets: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Sockets
+.PHONY : Sockets
+
+# fast build rule for target.
+Sockets/fast:
+	$(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/build
+.PHONY : Sockets/fast
 
 # target to build an object file
-ClientSocket.cpp.o:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/ClientSocket.cpp.o
-.PHONY : ClientSocket.cpp.o
-
-ClientSocket.i: ClientSocket.cpp.i
-.PHONY : ClientSocket.i
-
-# target to preprocess a source file
-ClientSocket.cpp.i:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/ClientSocket.cpp.i
-.PHONY : ClientSocket.cpp.i
-
-ClientSocket.s: ClientSocket.cpp.s
-.PHONY : ClientSocket.s
-
-# target to generate assembly for a file
-ClientSocket.cpp.s:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/ClientSocket.cpp.s
-.PHONY : ClientSocket.cpp.s
-
-ServerSocket.o: ServerSocket.cpp.o
-.PHONY : ServerSocket.o
-
-# target to build an object file
-ServerSocket.cpp.o:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/ServerSocket.cpp.o
-.PHONY : ServerSocket.cpp.o
-
-ServerSocket.i: ServerSocket.cpp.i
-.PHONY : ServerSocket.i
-
-# target to preprocess a source file
-ServerSocket.cpp.i:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/ServerSocket.cpp.i
-.PHONY : ServerSocket.cpp.i
-
-ServerSocket.s: ServerSocket.cpp.s
-.PHONY : ServerSocket.s
-
-# target to generate assembly for a file
-ServerSocket.cpp.s:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/ServerSocket.cpp.s
-.PHONY : ServerSocket.cpp.s
-
-SocketException.o: SocketException.cpp.o
-.PHONY : SocketException.o
-
-# target to build an object file
-SocketException.cpp.o:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/SocketException.cpp.o
-.PHONY : SocketException.cpp.o
-
-SocketException.i: SocketException.cpp.i
-.PHONY : SocketException.i
-
-# target to preprocess a source file
-SocketException.cpp.i:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/SocketException.cpp.i
-.PHONY : SocketException.cpp.i
-
-SocketException.s: SocketException.cpp.s
-.PHONY : SocketException.s
-
-# target to generate assembly for a file
-SocketException.cpp.s:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/SocketException.cpp.s
-.PHONY : SocketException.cpp.s
-
-SocketsUtils.o: SocketsUtils.cpp.o
-.PHONY : SocketsUtils.o
-
-# target to build an object file
-SocketsUtils.cpp.o:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.o
-.PHONY : SocketsUtils.cpp.o
-
-SocketsUtils.i: SocketsUtils.cpp.i
-.PHONY : SocketsUtils.i
-
-# target to preprocess a source file
-SocketsUtils.cpp.i:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.i
-.PHONY : SocketsUtils.cpp.i
-
-SocketsUtils.s: SocketsUtils.cpp.s
-.PHONY : SocketsUtils.s
-
-# target to generate assembly for a file
-SocketsUtils.cpp.s:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/SocketsUtils.cpp.s
-.PHONY : SocketsUtils.cpp.s
-
-main.o: main.cpp.o
+main.o:
+	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/main.o
 .PHONY : main.o
 
-# target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/main.cpp.o
-.PHONY : main.cpp.o
-
-main.i: main.cpp.i
+# target to preprocess a source file
+main.i:
+	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/main.i
 .PHONY : main.i
 
-# target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/main.cpp.i
-.PHONY : main.cpp.i
-
-main.s: main.cpp.s
-.PHONY : main.s
-
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/main.cpp.s
-.PHONY : main.cpp.s
+main.s:
+	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/main.s
+.PHONY : main.s
 
 # Help Target
 help:
@@ -240,18 +148,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... ferryinpres"
 	@echo "... rebuild_cache"
-	@echo "... ClientSocket.o"
-	@echo "... ClientSocket.i"
-	@echo "... ClientSocket.s"
-	@echo "... ServerSocket.o"
-	@echo "... ServerSocket.i"
-	@echo "... ServerSocket.s"
-	@echo "... SocketException.o"
-	@echo "... SocketException.i"
-	@echo "... SocketException.s"
-	@echo "... SocketsUtils.o"
-	@echo "... SocketsUtils.i"
-	@echo "... SocketsUtils.s"
+	@echo "... Sockets"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

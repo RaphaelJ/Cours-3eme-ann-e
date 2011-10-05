@@ -8,6 +8,8 @@
 #include "SocketsUtils.h"
 #include "SocketException.h"
 
+using namespace std;
+
 class ClientSocket
 {
 private:
@@ -15,12 +17,15 @@ private:
 
 public:
     ClientSocket(const char* ip, const int port);
+    ClientSocket(const int socket_fd);
     ClientSocket(const ClientSocket& other);
     ~ClientSocket();
     ClientSocket& operator=(const ClientSocket& other);
     
+    int getSocketFD() const { return this->_socket; }
+    
     template <class T>
-    inline void ClientSocket::send(const vector<T> data)
+    inline void send(const vector<T> data)
     {
         // Copie le contenu du vecteur dans un buffer
         T *buffer = new T[data.size()];
@@ -35,7 +40,7 @@ public:
     }
 
     template <class T>
-    inline vector<T> ClientSocket::receive(const size_t n_elems)
+    inline vector<T> receive(const size_t n_elems)
     {
         // Recoit dans un buffer
         T *buffer = new T[n_elems];

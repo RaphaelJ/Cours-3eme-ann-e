@@ -56,10 +56,10 @@ CMAKE_BINARY_DIR = /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build
 # Target rules for target CMakeFiles/ferryinpres.dir
 
 # All Build rule for target.
-CMakeFiles/ferryinpres.dir/all:
+CMakeFiles/ferryinpres.dir/all: Sockets/CMakeFiles/Sockets.dir/all
 	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/depend
 	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles  1 2 3 4 5
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles  5
 	@echo "Built target ferryinpres"
 .PHONY : CMakeFiles/ferryinpres.dir/all
 
@@ -85,6 +85,56 @@ CMakeFiles/ferryinpres.dir/clean:
 
 # clean rule for target.
 clean: CMakeFiles/ferryinpres.dir/clean
+.PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory Sockets
+
+# Convenience name for "all" pass in the directory.
+Sockets/all: Sockets/CMakeFiles/Sockets.dir/all
+.PHONY : Sockets/all
+
+# Convenience name for "clean" pass in the directory.
+Sockets/clean: Sockets/CMakeFiles/Sockets.dir/clean
+.PHONY : Sockets/clean
+
+# Convenience name for "preinstall" pass in the directory.
+Sockets/preinstall:
+.PHONY : Sockets/preinstall
+
+#=============================================================================
+# Target rules for target Sockets/CMakeFiles/Sockets.dir
+
+# All Build rule for target.
+Sockets/CMakeFiles/Sockets.dir/all:
+	$(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/depend
+	$(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles  1 2 3 4
+	@echo "Built target Sockets"
+.PHONY : Sockets/CMakeFiles/Sockets.dir/all
+
+# Include target in all.
+all: Sockets/CMakeFiles/Sockets.dir/all
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+Sockets/CMakeFiles/Sockets.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles 4
+	$(MAKE) -f CMakeFiles/Makefile2 Sockets/CMakeFiles/Sockets.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles 0
+.PHONY : Sockets/CMakeFiles/Sockets.dir/rule
+
+# Convenience name for target.
+Sockets: Sockets/CMakeFiles/Sockets.dir/rule
+.PHONY : Sockets
+
+# clean rule for target.
+Sockets/CMakeFiles/Sockets.dir/clean:
+	$(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/clean
+.PHONY : Sockets/CMakeFiles/Sockets.dir/clean
+
+# clean rule for target.
+clean: Sockets/CMakeFiles/Sockets.dir/clean
 .PHONY : clean
 
 #=============================================================================
