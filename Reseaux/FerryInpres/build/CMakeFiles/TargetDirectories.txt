@@ -1,2 +1,3 @@
 /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets/CMakeFiles/Sockets.dir
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles/ferryinpres.dir
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles/client.dir
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles/serveur.dir

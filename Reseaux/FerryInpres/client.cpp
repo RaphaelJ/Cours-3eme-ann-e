@@ -5,5 +5,5 @@
 
 int main(int argc, char **argv)
 {
-    withServerSocket(39001, manageRequest);
+
 }

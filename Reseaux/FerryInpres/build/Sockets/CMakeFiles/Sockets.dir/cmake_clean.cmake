@@ -1,8 +1,8 @@
 FILE(REMOVE_RECURSE
-  "CMakeFiles/Sockets.dir/ClientSocket.o"
-  "CMakeFiles/Sockets.dir/ServerSocket.o"
-  "CMakeFiles/Sockets.dir/SocketException.o"
-  "CMakeFiles/Sockets.dir/SocketsUtils.o"
+  "CMakeFiles/Sockets.dir/ClientSocket.cpp.o"
+  "CMakeFiles/Sockets.dir/ServerSocket.cpp.o"
+  "CMakeFiles/Sockets.dir/SocketException.cpp.o"
+  "CMakeFiles/Sockets.dir/SocketsUtils.cpp.o"
   "libSockets.pdb"
   "libSockets.a"
 )

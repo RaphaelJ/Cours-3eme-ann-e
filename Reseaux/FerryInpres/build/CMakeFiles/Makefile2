@@ -53,38 +53,73 @@ CMAKE_SOURCE_DIR = /home/rapha/Desktop/Cours/Reseaux/FerryInpres
 CMAKE_BINARY_DIR = /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build
 
 #=============================================================================
-# Target rules for target CMakeFiles/ferryinpres.dir
+# Target rules for target CMakeFiles/client.dir
 
 # All Build rule for target.
-CMakeFiles/ferryinpres.dir/all: Sockets/CMakeFiles/Sockets.dir/all
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/depend
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/build
+CMakeFiles/client.dir/all: Sockets/CMakeFiles/Sockets.dir/all
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/depend
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles  5
-	@echo "Built target ferryinpres"
-.PHONY : CMakeFiles/ferryinpres.dir/all
+	@echo "Built target client"
+.PHONY : CMakeFiles/client.dir/all
 
 # Include target in all.
-all: CMakeFiles/ferryinpres.dir/all
+all: CMakeFiles/client.dir/all
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/ferryinpres.dir/rule: cmake_check_build_system
+CMakeFiles/client.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles 5
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/ferryinpres.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/client.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles 0
-.PHONY : CMakeFiles/ferryinpres.dir/rule
+.PHONY : CMakeFiles/client.dir/rule
 
 # Convenience name for target.
-ferryinpres: CMakeFiles/ferryinpres.dir/rule
-.PHONY : ferryinpres
+client: CMakeFiles/client.dir/rule
+.PHONY : client
 
 # clean rule for target.
-CMakeFiles/ferryinpres.dir/clean:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/clean
-.PHONY : CMakeFiles/ferryinpres.dir/clean
+CMakeFiles/client.dir/clean:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/clean
+.PHONY : CMakeFiles/client.dir/clean
 
 # clean rule for target.
-clean: CMakeFiles/ferryinpres.dir/clean
+clean: CMakeFiles/client.dir/clean
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/serveur.dir
+
+# All Build rule for target.
+CMakeFiles/serveur.dir/all: Sockets/CMakeFiles/Sockets.dir/all
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/depend
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles  6
+	@echo "Built target serveur"
+.PHONY : CMakeFiles/serveur.dir/all
+
+# Include target in all.
+all: CMakeFiles/serveur.dir/all
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/serveur.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles 5
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/serveur.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles 0
+.PHONY : CMakeFiles/serveur.dir/rule
+
+# Convenience name for target.
+serveur: CMakeFiles/serveur.dir/rule
+.PHONY : serveur
+
+# clean rule for target.
+CMakeFiles/serveur.dir/clean:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/clean
+.PHONY : CMakeFiles/serveur.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/serveur.dir/clean
 .PHONY : clean
 
 #=============================================================================

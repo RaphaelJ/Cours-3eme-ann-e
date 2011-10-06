@@ -2,23 +2,17 @@
 #define SOCKETCEXCEPTION_H
 
 #include <string>
-#include <vector>
+
+#include "Exception.h"
 
 using namespace std;
 
-class SocketException
+class SocketException : Exception
 {
-private:
-    string _message;
-    SocketException();
-
 public:
-    SocketException(const char* message);
-    SocketException(const SocketException& other);
-    ~SocketException();
-    SocketException& operator=(const SocketException& other);
-    
-    const char* getMessage() const { return this->_message.c_str(); };
+    virtual SocketException(const char* message);
+    virtual SocketException(const SocketException& other);
+    virtual ~SocketException();
 };
 
 #endif // SOCKETCEXCEPTION_H

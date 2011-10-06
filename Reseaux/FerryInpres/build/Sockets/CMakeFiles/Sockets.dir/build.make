@@ -49,112 +49,112 @@ include Sockets/CMakeFiles/Sockets.dir/progress.make
 # Include the compile flags for this target's objects.
 include Sockets/CMakeFiles/Sockets.dir/flags.make
 
-Sockets/CMakeFiles/Sockets.dir/ClientSocket.o: Sockets/CMakeFiles/Sockets.dir/flags.make
-Sockets/CMakeFiles/Sockets.dir/ClientSocket.o: ../Sockets/ClientSocket.cpp
+Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o: Sockets/CMakeFiles/Sockets.dir/flags.make
+Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o: ../Sockets/ClientSocket.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles $(CMAKE_PROGRESS_1)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object Sockets/CMakeFiles/Sockets.dir/ClientSocket.o"
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/Sockets.dir/ClientSocket.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o"
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/Sockets.dir/ClientSocket.cpp.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.cpp
 
-Sockets/CMakeFiles/Sockets.dir/ClientSocket.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Sockets.dir/ClientSocket.i"
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.cpp > CMakeFiles/Sockets.dir/ClientSocket.i
+Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Sockets.dir/ClientSocket.cpp.i"
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.cpp > CMakeFiles/Sockets.dir/ClientSocket.cpp.i
 
-Sockets/CMakeFiles/Sockets.dir/ClientSocket.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Sockets.dir/ClientSocket.s"
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.cpp -o CMakeFiles/Sockets.dir/ClientSocket.s
+Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Sockets.dir/ClientSocket.cpp.s"
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.cpp -o CMakeFiles/Sockets.dir/ClientSocket.cpp.s
 
-Sockets/CMakeFiles/Sockets.dir/ClientSocket.o.requires:
-.PHONY : Sockets/CMakeFiles/Sockets.dir/ClientSocket.o.requires
+Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o.requires:
+.PHONY : Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o.requires
 
-Sockets/CMakeFiles/Sockets.dir/ClientSocket.o.provides: Sockets/CMakeFiles/Sockets.dir/ClientSocket.o.requires
-	$(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ClientSocket.o.provides.build
-.PHONY : Sockets/CMakeFiles/Sockets.dir/ClientSocket.o.provides
+Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o.provides: Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o.requires
+	$(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o.provides.build
+.PHONY : Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o.provides
 
-Sockets/CMakeFiles/Sockets.dir/ClientSocket.o.provides.build: Sockets/CMakeFiles/Sockets.dir/ClientSocket.o
+Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o.provides.build: Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o
 
-Sockets/CMakeFiles/Sockets.dir/ServerSocket.o: Sockets/CMakeFiles/Sockets.dir/flags.make
-Sockets/CMakeFiles/Sockets.dir/ServerSocket.o: ../Sockets/ServerSocket.cpp
+Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o: Sockets/CMakeFiles/Sockets.dir/flags.make
+Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o: ../Sockets/ServerSocket.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles $(CMAKE_PROGRESS_2)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object Sockets/CMakeFiles/Sockets.dir/ServerSocket.o"
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/Sockets.dir/ServerSocket.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ServerSocket.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o"
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/Sockets.dir/ServerSocket.cpp.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ServerSocket.cpp
 
-Sockets/CMakeFiles/Sockets.dir/ServerSocket.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Sockets.dir/ServerSocket.i"
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ServerSocket.cpp > CMakeFiles/Sockets.dir/ServerSocket.i
+Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Sockets.dir/ServerSocket.cpp.i"
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ServerSocket.cpp > CMakeFiles/Sockets.dir/ServerSocket.cpp.i
 
-Sockets/CMakeFiles/Sockets.dir/ServerSocket.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Sockets.dir/ServerSocket.s"
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ServerSocket.cpp -o CMakeFiles/Sockets.dir/ServerSocket.s
+Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Sockets.dir/ServerSocket.cpp.s"
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ServerSocket.cpp -o CMakeFiles/Sockets.dir/ServerSocket.cpp.s
 
-Sockets/CMakeFiles/Sockets.dir/ServerSocket.o.requires:
-.PHONY : Sockets/CMakeFiles/Sockets.dir/ServerSocket.o.requires
+Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o.requires:
+.PHONY : Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o.requires
 
-Sockets/CMakeFiles/Sockets.dir/ServerSocket.o.provides: Sockets/CMakeFiles/Sockets.dir/ServerSocket.o.requires
-	$(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ServerSocket.o.provides.build
-.PHONY : Sockets/CMakeFiles/Sockets.dir/ServerSocket.o.provides
+Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o.provides: Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o.requires
+	$(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o.provides.build
+.PHONY : Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o.provides
 
-Sockets/CMakeFiles/Sockets.dir/ServerSocket.o.provides.build: Sockets/CMakeFiles/Sockets.dir/ServerSocket.o
+Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o.provides.build: Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o
 
-Sockets/CMakeFiles/Sockets.dir/SocketException.o: Sockets/CMakeFiles/Sockets.dir/flags.make
-Sockets/CMakeFiles/Sockets.dir/SocketException.o: ../Sockets/SocketException.cpp
+Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o: Sockets/CMakeFiles/Sockets.dir/flags.make
+Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o: ../Sockets/SocketException.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles $(CMAKE_PROGRESS_3)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object Sockets/CMakeFiles/Sockets.dir/SocketException.o"
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/Sockets.dir/SocketException.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o"
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/Sockets.dir/SocketException.cpp.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.cpp
 
-Sockets/CMakeFiles/Sockets.dir/SocketException.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Sockets.dir/SocketException.i"
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.cpp > CMakeFiles/Sockets.dir/SocketException.i
+Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Sockets.dir/SocketException.cpp.i"
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.cpp > CMakeFiles/Sockets.dir/SocketException.cpp.i
 
-Sockets/CMakeFiles/Sockets.dir/SocketException.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Sockets.dir/SocketException.s"
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.cpp -o CMakeFiles/Sockets.dir/SocketException.s
+Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Sockets.dir/SocketException.cpp.s"
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.cpp -o CMakeFiles/Sockets.dir/SocketException.cpp.s
 
-Sockets/CMakeFiles/Sockets.dir/SocketException.o.requires:
-.PHONY : Sockets/CMakeFiles/Sockets.dir/SocketException.o.requires
+Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o.requires:
+.PHONY : Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o.requires
 
-Sockets/CMakeFiles/Sockets.dir/SocketException.o.provides: Sockets/CMakeFiles/Sockets.dir/SocketException.o.requires
-	$(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketException.o.provides.build
-.PHONY : Sockets/CMakeFiles/Sockets.dir/SocketException.o.provides
+Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o.provides: Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o.requires
+	$(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o.provides.build
+.PHONY : Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o.provides
 
-Sockets/CMakeFiles/Sockets.dir/SocketException.o.provides.build: Sockets/CMakeFiles/Sockets.dir/SocketException.o
+Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o.provides.build: Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o
 
-Sockets/CMakeFiles/Sockets.dir/SocketsUtils.o: Sockets/CMakeFiles/Sockets.dir/flags.make
-Sockets/CMakeFiles/Sockets.dir/SocketsUtils.o: ../Sockets/SocketsUtils.cpp
+Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o: Sockets/CMakeFiles/Sockets.dir/flags.make
+Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o: ../Sockets/SocketsUtils.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles $(CMAKE_PROGRESS_4)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object Sockets/CMakeFiles/Sockets.dir/SocketsUtils.o"
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/Sockets.dir/SocketsUtils.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o"
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/Sockets.dir/SocketsUtils.cpp.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.cpp
 
-Sockets/CMakeFiles/Sockets.dir/SocketsUtils.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Sockets.dir/SocketsUtils.i"
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.cpp > CMakeFiles/Sockets.dir/SocketsUtils.i
+Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Sockets.dir/SocketsUtils.cpp.i"
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.cpp > CMakeFiles/Sockets.dir/SocketsUtils.cpp.i
 
-Sockets/CMakeFiles/Sockets.dir/SocketsUtils.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Sockets.dir/SocketsUtils.s"
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.cpp -o CMakeFiles/Sockets.dir/SocketsUtils.s
+Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Sockets.dir/SocketsUtils.cpp.s"
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.cpp -o CMakeFiles/Sockets.dir/SocketsUtils.cpp.s
 
-Sockets/CMakeFiles/Sockets.dir/SocketsUtils.o.requires:
-.PHONY : Sockets/CMakeFiles/Sockets.dir/SocketsUtils.o.requires
+Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o.requires:
+.PHONY : Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o.requires
 
-Sockets/CMakeFiles/Sockets.dir/SocketsUtils.o.provides: Sockets/CMakeFiles/Sockets.dir/SocketsUtils.o.requires
-	$(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketsUtils.o.provides.build
-.PHONY : Sockets/CMakeFiles/Sockets.dir/SocketsUtils.o.provides
+Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o.provides: Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o.requires
+	$(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o.provides.build
+.PHONY : Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o.provides
 
-Sockets/CMakeFiles/Sockets.dir/SocketsUtils.o.provides.build: Sockets/CMakeFiles/Sockets.dir/SocketsUtils.o
+Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o.provides.build: Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o
 
 # Object files for target Sockets
 Sockets_OBJECTS = \
-"CMakeFiles/Sockets.dir/ClientSocket.o" \
-"CMakeFiles/Sockets.dir/ServerSocket.o" \
-"CMakeFiles/Sockets.dir/SocketException.o" \
-"CMakeFiles/Sockets.dir/SocketsUtils.o"
+"CMakeFiles/Sockets.dir/ClientSocket.cpp.o" \
+"CMakeFiles/Sockets.dir/ServerSocket.cpp.o" \
+"CMakeFiles/Sockets.dir/SocketException.cpp.o" \
+"CMakeFiles/Sockets.dir/SocketsUtils.cpp.o"
 
 # External object files for target Sockets
 Sockets_EXTERNAL_OBJECTS =
 
-Sockets/libSockets.a: Sockets/CMakeFiles/Sockets.dir/ClientSocket.o
-Sockets/libSockets.a: Sockets/CMakeFiles/Sockets.dir/ServerSocket.o
-Sockets/libSockets.a: Sockets/CMakeFiles/Sockets.dir/SocketException.o
-Sockets/libSockets.a: Sockets/CMakeFiles/Sockets.dir/SocketsUtils.o
+Sockets/libSockets.a: Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o
+Sockets/libSockets.a: Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o
+Sockets/libSockets.a: Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o
+Sockets/libSockets.a: Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o
 Sockets/libSockets.a: Sockets/CMakeFiles/Sockets.dir/build.make
 Sockets/libSockets.a: Sockets/CMakeFiles/Sockets.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX static library libSockets.a"
@@ -165,10 +165,10 @@ Sockets/libSockets.a: Sockets/CMakeFiles/Sockets.dir/link.txt
 Sockets/CMakeFiles/Sockets.dir/build: Sockets/libSockets.a
 .PHONY : Sockets/CMakeFiles/Sockets.dir/build
 
-Sockets/CMakeFiles/Sockets.dir/requires: Sockets/CMakeFiles/Sockets.dir/ClientSocket.o.requires
-Sockets/CMakeFiles/Sockets.dir/requires: Sockets/CMakeFiles/Sockets.dir/ServerSocket.o.requires
-Sockets/CMakeFiles/Sockets.dir/requires: Sockets/CMakeFiles/Sockets.dir/SocketException.o.requires
-Sockets/CMakeFiles/Sockets.dir/requires: Sockets/CMakeFiles/Sockets.dir/SocketsUtils.o.requires
+Sockets/CMakeFiles/Sockets.dir/requires: Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o.requires
+Sockets/CMakeFiles/Sockets.dir/requires: Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o.requires
+Sockets/CMakeFiles/Sockets.dir/requires: Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o.requires
+Sockets/CMakeFiles/Sockets.dir/requires: Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o.requires
 .PHONY : Sockets/CMakeFiles/Sockets.dir/requires
 
 Sockets/CMakeFiles/Sockets.dir/clean:

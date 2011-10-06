@@ -99,17 +99,30 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named ferryinpres
+# Target rules for targets named client
 
 # Build rule for target.
-ferryinpres: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 ferryinpres
-.PHONY : ferryinpres
+client: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client
+.PHONY : client
 
 # fast build rule for target.
-ferryinpres/fast:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/build
-.PHONY : ferryinpres/fast
+client/fast:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/build
+.PHONY : client/fast
+
+#=============================================================================
+# Target rules for targets named serveur
+
+# Build rule for target.
+serveur: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 serveur
+.PHONY : serveur
+
+# fast build rule for target.
+serveur/fast:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/build
+.PHONY : serveur/fast
 
 #=============================================================================
 # Target rules for targets named Sockets
@@ -124,20 +137,53 @@ Sockets/fast:
 	$(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/build
 .PHONY : Sockets/fast
 
+client.o: client.cpp.o
+.PHONY : client.o
+
 # target to build an object file
-main.o:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/main.o
-.PHONY : main.o
+client.cpp.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/client.cpp.o
+.PHONY : client.cpp.o
+
+client.i: client.cpp.i
+.PHONY : client.i
 
 # target to preprocess a source file
-main.i:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/main.i
-.PHONY : main.i
+client.cpp.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/client.cpp.i
+.PHONY : client.cpp.i
+
+client.s: client.cpp.s
+.PHONY : client.s
 
 # target to generate assembly for a file
-main.s:
-	$(MAKE) -f CMakeFiles/ferryinpres.dir/build.make CMakeFiles/ferryinpres.dir/main.s
-.PHONY : main.s
+client.cpp.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/client.cpp.s
+.PHONY : client.cpp.s
+
+server.o: server.cpp.o
+.PHONY : server.o
+
+# target to build an object file
+server.cpp.o:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/server.cpp.o
+.PHONY : server.cpp.o
+
+server.i: server.cpp.i
+.PHONY : server.i
+
+# target to preprocess a source file
+server.cpp.i:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/server.cpp.i
+.PHONY : server.cpp.i
+
+server.s: server.cpp.s
+.PHONY : server.s
+
+# target to generate assembly for a file
+server.cpp.s:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/server.cpp.s
+.PHONY : server.cpp.s
 
 # Help Target
 help:
@@ -145,13 +191,17 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... client"
 	@echo "... edit_cache"
-	@echo "... ferryinpres"
 	@echo "... rebuild_cache"
+	@echo "... serveur"
 	@echo "... Sockets"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... client.o"
+	@echo "... client.i"
+	@echo "... client.s"
+	@echo "... server.o"
+	@echo "... server.i"
+	@echo "... server.s"
 .PHONY : help
 
 

@@ -112,65 +112,101 @@ Sockets/fast:
 	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/build
 .PHONY : Sockets/fast
 
-# target to build an object file
-ClientSocket.o:
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ClientSocket.o
+ClientSocket.o: ClientSocket.cpp.o
 .PHONY : ClientSocket.o
 
-# target to preprocess a source file
-ClientSocket.i:
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ClientSocket.i
+# target to build an object file
+ClientSocket.cpp.o:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o
+.PHONY : ClientSocket.cpp.o
+
+ClientSocket.i: ClientSocket.cpp.i
 .PHONY : ClientSocket.i
 
-# target to generate assembly for a file
-ClientSocket.s:
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ClientSocket.s
+# target to preprocess a source file
+ClientSocket.cpp.i:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.i
+.PHONY : ClientSocket.cpp.i
+
+ClientSocket.s: ClientSocket.cpp.s
 .PHONY : ClientSocket.s
 
-# target to build an object file
-ServerSocket.o:
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ServerSocket.o
+# target to generate assembly for a file
+ClientSocket.cpp.s:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.s
+.PHONY : ClientSocket.cpp.s
+
+ServerSocket.o: ServerSocket.cpp.o
 .PHONY : ServerSocket.o
 
-# target to preprocess a source file
-ServerSocket.i:
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ServerSocket.i
+# target to build an object file
+ServerSocket.cpp.o:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o
+.PHONY : ServerSocket.cpp.o
+
+ServerSocket.i: ServerSocket.cpp.i
 .PHONY : ServerSocket.i
 
-# target to generate assembly for a file
-ServerSocket.s:
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ServerSocket.s
+# target to preprocess a source file
+ServerSocket.cpp.i:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.i
+.PHONY : ServerSocket.cpp.i
+
+ServerSocket.s: ServerSocket.cpp.s
 .PHONY : ServerSocket.s
 
-# target to build an object file
-SocketException.o:
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketException.o
+# target to generate assembly for a file
+ServerSocket.cpp.s:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.s
+.PHONY : ServerSocket.cpp.s
+
+SocketException.o: SocketException.cpp.o
 .PHONY : SocketException.o
 
-# target to preprocess a source file
-SocketException.i:
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketException.i
+# target to build an object file
+SocketException.cpp.o:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o
+.PHONY : SocketException.cpp.o
+
+SocketException.i: SocketException.cpp.i
 .PHONY : SocketException.i
 
-# target to generate assembly for a file
-SocketException.s:
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketException.s
+# target to preprocess a source file
+SocketException.cpp.i:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.i
+.PHONY : SocketException.cpp.i
+
+SocketException.s: SocketException.cpp.s
 .PHONY : SocketException.s
 
-# target to build an object file
-SocketsUtils.o:
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketsUtils.o
+# target to generate assembly for a file
+SocketException.cpp.s:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.s
+.PHONY : SocketException.cpp.s
+
+SocketsUtils.o: SocketsUtils.cpp.o
 .PHONY : SocketsUtils.o
 
-# target to preprocess a source file
-SocketsUtils.i:
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketsUtils.i
+# target to build an object file
+SocketsUtils.cpp.o:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o
+.PHONY : SocketsUtils.cpp.o
+
+SocketsUtils.i: SocketsUtils.cpp.i
 .PHONY : SocketsUtils.i
 
-# target to generate assembly for a file
-SocketsUtils.s:
-	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketsUtils.s
+# target to preprocess a source file
+SocketsUtils.cpp.i:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.i
+.PHONY : SocketsUtils.cpp.i
+
+SocketsUtils.s: SocketsUtils.cpp.s
 .PHONY : SocketsUtils.s
+
+# target to generate assembly for a file
+SocketsUtils.cpp.s:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.s
+.PHONY : SocketsUtils.cpp.s
 
 # Help Target
 help:

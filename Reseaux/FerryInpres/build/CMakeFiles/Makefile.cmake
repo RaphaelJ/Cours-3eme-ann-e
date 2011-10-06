@@ -47,6 +47,7 @@ SET(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 SET(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/ferryinpres.dir/DependInfo.cmake"
+  "CMakeFiles/client.dir/DependInfo.cmake"
+  "CMakeFiles/serveur.dir/DependInfo.cmake"
   "Sockets/CMakeFiles/Sockets.dir/DependInfo.cmake"
   )

@@ -24,6 +24,7 @@ public:
     
     int getSocketFD() const { return this->_socket; }
     
+    // Envoie un vecteur de données
     template <class T>
     inline void send(const vector<T> data)
     {
@@ -38,7 +39,16 @@ public:
         if (send(this->_socket, buffer, length, 0) == -1)
             throw SocketException("Erreur lors de l'envoi des données");
     }
-
+    
+    // Envoie une donnée
+    template <class T>
+    inline void send(const T data)
+    {
+        if (send(this->_socket, data, sizeof (T), 0) == -1)
+            throw SocketException("Erreur lors de l'envoi des données");
+    }
+    
+    // Reçoit un vecteur de données
     template <class T>
     inline vector<T> receive(const size_t n_elems)
     {
@@ -50,6 +60,18 @@ public:
         
         // Copie le buffer dans un vector
         vector<T> data(buffer, buffer + n_elems);
+        
+        return data;
+    }
+    
+    // Reçoit une donnée
+    template <class T>
+    inline T receive()
+    {
+        T data;
+        
+        if (recv(this->_socket, &data, sizeof (T), 0) == -1)
+            throw SocketException("Erreur lors de la réception des données");
         
         return data;
     }
