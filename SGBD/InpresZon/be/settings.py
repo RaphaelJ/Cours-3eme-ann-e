@@ -19,16 +19,16 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'be.sqlite3',
     },
-    #'oracle': {
-        #'ENGINE': 'django.db.backends.oracle',
-        #'NAME': 'xe',
-        #'USER': 'a_user',
-        #'PASSWORD': 'a_password',
-        #'HOST': '',
-        #'PORT': '',
-    #}
+    'oracle': {
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': 'oracle',
+        'USER': 'be',
+        'PASSWORD': 'pass',
+        'HOST': '192.168.10.100',
+        'PORT': '1521',
+    }
 }
-DATABASES['default'] = DATABASES['sqlite']
+DATABASES['default'] = DATABASES['oracle']
 
 TIME_ZONE = 'Europe/Brussels'
 

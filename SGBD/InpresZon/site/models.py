@@ -285,3 +285,10 @@ class CommandePaquetProduit(models.Model):
 
     class Meta:
         unique_together = ('paquet', 'produit')
+
+# Gestion des erreurs
+
+class Erreur(models.Model):
+    date_erreur = models.DateTimeField(auto_now_add=True)
+    erreur = models.TextField()
+    utilisateur = models.ForeignKey(Utilisateur, null=True)
