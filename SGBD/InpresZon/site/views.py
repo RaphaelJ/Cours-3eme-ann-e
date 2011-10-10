@@ -14,7 +14,7 @@ def catalogue(request):
     """ Affiche tous les éléments du catalogue """
     
     return render_to_response("catalogue.html", {
-        'produits': Produit.objects.all(),
+        'produits': Produit.objects.all()[:100],
     }, context_instance=RequestContext(request))
     
 def produit(request, produit_ean):
