@@ -24,7 +24,7 @@ DATABASES = {
         'NAME': 'oracle',
         'USER': 'be',
         'PASSWORD': 'pass',
-        'HOST': '192.168.10.100',
+        'HOST': '127.0.0.1',
         'PORT': '1521',
     }
 }

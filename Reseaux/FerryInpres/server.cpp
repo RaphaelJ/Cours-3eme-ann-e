@@ -24,10 +24,23 @@ void manageRequest(ClientSocket sock)
 void user_login(ClientSocket sock)
 {
     protocol packet = sock.receive<protocol>();
-    if (packet.type == LOGIN) {
+    while (packet.type == LOGIN) {
+        if (strcmp(packet.content.login.user, "rapha") == 0) {#
+            
+        }
+             
+        
+    }
         
         
+        else {
+            
+        }
+        packet.type = ACK;
+        sock.send<protocol>(packet);
+       
     } else
         throw Exception("En attente du login, reçu une commande inconnue.");
 }
 
+void  

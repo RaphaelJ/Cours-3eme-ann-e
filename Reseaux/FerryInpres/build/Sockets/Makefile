@@ -136,6 +136,30 @@ ClientSocket.cpp.s:
 	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.s
 .PHONY : ClientSocket.cpp.s
 
+Exception.o: Exception.cpp.o
+.PHONY : Exception.o
+
+# target to build an object file
+Exception.cpp.o:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/Exception.cpp.o
+.PHONY : Exception.cpp.o
+
+Exception.i: Exception.cpp.i
+.PHONY : Exception.i
+
+# target to preprocess a source file
+Exception.cpp.i:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/Exception.cpp.i
+.PHONY : Exception.cpp.i
+
+Exception.s: Exception.cpp.s
+.PHONY : Exception.s
+
+# target to generate assembly for a file
+Exception.cpp.s:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/Exception.cpp.s
+.PHONY : Exception.cpp.s
+
 ServerSocket.o: ServerSocket.cpp.o
 .PHONY : ServerSocket.o
 
@@ -220,6 +244,9 @@ help:
 	@echo "... ClientSocket.o"
 	@echo "... ClientSocket.i"
 	@echo "... ClientSocket.s"
+	@echo "... Exception.o"
+	@echo "... Exception.i"
+	@echo "... Exception.s"
 	@echo "... ServerSocket.o"
 	@echo "... ServerSocket.i"
 	@echo "... ServerSocket.s"

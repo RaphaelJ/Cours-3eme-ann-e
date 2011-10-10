@@ -26,6 +26,14 @@ SocketsUtils.h
 SocketException.h
 /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
 
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/Exception.cpp
+Exception.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/Exception.h
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/Exception.h
+string
+-
+
 /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ServerSocket.cpp
 ServerSocket.h
 /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ServerSocket.h
@@ -45,8 +53,8 @@ SocketException.h
 /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
 string
 -
-vector
--
+Exception.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/Exception.h
 
 /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.cpp
 SocketsUtils.h

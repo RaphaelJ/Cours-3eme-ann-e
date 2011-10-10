@@ -3,18 +3,25 @@
 
 Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o: ../Sockets/ClientSocket.cpp
 Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o: ../Sockets/ClientSocket.h
+Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o: ../Sockets/Exception.h
 Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o: ../Sockets/SocketException.h
 Sockets/CMakeFiles/Sockets.dir/ClientSocket.cpp.o: ../Sockets/SocketsUtils.h
 
+Sockets/CMakeFiles/Sockets.dir/Exception.cpp.o: ../Sockets/Exception.cpp
+Sockets/CMakeFiles/Sockets.dir/Exception.cpp.o: ../Sockets/Exception.h
+
 Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o: ../Sockets/ClientSocket.h
+Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o: ../Sockets/Exception.h
 Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o: ../Sockets/ServerSocket.cpp
 Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o: ../Sockets/ServerSocket.h
 Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o: ../Sockets/SocketException.h
 Sockets/CMakeFiles/Sockets.dir/ServerSocket.cpp.o: ../Sockets/SocketsUtils.h
 
+Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o: ../Sockets/Exception.h
 Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o: ../Sockets/SocketException.cpp
 Sockets/CMakeFiles/Sockets.dir/SocketException.cpp.o: ../Sockets/SocketException.h
 
+Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o: ../Sockets/Exception.h
 Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o: ../Sockets/SocketException.h
 Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o: ../Sockets/SocketsUtils.cpp
 Sockets/CMakeFiles/Sockets.dir/SocketsUtils.cpp.o: ../Sockets/SocketsUtils.h

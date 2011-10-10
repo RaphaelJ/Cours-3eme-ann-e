@@ -1,2 +1,2 @@
-/usr/bin/ar cr libSockets.a  CMakeFiles/Sockets.dir/ClientSocket.cpp.o CMakeFiles/Sockets.dir/ServerSocket.cpp.o CMakeFiles/Sockets.dir/SocketException.cpp.o CMakeFiles/Sockets.dir/SocketsUtils.cpp.o
+/usr/bin/ar cr libSockets.a  CMakeFiles/Sockets.dir/ClientSocket.cpp.o CMakeFiles/Sockets.dir/ServerSocket.cpp.o CMakeFiles/Sockets.dir/Exception.cpp.o CMakeFiles/Sockets.dir/SocketException.cpp.o CMakeFiles/Sockets.dir/SocketsUtils.cpp.o
 /usr/bin/ranlib libSockets.a
