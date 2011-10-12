@@ -1,15 +1,21 @@
 # -*- coding: UTF-8 -*-
 
-from django.forms import ModelForm, CharField, PasswordInput, ValidationError
+from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from auth_backend import crypt_mdp
 from models import Utilisateur, CaddieProduit, Commande
 
-class UtilisateurForm(ModelForm):
+class UtilisateurForm(forms.Form):
     """ Formulaire permettant l'inscription d'un utilisateur """
 
-    mot_de_passe = CharField(label=_("Mot de passe"), widget=PasswordInput)
+    login = forms.CharField(label=_(u"Nom d'utilisateur"), max_length=30)
+    mot_de_passe = forms.CharField(
+        label=_(u"Mot de passe"), widget=forms.PasswordInput
+    )
+    email = forms.CharField(label=_(u"Adresse email"))
+    nom = forms.CharField(label=_(u"Nom"), max_length=30)
+    prenom = forms.CharField(label=_(u"Prénom"), max_length=30)
 
     def clean_mot_de_passe(self):
         """ Crypte la mot de passe avant d'enregistrer """
@@ -18,27 +24,23 @@ class UtilisateurForm(ModelForm):
         self.cleaned_data["mot_de_passe"] = mdp_hash
         return mdp_hash
 
-    class Meta:
-        model = Utilisateur
-
 class ProfilForm(UtilisateurForm):
     """
     Formulaire permettant la modification des informations de profil de
     l'utilisateur
     """
-
+    
     class Meta:
-        model = Utilisateur
         exclude = ('login')
 
-class CaddieProduitForm(ModelForm):
+class CaddieProduitForm(forms.ModelForm):
     """ Formulaire permettant la modification de la quantité d'un article """
 
     def clean_quantite(self):
         """ Vérifie que la quantité introduite est positive et non nulle """
         quantite = self.cleaned_data['quantite']
         if quantite <= 0:
-            raise ValidationError(
+            raise forms.ValidationError(
                 _(u"La quantité du produit doit être supérieure à zéro")
             )
         
@@ -47,7 +49,7 @@ class CaddieProduitForm(ModelForm):
     class Meta:
         model = CaddieProduit
 
-class Adresse(ModelForm):
+class Adresse(forms.ModelForm):
     """
     Formulaire permettant d'entrer une nouvelle adresse
     """
