@@ -6,43 +6,57 @@ from django.db import connection
 
 from models import Utilisateur
 
-# Effectue l'appel d'une procédure ou une fonction PL/SQL
-callproc = connection.cursor().callproc
-callfunc = connection.cursor().callfunc
-
 class GestionUtilisateurs:
     @staticmethod
     def Ajouter(login, mot_de_passe, email, nom, prenom):
-        callproc("GESTION_UTILISATEURS.Ajouter", (
+        connection.cursor()
+        cur = connection.connection.cursor()
+        return cur.callproc("GESTION_UTILISATEURS.Ajouter", (
             login, mot_de_passe, email, nom, prenom
         ))
 
     @staticmethod
+    def Modifier(login, mot_de_passe, nom, prenom):
+        connection.cursor()
+        cur = connection.connection.cursor()
+        return cur.callproc("GESTION_UTILISATEURS.Modifier", (
+            login, mot_de_passe, nom, prenom
+        ))
+
+    @staticmethod
     def LoginExiste(login):
-        return callfunc("GESTION_UTILISATEURS.LoginExiste",
+        connection.cursor()
+        cur = connection.connection.cursor()
+        return cur.callfunc("GESTION_UTILISATEURS.LoginExiste",
             cx_Oracle.NUMBER, [login]
-        ) == '1'
+        ) == 1.0
 
     @staticmethod
     def EmailExiste(email):
-        return callfunc("GESTION_UTILISATEURS.EmailExiste",
+        connection.cursor()
+        cur = connection.connection.cursor()
+        return cur.callfunc("GESTION_UTILISATEURS.EmailExiste",
             cx_Oracle.NUMBER, [email]
-        ) == '1'
+        ) == 1.0
 
     @staticmethod
     def Connexion(login, mot_de_passe):
-        cur = connection.cursor()
-        
-        email = cur.var(cx_Oracle.STRING)
-        admin = cur.var(cx_Oracle.NUMBER)
-        nom = cur.var(cx_Oracle.STRING)
-        prenom = cur.var(cx_Oracle.STRING)
-        date_inscription = cur.var(cx_Oracle.TIMESTAMP)
+        connection.cursor()
+        cur = connection.connection.cursor()
+
+        variables = { 'login': login,
+            'mot_de_passe': mot_de_passe,
+            'email': cur.var(cx_Oracle.STRING),
+            'admin': cur.var(cx_Oracle.NUMBER),
+            'nom': cur.var(cx_Oracle.STRING),
+            'prenom': cur.var(cx_Oracle.STRING),
+            'date_inscription': cur.var(cx_Oracle.TIMESTAMP)
+        }
 
         cur.execute("""
-            DECLARE;
-                utilisateur SITE_UTILISATEUR%%ROWTYPE
-            BEGIN;
+            DECLARE
+                utilisateur SITE_UTILISATEUR%ROWTYPE;
+            BEGIN
                 utilisateur := GESTION_UTILISATEURS.Connexion(
                     :login, :mot_de_passe
                 );
@@ -51,19 +65,22 @@ class GestionUtilisateurs:
                 :nom := utilisateur.nom;
                 :prenom := utilisateur.prenom;
                 :date_inscription := utilisateur.date_inscription;
-            END;""", login=login, mot_de_passe=mot_de_passe, email=email,
-            admin=admin, nom=nom, prenom=prenom,
-            date_inscription=date_inscription
+            END;""",variables
         )
         
         return Utilisateur(
-            login=login, mot_de_passe=mot_de_passe, email=email, admin=admin,
-            nom=nom, prenom=prenom, date_inscription=date_inscription
+            login=login, mot_de_passe=mot_de_passe,
+            email=variables['email'].getvalue(),
+            admin=variables['admin'].getvalue(),
+            nom=variables['nom'].getvalue(),
+            prenom=variables['prenom'].getvalue(),
+            date_inscription=variables['date_inscription'].getvalue()
         )
 
     @staticmethod
     def Utilisateur(login):
-        cur = connection.cursor()
+        connection.cursor()
+        cur = connection.connection.cursor()
 
         variables = { 'login': login,
             'mot_de_passe': cur.var(cx_Oracle.STRING),
@@ -74,12 +91,12 @@ class GestionUtilisateurs:
             'date_inscription': cur.var(cx_Oracle.TIMESTAMP)
         }
 
-        cur.execute(u"""
-            DECLARE;
-                utilisateur SITE_UTILISATEUR%%ROWTYPE
-            BEGIN;
+        cur.execute("""
+            DECLARE
+                utilisateur SITE_UTILISATEUR%ROWTYPE;
+            BEGIN
                 utilisateur := GESTION_UTILISATEURS.Utilisateur(:login);
-                :mot_de_passe := utilisateur.mot_de_passe
+                :mot_de_passe := utilisateur.mot_de_passe;
                 :email := utilisateur.email;
                 :admin := utilisateur.admin;
                 :nom := utilisateur.nom;
@@ -89,6 +106,11 @@ class GestionUtilisateurs:
         )
 
         return Utilisateur(
-            login=login, mot_de_passe=mot_de_passe, email=email, admin=admin,
-            nom=nom, prenom=prenom, date_inscription=date_inscription
+            login=login,
+            mot_de_passe=variables['mot_de_passe'].getvalue(),
+            email=variables['email'].getvalue(),
+            admin=variables['admin'].getvalue(),
+            nom=variables['nom'].getvalue(),
+            prenom=variables['prenom'].getvalue(),
+            date_inscription=variables['date_inscription'].getvalue()
         )

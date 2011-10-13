@@ -79,7 +79,7 @@ idsFiltres filtres = do
     ids <- forM (map requeteFiltre filtres) $ \(vue, options) ->
         queryViewKeys couchDb couchDesign vue options
     
-    return $ foldl1' intersect (nub ids) -- Retourne les ids communs
+    return $ foldl1' intersect (nub ids) -- Retourne les ids communs uniques
     
   where
     requeteFiltre :: Filtre -> (Doc, [(String, JSValue)])

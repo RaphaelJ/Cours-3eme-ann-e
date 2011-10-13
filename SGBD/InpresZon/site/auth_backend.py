@@ -4,7 +4,7 @@ import sha
 
 from django.contrib.auth.models import User, check_password
 
-from models import Utilisateur
+from packages import GestionUtilisateurs
 
 def crypt_mdp(mot_de_passe):
     """ Retourne la valeur hexadécimale du hash SHA1 du mot de passe """
@@ -16,7 +16,7 @@ class PLSQLBackend():
 
     def authenticate(self, username=None, password=None):
         try:
-            u = Utilisateur.objects.get(
+            u = GestionUtilisateurs.Connexion(
                 login=username, mot_de_passe=crypt_mdp(password)
             )
             return construire_user(u)
@@ -25,7 +25,7 @@ class PLSQLBackend():
 
     def get_user(self, user_id):
         try:
-            u = Utilisateur.objects.get(login=user_id)
+            u = GestionUtilisateurs.Utilisateur(login=user_id)
             return construire_user(u)
         except Utilisateur.DoesNotExist:
             return None
