@@ -20,14 +20,14 @@ class PLSQLBackend():
                 login=username, mot_de_passe=crypt_mdp(password)
             )
             return construire_user(u)
-        except Utilisateur.DoesNotExist:
+        except:
             return None
 
     def get_user(self, user_id):
         try:
             u = GestionUtilisateurs.Utilisateur(login=user_id)
             return construire_user(u)
-        except Utilisateur.DoesNotExist:
+        except:
             return None
 
 def construire_user(u):
