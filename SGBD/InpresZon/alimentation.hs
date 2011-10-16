@@ -8,15 +8,28 @@ couchHote = "127.0.0.1"
 couchDb = db "products"
 couchDesign = doc "index"
 
+beHote = "192.168.10.74"
+usaHote = "192.168.10.74"
+ukHote = "192.168.10.74"
+
 -- | Contenu des filtres pour l'importation depuis CouchDB.
 data Filtre = Artiste String | Prix Double Double | Categorie Categorie
             | Langue Langue | ASIN String deriving (Show)
 data Categorie = Musique | Livre | Film deriving (Show)
 data Langue = Fr | En deriving (Show)
 
-main = do menu True [ ("Insérer dans BE", insertionBe)
-                    , ("Insérer dans USA", insertionUsa)
-                    , ("Insérer dans UK", insertionUk)]
+main = do
+    
+    menu True [ ("Insérer dans BE", insertionBe )
+              , ("Insérer dans USA", insertionUsa)
+              , ("Insérer dans UK", insertionUk)]
+  where
+    oracleConn hote user =
+        connectODBC $ "DRIVER=oracle;Dbq=//"++hote++":1521/oracle.oracle;\
+                       UID="++user++"be;PWD=pass"
+    mysqlConn hote user =
+        connectODBC $ "DRIVER=mysql;SERVER="++hote++";DATABASE="++user++";\
+                       USER="++user++";PASSWORD=pass;"
 
 -- | Fonction générique pour la gestion des menus. Accepte une liste d'actions
 -- associées à une description.
@@ -119,7 +132,7 @@ inserer id_docs = do
 
 -- | Demande les filtres l'utilisateur, récupère les documents et les insère
 -- dans la base de données
-insertion filtres = runCouchDB couchHote 5984 $ do
+insertion filtres conn = runCouchDB couchHote 5984 $ do
     filtres' <- liftIO $ gestionFiltres filtres
     ids <- idsFiltres filtres'
     inserer ids

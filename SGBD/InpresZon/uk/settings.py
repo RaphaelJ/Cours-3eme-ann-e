@@ -15,29 +15,24 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-    'sqlite': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'be.sqlite3',
-    },
-    'oracle': {
-        'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'oracle',
-        'USER': 'be',
+    'mysql': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'uk',
+        'USER': 'uk',
         'PASSWORD': 'pass',
         'HOST': '192.168.10.74',
-        'PORT': '1521',
     }
 }
-DATABASES['default'] = DATABASES['oracle']
+DATABASES['default'] = DATABASES['mysql']
 
-SITE = True
+SITE = False
 CATEGORIES = (
-    'livre', 'musique', 'film'
+    'film'
 )
 
 TIME_ZONE = 'Europe/Brussels'
 
-LANGUAGE_CODE = 'fr'
+LANGUAGE_CODE = 'en'
 
 SITE_ID = 1
 

@@ -5,6 +5,7 @@ from cx_Oracle import IntegrityError
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.context_processors import csrf
+from django.db import connection, transaction
 from django.db.utils import DatabaseError
 from django.forms.util import ErrorList
 from django.shortcuts import render_to_response, redirect
@@ -19,7 +20,6 @@ from packages import GestionUtilisateurs
 #[{'time': '0.154', 'sql': u'SELECT * FROM (SELECT ROWNUM AS "_RN", "_SUB".* FROM (SELECT (1) AS "A" FROM "SITE_UTILISATEUR" WHERE "SITE_UTILISATEUR"."LOGIN" = Rapha ) "_SUB" WHERE ROWNUM <= 1) WHERE "_RN" > 0'}, {'time': '0.032', 'sql': u'SELECT * FROM (SELECT ROWNUM AS "_RN", "_SUB".* FROM (SELECT (1) AS "A" FROM "SITE_UTILISATEUR" WHERE "SITE_UTILISATEUR"."EMAIL" = rap@gmail.com ) "_SUB" WHERE ROWNUM <= 1) WHERE "_RN" > 0'}, {'time': '0.004', 'sql': u'SELECT * FROM (SELECT ROWNUM AS "_RN", "_SUB".* FROM (SELECT (1) AS "A" FROM "SITE_UTILISATEUR" WHERE "SITE_UTILISATEUR"."LOGIN" = Rapha ) "_SUB" WHERE ROWNUM <= 1) WHERE "_RN" > 0'}, {'time': '0.196', 'sql': u'
 #INSERT INTO "SITE_UTILISATEUR" ("LOGIN", "MOT_DE_PASSE", "EMAIL", "ADMIN", "NOM", "PRENOM", "DATE_INSCRIPTION", "MODE_PAIEMENT", "MODE_LIVRAISON") VALUES (Rapha, fefd47cb7691a8016da2735af04ce41b46a8365e, rap@gmail.com, False, Rap, Ha, 2011-10-12 09:43:21.784305, , )'}, {'time': '0.028', 'sql': u'SELECT "SITE_UTILISATEUR"."LOGIN", "SITE_UTILISATEUR"."MOT_DE_PASSE", "SITE_UTILISATEUR"."EMAIL", "SITE_UTILISATEUR"."ADMIN", "SITE_UTILISATEUR"."NOM", "SITE_UTILISATEUR"."PRENOM", "SITE_UTILISATEUR"."DATE_INSCRIPTION", "SITE_UTILISATEUR"."MODE_PAIEMENT", "SITE_UTILISATEUR"."MODE_LIVRAISON" FROM "SITE_UTILISATEUR" WHERE ("SITE_UTILISATEUR"."LOGIN" = Rapha  AND "SITE_UTILISATEUR"."MOT_DE_PASSE" = fefd47cb7691a8016da2735af04ce41b46a8365e )'}, {'time': '0.008', 'sql': u'SELECT "SITE_SESSION"."CLE", "SITE_SESSION"."DONNEES", "SITE_SESSION"."EXPIRATION" FROM "SITE_SESSION" WHERE ("SITE_SESSION"."CLE" = a2b72f0291a6b1f1dd135e5ccd335669  AND "SITE_SESSION"."EXPIRATION" > TO_TIMESTAMP(2011-10-12 09:43:22.056324, \'YYYY-MM-DD HH24:MI:SS.FF\') )'}, {'time': '0.006', 'sql': u'SELECT "SITE_SESSION"."CLE", "SITE_SESSION"."DONNEES", "SITE_SESSION"."EXPIRATION" FROM "SITE_SESSION" WHERE "SITE_SESSION"."CLE" = 22a5761400f7d0f67dcbb723110e5783 '}, {'time': '0.015', 'sql': u'INSERT INTO "SITE_SESSION" ("CLE", "DONNEES", "EXPIRATION") VALUES (22a5761400f7d0f67dcbb723110e5783, ZjdmMDY3MDFiNzk2NjAxMzRhZmE2MmExNDY2YzU0N2ZhNzBjYzUzZTqAAn1xAVUKdGVzdGNvb2tp\nZVUGd29ya2Vkcy4=\n, 2011-10-26 09:43:22.108453)'}, {'time': '0.005', 'sql': u'SELECT "SITE_SESSION"."CLE", "SITE_SESSION"."DONNEES", "SITE_SESSION"."EXPIRATION" FROM "SITE_SESSION" WHERE "SITE_SESSION"."CLE" = a2b72f0291a6b1f1dd135e5ccd335669 '}, {'time': '0.013', 'sql': u'DELETE FROM "SITE_SESSION" WHERE "CLE" IN (a2b72f0291a6b1f1dd135e5ccd335669)'}, {'time': '0.007', 'sql': u'SELECT "SITE_UTILISATEUR"."LOGIN", "SITE_UTILISATEUR"."MOT_DE_PASSE", "SITE_UTILISATEUR"."EMAIL", "SITE_UTILISATEUR"."ADMIN", "SITE_UTILISATEUR"."NOM", "SITE_UTILISATEUR"."PRENOM", "SITE_UTILISATEUR"."DATE_INSCRIPTION", "SITE_UTILISATEUR"."MODE_PAIEMENT", "SITE_UTILISATEUR"."MODE_LIVRAISON" FROM "SITE_UTILISATEUR" WHERE "SITE_UTILISATEUR"."LOGIN" = Rapha '}, {'time': '0.005', 'sql': u'SELECT * FROM (SELECT ROWNUM AS "_RN", "_SUB".* FROM (SELECT (1) AS "A" FROM "SITE_UTILISATEUR" WHERE "SITE_UTILISATEUR"."LOGIN" = Rapha ) "_SUB" WHERE ROWNUM <= 1) WHERE "_RN" > 0'}, {'time': '0.028', 'sql': u'UPDATE "SITE_UTILISATEUR" SET "MOT_DE_PASSE" = fefd47cb7691a8016da2735af04ce41b46a8365e, "EMAIL" = rap@gmail.com, "ADMIN" = False, "NOM" = Rap, "PRENOM" = Ha, "DATE_INSCRIPTION" = 2011-10-12 09:43:21.784305, "MODE_PAIEMENT" = , "MODE_LIVRAISON" =  WHERE "SITE_UTILISATEUR"."LOGIN" = Rapha '}]
 
-
 def catalogue(request):
     """ Affiche tous les éléments du catalogue """
     
@@ -33,7 +33,7 @@ def produit(request, produit_ean):
     return render_to_response("produit.html", {
         'produit': Produit.objects.get(ean=produit_ean),
     }, context_instance=RequestContext(request))
-
+    
 def inscription(request):
     """ Affiche et enregistre le formulaire d'inscription """
 

@@ -1,43 +1,36 @@
-# Django settings for be project.
+# Django settings for usa project.
 
 import sys
 sys.path += ['../../']
-
-import InpresZon
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Raphael Javaux', 'raphaeljavaux@gmail.com'),
+    # ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
-    'sqlite': {
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'be.sqlite3',
-    },
-    'oracle': {
-        'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'oracle',
-        'USER': 'be',
-        'PASSWORD': 'pass',
-        'HOST': '192.168.10.74',
-        'PORT': '1521',
+        'NAME': 'usa.sqlite3',
     }
 }
-DATABASES['default'] = DATABASES['oracle']
 
-SITE = True
-CATEGORIES = (
-    'livre', 'musique', 'film'
-)
+# Local time zone for this installation. Choices can be found here:
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+# although not all choices may be available on all operating systems.
+# On Unix systems, a value of None will cause Django to use the same
+# timezone as the operating system.
+# If running in a Windows environment this must be set to the same as your
+# system time zone.
+TIME_ZONE = 'America/Chicago'
 
-TIME_ZONE = 'Europe/Brussels'
-
-LANGUAGE_CODE = 'fr'
+# Language code for this installation. All choices can be found here:
+# http://www.i18nguy.com/unicode/language-identifiers.html
+LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
 
@@ -89,7 +82,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '(5qdg&eb%cpleq*4$+-kz(e@08u7v(dscwe*%#@!cb()qo68)w'
+SECRET_KEY = '@c9kc%3q#eydl-o-*fkry6=@b3*wr&dz+7k-p2@y7dkh%*p2)y'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -100,30 +93,29 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
-    'InpresZon.site.commit_middleware.CommitMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'be.urls'
+ROOT_URLCONF = 'usa.urls'
 
 FIXTURE_DIRS = ('fixtures/', )
 
 TEMPLATE_DIRS = (
-    '../templates'
+    '../templates',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
 
 INSTALLED_APPS = (
-    #'django.contrib.auth',
-    #'django.contrib.contenttypes',
-    #'django.contrib.sessions',
-    #'django.contrib.sites',
-    #'django.contrib.messages',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
@@ -132,12 +124,6 @@ INSTALLED_APPS = (
     
     'InpresZon.site',
 )
-
-AUTHENTICATION_BACKENDS = (
-    'InpresZon.site.auth_backend.PLSQLBackend',
-)
-
-SESSION_ENGINE = 'InpresZon.site.session_backend'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

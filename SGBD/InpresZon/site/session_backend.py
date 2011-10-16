@@ -9,6 +9,7 @@ from django.db import IntegrityError
 from django.utils.encoding import force_unicode
 
 from models import Session
+from packages import GestionSessions
 
 class SessionStore(DBStore):
     """
@@ -17,23 +18,24 @@ class SessionStore(DBStore):
     
     def load(self):
         try:
-            s = Session.objects.get(
-                cle = self.session_key,
-                expiration__gt=datetime.datetime.now()
-            )
+            s = GestionSessions.Chercher(self.session_key)
             d = self.decode(force_unicode(s.donnees))
-            print ("Données: "+ str(d))
+            print ("Raw data:", s.donnees)
+            print ("Data:", d)
             return d
-        except (Session.DoesNotExist, SuspiciousOperation):
+        except:
+            print ("Creation")
             self.create()
             return {}
 
     def exists(self, session_key):
         try:
-            Session.objects.get(cle=session_key)
-        except Session.DoesNotExist:
+            GestionSessions.Chercher(session_key)
+            print ("Existe")
+            return True
+        except:
+            print ("N'existe pas")
             return False
-        return True
 
     def save(self, must_create=False):
         """
@@ -42,18 +44,21 @@ class SessionStore(DBStore):
         create a *new* entry (as opposed to possibly updating an existing
         entry).
         """
-        
-        a = self._get_session(no_load=must_create)
-        
-        obj = Session(
+
+        s = Session(
             cle = self.session_key,
             donnees = self.encode(self._get_session(no_load=must_create)),
             expiration = self.get_expiry_date()
         )
         
         try:
-            obj.save(force_insert=must_create)
-        except IntegrityError:
+            if must_create or not self.exists(s.cle):
+                GestionSessions.Ajouter(s.cle, s.donnees, s.expiration)
+                print ("Must Save:", s.cle, s.donnees)
+            else:
+                GestionSessions.Modifier(s.cle, s.donnees, s.expiration)
+                print ("DoneMust Save:", s.cle, s.donnees)
+        except:
             if must_create:
                 raise CreateError
             raise
@@ -64,7 +69,4 @@ class SessionStore(DBStore):
                 return
             session_key = self._session_key
         
-        try:
-            Session.objects.get(cle=session_key).delete()
-        except Session.DoesNotExist:
-            pass
+        GestionSessions.Supprimer(session_key)

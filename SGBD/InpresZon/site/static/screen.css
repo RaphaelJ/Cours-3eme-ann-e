@@ -213,7 +213,7 @@ div#contenu form div.group {
 
 div#contenu form label {
 	text-align: right;
-	float: left;
+/* 	float: left; */
 	width: 8em;
 	min-width: 5em;
 	padding-right: 1em;

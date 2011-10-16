@@ -22,4 +22,7 @@ DROP TABLE SITE_FILM_MUSIQUE_AUTEURS cascade constraints ;
 DROP TABLE SITE_FILM_PAYS cascade constraints ;
 DROP TABLE SITE_FILM_PRODUIT cascade constraints ;
 DROP TABLE SITE_FILM_SESSION cascade constraints ;
-DROP TABLE SITE_FILM_UTILISATEUR cascade constraints ;
+DROP TABLE SITE_ADRESSE cascade constraints ;
+DROP TABLE SITE_ERREUR cascade constraints ;
+DROP TABLE SITE_FILM_ACTEURS cascade constraints ;
+DROP TABLE SITE_UTILISATEUR_ADRESSES cascade constraints ;

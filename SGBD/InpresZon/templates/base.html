@@ -1,32 +1,49 @@
 {% load i18n %}
 
-<!DOCTYPE html>
-<html>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr-BE" lang="fr-BE">
 <head>
     <meta charset="utf-8" />
     <title>{% block titre %}{% endblock %} - InpresZon</title>
-    <link type="text/css" rel="stylesheet" href="" media="all" />
+    <link rel="stylesheet" title="Default" type="text/css" href="/static/screen.css" media="screen" />
 </head>
 <body>
-    <ul class="menu">
-        <li><a href="{% url catalogue %}">{% trans "Catalogue" %}</a></li>
+    <div id="entete">
+        <img src="/static/books.gif" id="leftimg" alt="vegetables"/>
+        <h1>Inprezon</h1>
+        <img src="/static/movies.gif" id="rightimg" alt="sac"/>
+    </div>
+    <div id="global">
+        <div id="login" class="blocmenugauche menu">
+            <ul>
+                <li><a href="{% url catalogue %}">{% trans "Catalogue" %}</a></li>
 
-        {% if user.is_authenticated %}
-            <li><a href="{% url caddie %}">{% trans "Caddie" %}</a></li>
-            <li><a href="{% url profil %}">{% trans "Profil" %}</a></li>
-            <li><a href="{% url deconnexion %}">
-                {% blocktrans with login=user.username %}
-                    Déconnexion ({{ login }})
-                {% endblocktrans %}
-            </a></li>
-        {% else %}
-            <li><a href="{% url connexion %}">{% trans "Connexion" %}</a></li>
-            <li><a href="{% url inscription %}">{% trans "Inscription" %}</a></li>
-        {% endif %}
-    </ul>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url caddie %}">{% trans "Caddie" %}</a></li>
+                    <li><a href="{% url profil %}">{% trans "Profil" %}</a></li>
+                    <li><a href="{% url deconnexion %}">
+                        {% blocktrans with login=user.username %}
+                            Déconnexion ({{ login }})
+                        {% endblocktrans %}
+                    </a></li>
+                {% else %}
+                    <li><a href="{% url connexion %}">{% trans "Connexion" %}</a></li>
+                    <li><a href="{% url inscription %}">{% trans "Inscription" %}</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="blocmenugauche menu">
+            <ul>
+            </ul>
+        </div>
 
-    <h1>{% block titre-page %}{% endblock %}</h1>
+        <div id="contenu">
+            <h1>{% block titre-page %}{% endblock %}</h1>
     
-    {% block contenu %}{% endblock %}
+            {% block contenu %}{% endblock %}
+        </div>
+    </div>
+    <div id="pied">SGBD 2011/2012. Raphael Javaux.</div>
 </body>
 </html>

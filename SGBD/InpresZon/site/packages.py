@@ -4,7 +4,7 @@ import cx_Oracle
 
 from django.db import connection
 
-from models import Utilisateur
+from models import Utilisateur, Session
 
 class GestionUtilisateurs:
     @staticmethod
@@ -121,10 +121,9 @@ class GestionSessions:
     def Ajouter(cle, donnees, expiration):
         connection.cursor()
         cur = connection.connection.cursor()
-        return cur.callproc("GESTION_SESSIONS.Ajouter", (
+        cur.callproc("GESTION_SESSIONS.Ajouter", (
             cle, donnees, expiration
         ))
-
 
     @staticmethod
     def Modifier(cle, donnees, expiration):
@@ -135,11 +134,11 @@ class GestionSessions:
         ))
 
     @staticmethod
-    def Chercher(c):
+    def Chercher(cle):
         connection.cursor()
         cur = connection.connection.cursor()
 
-        variables = { 'cle': login,
+        variables = { 'cle': cle,
             'donnees': cur.var(cx_Oracle.STRING),
             'expiration': cur.var(cx_Oracle.TIMESTAMP),
         }
@@ -150,24 +149,19 @@ class GestionSessions:
             BEGIN
                 VarSession := GESTION_SESSIONS.Chercher(:cle);
                 :donnees := VarSession.donnees;
-                :expiration := utilisateur.admin;
-                :nom := utilisateur.nom;
-                :prenom := utilisateur.prenom;
-                :date_inscription := utilisateur.date_inscription;
+                :expiration := VarSession.expiration;
             END;""",variables
         )
 
-        return Utilisateur(
-            login=login, mot_de_passe=mot_de_passe,
-            email=variables['email'].getvalue(),
-            admin=variables['admin'].getvalue(),
-            nom=variables['nom'].getvalue(),
-            prenom=variables['prenom'].getvalue(),
-            date_inscription=variables['date_inscription'].getvalue()
+        print ("Session:", cle, variables['donnees'].getvalue())
+
+        return Session(
+            cle=cle, donnees=variables['donnees'].getvalue(),
+            expiration=variables['expiration'].getvalue()
         )
         
     @staticmethod
     def Supprimer(cle):
         connection.cursor()
         cur = connection.connection.cursor()
-        return cur.callproc("GESTION_SESSIONS.Supprimer", (cle))
+        return cur.callproc("GESTION_SESSIONS.Supprimer", (cle,))

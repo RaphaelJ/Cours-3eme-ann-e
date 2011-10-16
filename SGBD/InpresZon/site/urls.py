@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib.auth.views import login, logout
+from django.db import transaction
 
 import views
 
@@ -10,14 +11,14 @@ urlpatterns = patterns('',
 
     # Utilisateur
     url(r'^utilisateur/inscription/$', views.inscription, name="inscription"),
-    url(r'^utilisateur/connexion/$', login, {
+    url(r'^utilisateur/connexion/$', transaction.commit_on_success(login), {
         'template_name': 'connexion.html'
     }, name="connexion"),
     url(r'^utilisateur/profil/$', views.profil, name="profil"),
     url(r'^utilisateur/adresses/$', views.adresses, name="adresses"),
     url(r'^utilisateur/adresses/(\d+)/$', views.adresse, name="adresse-modifier"),
     url(r'^utilisateur/adresses/supprimer/(\d+)/$', views.adresse, name="adresse-supprimer"),
-    url(r'^utilisateur/deconnexion/$', logout, {
+    url(r'^utilisateur/deconnexion/$', transaction.commit_on_success(logout), {
         'template_name': 'deconnexion.html',
         'next_page': '/utilisateur/connexion/',
     }, name="deconnexion"),
@@ -34,4 +35,9 @@ urlpatterns = patterns('',
 
     # Commande
     url(r'^commande/$', views.commande, name="commande"),
+
+    # Fichiers statiques
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': '/static'}
+    ),
 )
