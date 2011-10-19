@@ -3,6 +3,8 @@
 
 #include <time.h>
 
+#include "Sockets/ClientSocket.h"
+
 #define STR_LENGTH 30
 
 // Stocke l'heure
@@ -48,5 +50,13 @@ typedef struct _protocol {
         } ferry_arriving;
     } content;
 } protocol;
+
+// Envoie un packet qui ne contient aucune information si ce n'est son type.
+inline void send_flag_packet(ClientSocket sock, protocol::protocol_type type)
+{
+    protocol packet;
+    packet.type = type;
+    sock.send<protocol>(packet);
+}
 
 #endif // PROTOCOL_H

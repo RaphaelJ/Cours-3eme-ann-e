@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Exception.cpp
+Exception.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Exception.h
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Exception.h
+exception
+-
+string
+-
+

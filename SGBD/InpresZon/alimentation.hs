@@ -1,16 +1,25 @@
 import Control.Monad
 import Control.Monad.IO.Class
 import Database.CouchDB
+import Database.HDBC.Types
+import Database.HDBC.ODBC
+import Data.Digits
 import Data.List
+import Data.HashTable (hashString)
+import Data.Maybe
 import Text.JSON
+
+import Debug.Trace
 
 couchHote = "127.0.0.1"
 couchDb = db "products"
 couchDesign = doc "index"
 
-beHote = "192.168.10.74"
-usaHote = "192.168.10.74"
-ukHote = "192.168.10.74"
+beHote = "127.0.0.1"
+usaHote = "127.0.0.1"
+ukHote = "127.0.0.1"
+
+codeFournisseurAmazon = 1
 
 -- | Contenu des filtres pour l'importation depuis CouchDB.
 data Filtre = Artiste String | Prix Double Double | Categorie Categorie
@@ -18,18 +27,30 @@ data Filtre = Artiste String | Prix Double Double | Categorie Categorie
 data Categorie = Musique | Livre | Film deriving (Show)
 data Langue = Fr | En deriving (Show)
 
+-- | Informations sur une connexion à une base de données
+data Connexion = Connexion Connection String -- DBConnection Origine
+
 main = do
-    
-    menu True [ ("Insérer dans BE", insertionBe )
-              , ("Insérer dans USA", insertionUsa)
-              , ("Insérer dans UK", insertionUk)]
+    connBe <- oracleConn beHote "be"
+    connUsa <- oracleConn usaHote "usa"
+    connUk <- mysqlConn ukHote "uk"
+    menu True [ ("Insérer dans BE"
+                , insertionBe $ Connexion connBe "BE")
+              , ("Insérer dans USA"
+                , insertionUsa $ Connexion connUsa "USA")
+              , ("Insérer dans UK"
+                , insertionUk $ Connexion connUk "UK") ]
+    disconnect connBe
+    disconnect connUsa
+    disconnect connUk
   where
     oracleConn hote user =
         connectODBC $ "DRIVER=oracle;Dbq=//"++hote++":1521/oracle.oracle;\
-                       UID="++user++"be;PWD=pass"
+                      \UID="++user++";PWD=pass"
+                       
     mysqlConn hote user =
         connectODBC $ "DRIVER=mysql;SERVER="++hote++";DATABASE="++user++";\
-                       USER="++user++";PASSWORD=pass;"
+                      \USER="++user++";PASSWORD=pass;"
 
 -- | Fonction générique pour la gestion des menus. Accepte une liste d'actions
 -- associées à une description.
@@ -118,25 +139,179 @@ idsFiltres filtres = do
     requeteFiltre (ASIN amazon_asin) =
         (doc "by_asin", [("key", JSString $ toJSString amazon_asin)])
 
+insertionUk = insertion [Langue En, Categorie Film]
+insertionBe = insertion [Langue Fr]
+insertionUsa = insertion [Langue En, Categorie Livre]
+
+-- | Demande les filtres l'utilisateur, récupère les documents et les insère
+-- dans la base de données
+insertion filtres conn = do
+    filtres' <- gestionFiltres filtres
+    runCouchDB couchHote 5984 $ do
+        ids <- idsFiltres filtres'
+        inserer ids conn
+
 -- | Insère tous les documents de la liste dans la base de données.
-inserer id_docs = do
+inserer id_docs (Connexion conn origine) = do
     let n = length id_docs
     liftIO $ putStrLn $ show n ++ " média(s) à insérer..."
     forM_ id_docs $ \id_doc -> do
         Just (_, _, JSObject contenu) <- getDoc couchDb id_doc
         let assoc_contenu = fromJSObject contenu
---         liftIO $ print $ lookup "title" assoc_contenu
---         liftIO $ print $ lookup "category" assoc_contenu
+        liftIO $ case toString $ fromJust $ lookup "category" assoc_contenu of
+            "music" -> insererMusique assoc_contenu
+            "book" -> insererLivre assoc_contenu
+            "movie" -> insererFilm assoc_contenu
+        liftIO $ commit conn
         return ()
     liftIO $ putStrLn $ show n ++ " média(s) inséré(s)."
+  where
+    insererMusique doc = do
+        let amazon_asin = toString $ fromJust $ lookup "asin" doc
+        print $ "Insertion musique ("++ amazon_asin ++") ..."
+        produit_ean <- insererProduit doc
+        
+        when (isJust produit_ean) $ do
+            insererArtistes $ fromJust $ lookup "artist" doc
+            let Just label = fmap toString $ lookup "label" doc
+            insererEditeur label
+            let support = ""
+            let Just disques = fmap (floor . fromJRational) $ lookup "discs" doc
+            let Just publication = fmap toString $ lookup "release_date" doc
+            req <- prepare conn "INSERT INTO site_musique VALUES (?, ?, ?, ?, ?)"
+            execute req [ SqlInteger $ fromJust $ produit_ean, SqlString label
+                        , SqlString support, SqlInteger disques
+                        , SqlString publication ]
+            return ()
 
--- | Demande les filtres l'utilisateur, récupère les documents et les insère
--- dans la base de données
-insertion filtres conn = runCouchDB couchHote 5984 $ do
-    filtres' <- liftIO $ gestionFiltres filtres
-    ids <- idsFiltres filtres'
-    inserer ids
+    insererLivre doc = do
+        let amazon_asin = toString $ fromJust $ lookup "asin" doc
+        print $ "Insertion livre ("++ amazon_asin ++") ..."
+        produit_ean <- insererProduit doc
 
-insertionBe = insertion [Langue Fr]
-insertionUsa = insertion [Langue En, Categorie Livre]
-insertionUk = insertion [Langue En, Categorie Film]
+        when (isJust produit_ean) $ do
+            case lookup "autors" doc of
+                Just e  -> insererArtistes e
+                Nothing -> return ()
+            editeur <- case fmap toString $ lookup "editeur" doc of
+                    Just e  -> insererEditeur e >> return e
+                    Nothing -> return ""
+            let Just isbn = fmap toString $ lookup "asin" doc
+            let Just reliure = fmap toString $ lookup "format" doc
+            let pages = case fmap (floor . fromJRational) $ lookup "pages" doc of
+                                Just e  -> e
+                                Nothing -> -1
+            let publication = case fmap toString $ lookup "date" doc of
+                                Just e  -> e
+                                Nothing -> ""
+            let edition = case fmap toString $ lookup "edition" doc of
+                                Just e  -> e
+                                Nothing -> ""
+            req <- prepare conn "INSERT INTO site_livre VALUES (?, ?, ?, ?, ?, ?, ?)"
+            execute req [ SqlInteger $ fromJust $ produit_ean, SqlString isbn
+                        , SqlString editeur, SqlString reliure
+                        , SqlInteger pages, SqlString publication
+                        , SqlString edition ]
+            return ()
+            
+    insererFilm doc = do
+        let amazon_asin = toString $ fromJust $ lookup "asin" doc
+        print $ "Insertion film ("++ amazon_asin ++") ..."
+
+        produit_ean <- insererProduit doc
+
+        when (isJust produit_ean) $ do
+            case lookup "actors" doc of
+                 Just acs  -> insererArtistes acs
+                 Nothing  -> return ()
+            case lookup "directors" doc of
+                 Just ds  -> insererArtistes ds
+                 Nothing  -> return ()
+            let Just studio = fmap toString $ lookup "studio" doc
+            insererEditeur studio
+            let support = case lookup "format" doc of
+                            Just s  -> toString s
+                            Nothing -> ""
+            let Just disques = fmap (floor . fromJRational) $ lookup "discs" doc
+            let note = case lookup "rating" doc of
+                            Just s  -> toString s
+                            Nothing -> ""
+            let duree = case lookup "runtime" doc of
+                            Just s  -> toString s
+                            Nothing -> ""
+            req <- prepare conn "INSERT INTO site_film VALUES (?, ?, ?, ?, ?, ?)"
+            execute req [ SqlInteger $ fromJust $ produit_ean, SqlString studio
+                        , SqlString support, SqlInteger disques
+                        , SqlString note, SqlString duree ]
+            return ()
+            
+    -- Insère les artistes non existants
+    insererArtistes (JSArray artistes) = do
+        req <- prepare conn "SELECT nom FROM site_artiste WHERE nom = ?;"
+        req_insert <- prepare conn "INSERT INTO site_artiste VALUES (?);"
+        forM_ artistes $ \a -> do
+            let a_str = toString a
+            execute req [SqlString a_str]
+            existe <- fetchRow req
+            when (isNothing existe) $ do -- Artiste non existant
+                execute req_insert [SqlString a_str]
+                return ()
+
+    -- Insère l'editeur s'il n'exite pas
+    insererEditeur editeur = do
+        req <- prepare conn "SELECT nom FROM site_editeur WHERE nom = ?;"
+        execute req [SqlString editeur]
+        existe <- fetchRow req
+        when (isNothing existe) $ do -- Editeur non existant
+            req_insert <- prepare conn "INSERT INTO site_editeur \
+                                       \(SELECT ? FROM DUAL WHERE NOT EXISTS \
+                                       \    (SELECT * FROM site_editeur WHERE nom = ?));"
+            execute req_insert [SqlString editeur, SqlString editeur]
+            return ()
+
+    -- Insère un produit dans la base et retourne l'ean.
+    -- Retourne Nothing si le produit existe déjà
+    insererProduit doc = do
+        let Just amazon_asin = fmap toString $ lookup "asin" doc
+        let produit_ean = ean amazon_asin
+
+        req <- prepare conn "SELECT ean FROM site_produit WHERE ean = ?;"
+        execute req [SqlInteger produit_ean]
+        existe <- fetchRow req
+        if isJust existe
+           then return Nothing -- Produit existant
+           else do
+               let titre = case lookup "title" doc of
+                                Just l  -> toString l
+                                Nothing -> ""
+               let description = ""
+               let langue = case lookup "language" doc of
+                                Just l  -> toString l
+                                Nothing -> case lookup "languages" doc of
+                                                Just (JSArray ls) -> toString $ head ls
+                                                Nothing -> ""
+               
+               let Just prix = fmap fromJRational $ lookup "price" doc
+               let devise = "USD"
+
+               req_insert <- prepare conn "INSERT INTO site_produit VALUES (?, ?, ?, ?, ?, 0, ?, ?, ?, 0);"
+               execute req_insert [SqlInteger produit_ean , SqlString titre
+                           , SqlString description, SqlString langue
+                           , SqlDouble $ fromRational $ prix, SqlString devise
+                           , SqlInteger codeFournisseurAmazon
+                           , SqlString origine ]
+               
+               return $ Just produit_ean
+
+    -- Génère un code EAN depuis le code Amazon
+    ean amazon_asin =
+        let codeProduit = fromIntegral $ (abs $ hashString amazon_asin) `mod` 10^9
+            code = 200 * 10^10 + codeFournisseurAmazon * 10^7 + codeProduit * 10
+            (impairs, pairs) = partition (odd . fst) $ zip [1..] (digits 10 code)
+            sumImpairs = sum $ map snd $ impairs
+            sumPairs = sum $ map snd $ pairs
+            checksum = (10 - ((3*sumPairs + sumImpairs) `mod` 10)) `mod` 10
+        in code + checksum
+
+    toString (JSString s) = fromJSString s
+    fromJRational (JSRational _ r) = r

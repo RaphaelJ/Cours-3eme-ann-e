@@ -81,6 +81,7 @@ client_EXTERNAL_OBJECTS =
 
 client: CMakeFiles/client.dir/client.cpp.o
 client: Sockets/libSockets.a
+client: Utils/libUtils.a
 client: CMakeFiles/client.dir/build.make
 client: CMakeFiles/client.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable client"

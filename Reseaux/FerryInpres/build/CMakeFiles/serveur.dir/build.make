@@ -81,6 +81,7 @@ serveur_EXTERNAL_OBJECTS =
 
 serveur: CMakeFiles/serveur.dir/server.cpp.o
 serveur: Sockets/libSockets.a
+serveur: Utils/libUtils.a
 serveur: CMakeFiles/serveur.dir/build.make
 serveur: CMakeFiles/serveur.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable serveur"

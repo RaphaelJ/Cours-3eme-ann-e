@@ -34,7 +34,10 @@ ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
+  INCLUDE("/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Utils/cmake_install.cmake")
   INCLUDE("/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets/cmake_install.cmake")
+  INCLUDE("/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/IniParser/cmake_install.cmake")
+  INCLUDE("/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/ThreadPool/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 

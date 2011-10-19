@@ -33,7 +33,8 @@ class SessionStore(DBStore):
             GestionSessions.Chercher(session_key)
             print ("Existe")
             return True
-        except:
+        except Exception as e:
+            print e
             print ("N'existe pas")
             return False
 

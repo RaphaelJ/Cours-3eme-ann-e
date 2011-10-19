@@ -5,6 +5,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <vector>
+
 #include "SocketsUtils.h"
 #include "SocketException.h"
 
@@ -19,10 +21,10 @@ public:
     ClientSocket(const char* ip, const int port);
     ClientSocket(const int socket_fd);
     ClientSocket(const ClientSocket& other);
-    ~ClientSocket();
+    ~ClientSocket() {};
     ClientSocket& operator=(const ClientSocket& other);
     
-    int getSocketFD() const { return this->_socket; }
+    int get_socket_fd() const { return this->_socket; }
     
     // Envoie un vecteur de données
     template <class T>

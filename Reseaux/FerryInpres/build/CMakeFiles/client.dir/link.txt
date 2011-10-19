@@ -1,1 +1,1 @@
-/usr/bin/c++   -g -Wall -g    CMakeFiles/client.dir/client.cpp.o  -o client -rdynamic Sockets/libSockets.a -lpthread 
+/usr/bin/c++   -g -Wall -g    CMakeFiles/client.dir/client.cpp.o  -o client -rdynamic Sockets/libSockets.a -lCSV -lpthread Utils/libUtils.a 

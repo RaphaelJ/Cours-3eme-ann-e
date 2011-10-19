@@ -20,7 +20,7 @@ DATABASES = {
         'NAME': 'oracle',
         'USER': 'usa',
         'PASSWORD': 'pass',
-        'HOST': '192.168.10.74',
+        'HOST': '127.0.0.1',
         'PORT': '1521',
     }
 }
@@ -103,7 +103,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'be.urls'
+ROOT_URLCONF = 'usa.urls'
 
 FIXTURE_DIRS = ('fixtures/', )
 

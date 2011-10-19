@@ -155,14 +155,26 @@ CMAKE_USE_RELATIVE_PATHS:BOOL=OFF
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//Dependencies for target
+CSV_LIB_DEPENDS:STATIC=
+
 //Single output directory for building all executables.
 EXECUTABLE_OUTPUT_PATH:PATH=
+
+//Dependencies for target
+IniParser_LIB_DEPENDS:STATIC=
 
 //Single output directory for building all libraries.
 LIBRARY_OUTPUT_PATH:PATH=
 
 //Dependencies for the target
-Sockets_LIB_DEPENDS:STATIC=general;-lpthread;
+Sockets_LIB_DEPENDS:STATIC=general;-lpthread;general;Utils;
+
+//Dependencies for target
+ThreadPool_LIB_DEPENDS:STATIC=
+
+//Dependencies for target
+Utils_LIB_DEPENDS:STATIC=
 
 //Value Computed by CMake
 ferryinpres_BINARY_DIR:STATIC=/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build
@@ -188,7 +200,7 @@ CMAKE_CACHE_MAJOR_VERSION:INTERNAL=2
 //Minor version of cmake used to create the current loaded cache
 CMAKE_CACHE_MINOR_VERSION:INTERNAL=8
 //Patch version of cmake used to create the current loaded cache
-CMAKE_CACHE_PATCH_VERSION:INTERNAL=5
+CMAKE_CACHE_PATCH_VERSION:INTERNAL=6
 //ADVANCED property for variable: CMAKE_COLOR_MAKEFILE
 CMAKE_COLOR_MAKEFILE-ADVANCED:INTERNAL=1
 //Path to CMake executable.
@@ -273,7 +285,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_LOCAL_GENERATORS:INTERNAL=2
+CMAKE_NUMBER_OF_LOCAL_GENERATORS:INTERNAL=5
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

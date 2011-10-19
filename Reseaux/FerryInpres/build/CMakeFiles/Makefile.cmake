@@ -8,7 +8,10 @@ SET(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 SET(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
   "../CMakeLists.txt"
+  "../IniParser/CMakeLists.txt"
   "../Sockets/CMakeLists.txt"
+  "../ThreadPool/CMakeLists.txt"
+  "../Utils/CMakeLists.txt"
   "CMakeFiles/CMakeCCompiler.cmake"
   "CMakeFiles/CMakeCXXCompiler.cmake"
   "CMakeFiles/CMakeSystem.cmake"
@@ -42,12 +45,18 @@ SET(CMAKE_MAKEFILE_OUTPUTS
 # Byproducts of CMake generate step:
 SET(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
+  "Utils/CMakeFiles/CMakeDirectoryInformation.cmake"
   "Sockets/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "IniParser/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "ThreadPool/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 SET(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/client.dir/DependInfo.cmake"
   "CMakeFiles/serveur.dir/DependInfo.cmake"
+  "Utils/CMakeFiles/Utils.dir/DependInfo.cmake"
   "Sockets/CMakeFiles/Sockets.dir/DependInfo.cmake"
+  "IniParser/CMakeFiles/IniParser.dir/DependInfo.cmake"
+  "ThreadPool/CMakeFiles/ThreadPool.dir/DependInfo.cmake"
   )

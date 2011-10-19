@@ -3,16 +3,16 @@
 
 #include <string>
 
-#include "Exception.h"
+#include "Utils/Exception.h"
 
 using namespace std;
 
 class SocketException : Exception
 {
 public:
-    virtual SocketException(const char* message);
-    virtual SocketException(const SocketException& other);
-    virtual ~SocketException();
+    SocketException(const char* message);
+    SocketException(const SocketException& other);
+    virtual ~SocketException() throw() {};
 };
 
 #endif // SOCKETCEXCEPTION_H

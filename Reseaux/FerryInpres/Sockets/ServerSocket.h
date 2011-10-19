@@ -3,11 +3,13 @@
 
 #include <pthread.h>
 
+#include "ThreadPool/ThreadPool.h"
+
 #include "SocketsUtils.h"
 #include "ClientSocket.h"
 
 using namespace std;
 
-void withServerSocket(const int port, void (*action)(ClientSocket sock));
+void with_server_socket(const int port, void (*action)(ClientSocket sock));
 
 #endif // SERVERSOCKET_H

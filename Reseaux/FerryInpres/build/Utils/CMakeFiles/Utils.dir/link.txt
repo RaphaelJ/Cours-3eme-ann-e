@@ -1,0 +1,2 @@
+/usr/bin/ar cr libUtils.a  CMakeFiles/Utils.dir/Exception.cpp.o
+/usr/bin/ranlib libUtils.a

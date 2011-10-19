@@ -20,7 +20,7 @@ DATABASES = {
         'NAME': 'uk',
         'USER': 'uk',
         'PASSWORD': 'pass',
-        'HOST': '192.168.10.74',
+        'HOST': '127.0.0.1',
     }
 }
 DATABASES['default'] = DATABASES['mysql']

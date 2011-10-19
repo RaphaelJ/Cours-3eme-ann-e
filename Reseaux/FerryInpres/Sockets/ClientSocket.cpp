@@ -19,12 +19,7 @@ ClientSocket::ClientSocket(const int socket_fd)
 
 ClientSocket::ClientSocket(const ClientSocket& other)
 {
-    this->_socket = other.getSocketFD();
-}
-
-ClientSocket::~ClientSocket()
-{
-
+    this->_socket = other.get_socket_fd();
 }
 
 ClientSocket& ClientSocket::operator=(const ClientSocket& other)

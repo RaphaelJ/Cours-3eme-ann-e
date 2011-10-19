@@ -12,24 +12,25 @@ Extra Arguments=
 ProjectRootRelative=./
 
 [Launch]
-Launch Configurations=Launch Configuration 0
+Launch Configurations=Launch Configuration 1
 
-[Launch][Launch Configuration 0]
+[Launch][Launch Configuration 1]
 Configured Launch Modes=execute
 Configured Launchers=nativeAppLauncher
-Name=Nouvelle configuration Application native
+Name=client
 Type=Native Application
 
-[Launch][Launch Configuration 0][Data]
+[Launch][Launch Configuration 1][Data]
 Arguments=
+Configured from ProjectItem=FerryInpres,client
 Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
 Dependency Action=Nothing
 EnvironmentGroup=default
 Executable=
 External Terminal=konsole --noclose --workdir %workdir -e %exe
-Project Target=FerryInpres,ferryinpres
+Project Target=FerryInpres,client
 Use External Terminal=false
-Working Directory=
+Working Directory=file:///home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/
 isExecutable=false
 
 [Project]

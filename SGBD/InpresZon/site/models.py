@@ -23,9 +23,7 @@ MODES_LIVRAISON = (
 )
 
 if settings.SITE:
-
     # Utilisateurs
-
     class Pays(models.Model):
         nom_fr = models.CharField(max_length=30)
         nom_en = models.CharField(max_length=30)
@@ -116,9 +114,9 @@ class Produit(models.Model):
     )
     
     ean = models.BigIntegerField(primary_key=True)
-    titre = models.CharField(max_length=30)
-    description = models.CharField(max_length=1024)
-    langue = models.CharField(max_length=2, choices=LANGUES)
+    titre = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    langue = models.CharField(max_length=25, choices=LANGUES, blank=True)
     
     prix = models.DecimalField(max_digits=10, decimal_places=2)
     devise = models.CharField(max_length=3, choices=DEVISES)
@@ -153,13 +151,13 @@ class Produit(models.Model):
                     return None
 
 class Artiste(models.Model):
-    nom = models.CharField(max_length=30)
+    nom = models.CharField(max_length=255, primary_key=True)
 
     class Meta:
         ordering = ('nom',)
 
 class Editeur(models.Model):
-    nom = models.CharField(max_length=30, primary_key=True)
+    nom = models.CharField(max_length=255, primary_key=True)
 
     class Meta:
         ordering = ('nom',)
@@ -172,8 +170,8 @@ if 'livre' in settings.CATEGORIES:
 
         reliure = models.CharField(max_length=30)
         pages = models.IntegerField(null=True)
-        publication = models.DateField(null=True)
-        num_edition = models.IntegerField(null=True)
+        publication = models.CharField(max_length=64, blank=True)
+        num_edition = models.CharField(max_length=64, blank=True)
 
 if 'film' in settings.CATEGORIES:
     class Film(Produit):
@@ -196,10 +194,10 @@ if 'film' in settings.CATEGORIES:
         realisateurs = models.ManyToManyField(Artiste, related_name="films_realisateur")
         studio = models.ForeignKey(Editeur, related_name="films")
 
-        support = models.CharField(max_length=4, choices=SUPPORTS, blank=True)
+        support = models.CharField(max_length=64, choices=SUPPORTS, blank=True)
         disques = models.IntegerField(null=True)
-        notation = models.CharField(max_length=5, choices=NOTATIONS, blank=True)
-        duree = models.IntegerField(null=True) # Durée du film en secondes
+        notation = models.CharField(max_length=64, choices=NOTATIONS, blank=True)
+        duree = models.CharField(max_length=64) # Durée du film
 
 if 'musique' in settings.CATEGORIES:
     class Musique(Produit):
@@ -212,9 +210,9 @@ if 'musique' in settings.CATEGORIES:
         auteurs = models.ManyToManyField(Artiste, related_name="musiques")
         label = models.ForeignKey(Editeur, related_name="musiques", null=True)
 
-        support = models.CharField(max_length=4, choices=SUPPORTS, blank=True)
+        support = models.CharField(max_length=16, choices=SUPPORTS, blank=True)
         disques = models.IntegerField(null=True)
-        publication = models.DateField(null=True)
+        publication = models.CharField(max_length=64, blank=True)
 
 if settings.SITE:
     

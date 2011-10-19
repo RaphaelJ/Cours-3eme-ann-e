@@ -59,6 +59,11 @@ class ProfilForm(forms.Form):
 
     def clean_mot_de_passe(self):
         """ Crypte la mot de passe avant d'enregistrer """
+        if self.cleaned_data["mot_de_passe"] == "":
+            raise forms.ValidationError(
+                _(u"Le mot de passe ne peut être vide")
+            )
+        
         mdp_hash = crypt_mdp(self.cleaned_data["mot_de_passe"])
         self.cleaned_data["mot_de_passe"] = mdp_hash
         return mdp_hash

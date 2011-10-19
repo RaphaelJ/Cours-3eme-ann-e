@@ -125,6 +125,19 @@ serveur/fast:
 .PHONY : serveur/fast
 
 #=============================================================================
+# Target rules for targets named Utils
+
+# Build rule for target.
+Utils: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Utils
+.PHONY : Utils
+
+# fast build rule for target.
+Utils/fast:
+	$(MAKE) -f Utils/CMakeFiles/Utils.dir/build.make Utils/CMakeFiles/Utils.dir/build
+.PHONY : Utils/fast
+
+#=============================================================================
 # Target rules for targets named Sockets
 
 # Build rule for target.
@@ -136,6 +149,32 @@ Sockets: cmake_check_build_system
 Sockets/fast:
 	$(MAKE) -f Sockets/CMakeFiles/Sockets.dir/build.make Sockets/CMakeFiles/Sockets.dir/build
 .PHONY : Sockets/fast
+
+#=============================================================================
+# Target rules for targets named IniParser
+
+# Build rule for target.
+IniParser: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 IniParser
+.PHONY : IniParser
+
+# fast build rule for target.
+IniParser/fast:
+	$(MAKE) -f IniParser/CMakeFiles/IniParser.dir/build.make IniParser/CMakeFiles/IniParser.dir/build
+.PHONY : IniParser/fast
+
+#=============================================================================
+# Target rules for targets named ThreadPool
+
+# Build rule for target.
+ThreadPool: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 ThreadPool
+.PHONY : ThreadPool
+
+# fast build rule for target.
+ThreadPool/fast:
+	$(MAKE) -f ThreadPool/CMakeFiles/ThreadPool.dir/build.make ThreadPool/CMakeFiles/ThreadPool.dir/build
+.PHONY : ThreadPool/fast
 
 client.o: client.cpp.o
 .PHONY : client.o
@@ -195,7 +234,10 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... serveur"
+	@echo "... Utils"
 	@echo "... Sockets"
+	@echo "... IniParser"
+	@echo "... ThreadPool"
 	@echo "... client.o"
 	@echo "... client.i"
 	@echo "... client.s"
