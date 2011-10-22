@@ -49,37 +49,37 @@ include CMakeFiles/client.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/client.dir/flags.make
 
-CMakeFiles/client.dir/client.cpp.o: CMakeFiles/client.dir/flags.make
-CMakeFiles/client.dir/client.cpp.o: ../client.cpp
+CMakeFiles/client.dir/Client.cpp.o: CMakeFiles/client.dir/flags.make
+CMakeFiles/client.dir/Client.cpp.o: ../Client.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles $(CMAKE_PROGRESS_1)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/client.dir/client.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/client.dir/client.cpp.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/client.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/client.dir/Client.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/client.dir/Client.cpp.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Client.cpp
 
-CMakeFiles/client.dir/client.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/client.dir/client.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/client.cpp > CMakeFiles/client.dir/client.cpp.i
+CMakeFiles/client.dir/Client.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/client.dir/Client.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Client.cpp > CMakeFiles/client.dir/Client.cpp.i
 
-CMakeFiles/client.dir/client.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/client.dir/client.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/client.cpp -o CMakeFiles/client.dir/client.cpp.s
+CMakeFiles/client.dir/Client.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/client.dir/Client.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Client.cpp -o CMakeFiles/client.dir/Client.cpp.s
 
-CMakeFiles/client.dir/client.cpp.o.requires:
-.PHONY : CMakeFiles/client.dir/client.cpp.o.requires
+CMakeFiles/client.dir/Client.cpp.o.requires:
+.PHONY : CMakeFiles/client.dir/Client.cpp.o.requires
 
-CMakeFiles/client.dir/client.cpp.o.provides: CMakeFiles/client.dir/client.cpp.o.requires
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/client.cpp.o.provides.build
-.PHONY : CMakeFiles/client.dir/client.cpp.o.provides
+CMakeFiles/client.dir/Client.cpp.o.provides: CMakeFiles/client.dir/Client.cpp.o.requires
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/Client.cpp.o.provides.build
+.PHONY : CMakeFiles/client.dir/Client.cpp.o.provides
 
-CMakeFiles/client.dir/client.cpp.o.provides.build: CMakeFiles/client.dir/client.cpp.o
+CMakeFiles/client.dir/Client.cpp.o.provides.build: CMakeFiles/client.dir/Client.cpp.o
 
 # Object files for target client
 client_OBJECTS = \
-"CMakeFiles/client.dir/client.cpp.o"
+"CMakeFiles/client.dir/Client.cpp.o"
 
 # External object files for target client
 client_EXTERNAL_OBJECTS =
 
-client: CMakeFiles/client.dir/client.cpp.o
+client: CMakeFiles/client.dir/Client.cpp.o
 client: Sockets/libSockets.a
 client: Utils/libUtils.a
 client: CMakeFiles/client.dir/build.make
@@ -91,7 +91,7 @@ client: CMakeFiles/client.dir/link.txt
 CMakeFiles/client.dir/build: client
 .PHONY : CMakeFiles/client.dir/build
 
-CMakeFiles/client.dir/requires: CMakeFiles/client.dir/client.cpp.o.requires
+CMakeFiles/client.dir/requires: CMakeFiles/client.dir/Client.cpp.o.requires
 .PHONY : CMakeFiles/client.dir/requires
 
 CMakeFiles/client.dir/clean:

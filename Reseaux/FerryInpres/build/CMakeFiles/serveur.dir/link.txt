@@ -1,1 +1,1 @@
-/usr/bin/c++   -g -Wall -g    CMakeFiles/serveur.dir/server.cpp.o  -o serveur -rdynamic Sockets/libSockets.a -lpthread Utils/libUtils.a 
+/usr/bin/c++   -g -Wall -g    CMakeFiles/serveur.dir/Server.cpp.o  -o serveur -rdynamic Sockets/libSockets.a -lpthread Utils/libUtils.a 

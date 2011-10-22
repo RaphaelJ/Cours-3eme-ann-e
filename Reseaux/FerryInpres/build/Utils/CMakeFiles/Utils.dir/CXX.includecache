@@ -6,13 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Exception.cpp
-Exception.h
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Exception.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Async.cpp
+Async.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Async.h
 
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Exception.h
-exception
--
-string
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Async.h
+pthread.h
 -
 

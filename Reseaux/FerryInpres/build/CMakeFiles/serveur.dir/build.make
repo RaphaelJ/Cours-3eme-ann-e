@@ -49,37 +49,37 @@ include CMakeFiles/serveur.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/serveur.dir/flags.make
 
-CMakeFiles/serveur.dir/server.cpp.o: CMakeFiles/serveur.dir/flags.make
-CMakeFiles/serveur.dir/server.cpp.o: ../server.cpp
+CMakeFiles/serveur.dir/Server.cpp.o: CMakeFiles/serveur.dir/flags.make
+CMakeFiles/serveur.dir/Server.cpp.o: ../Server.cpp
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles $(CMAKE_PROGRESS_1)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/serveur.dir/server.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/serveur.dir/server.cpp.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/server.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/serveur.dir/Server.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/serveur.dir/Server.cpp.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Server.cpp
 
-CMakeFiles/serveur.dir/server.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/serveur.dir/server.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/server.cpp > CMakeFiles/serveur.dir/server.cpp.i
+CMakeFiles/serveur.dir/Server.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/serveur.dir/Server.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Server.cpp > CMakeFiles/serveur.dir/Server.cpp.i
 
-CMakeFiles/serveur.dir/server.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/serveur.dir/server.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/server.cpp -o CMakeFiles/serveur.dir/server.cpp.s
+CMakeFiles/serveur.dir/Server.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/serveur.dir/Server.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Server.cpp -o CMakeFiles/serveur.dir/Server.cpp.s
 
-CMakeFiles/serveur.dir/server.cpp.o.requires:
-.PHONY : CMakeFiles/serveur.dir/server.cpp.o.requires
+CMakeFiles/serveur.dir/Server.cpp.o.requires:
+.PHONY : CMakeFiles/serveur.dir/Server.cpp.o.requires
 
-CMakeFiles/serveur.dir/server.cpp.o.provides: CMakeFiles/serveur.dir/server.cpp.o.requires
-	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/server.cpp.o.provides.build
-.PHONY : CMakeFiles/serveur.dir/server.cpp.o.provides
+CMakeFiles/serveur.dir/Server.cpp.o.provides: CMakeFiles/serveur.dir/Server.cpp.o.requires
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/Server.cpp.o.provides.build
+.PHONY : CMakeFiles/serveur.dir/Server.cpp.o.provides
 
-CMakeFiles/serveur.dir/server.cpp.o.provides.build: CMakeFiles/serveur.dir/server.cpp.o
+CMakeFiles/serveur.dir/Server.cpp.o.provides.build: CMakeFiles/serveur.dir/Server.cpp.o
 
 # Object files for target serveur
 serveur_OBJECTS = \
-"CMakeFiles/serveur.dir/server.cpp.o"
+"CMakeFiles/serveur.dir/Server.cpp.o"
 
 # External object files for target serveur
 serveur_EXTERNAL_OBJECTS =
 
-serveur: CMakeFiles/serveur.dir/server.cpp.o
+serveur: CMakeFiles/serveur.dir/Server.cpp.o
 serveur: Sockets/libSockets.a
 serveur: Utils/libUtils.a
 serveur: CMakeFiles/serveur.dir/build.make
@@ -91,7 +91,7 @@ serveur: CMakeFiles/serveur.dir/link.txt
 CMakeFiles/serveur.dir/build: serveur
 .PHONY : CMakeFiles/serveur.dir/build
 
-CMakeFiles/serveur.dir/requires: CMakeFiles/serveur.dir/server.cpp.o.requires
+CMakeFiles/serveur.dir/requires: CMakeFiles/serveur.dir/Server.cpp.o.requires
 .PHONY : CMakeFiles/serveur.dir/requires
 
 CMakeFiles/serveur.dir/clean:

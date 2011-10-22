@@ -4,7 +4,7 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_CXX
-  "/home/rapha/Desktop/Cours/Reseaux/FerryInpres/server.cpp" "/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles/serveur.dir/server.cpp.o"
+  "/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Server.cpp" "/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles/serveur.dir/Server.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 

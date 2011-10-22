@@ -32,20 +32,20 @@ typedef struct _protocol {
         } login;
         
         // Donne l'heure du prochain départ
-        s_time departure_known;
+        char departure_known[5];
         
         // Demande l'autorisation du début de l'embarquement
-        s_time begin_loading;
+        char begin_loading[5];
         
         // Notifie la fin de l'embarquement et demande l'autorisation de partir
-        s_time end_loading;
+        char end_loading[5];
         
         // Notifie que le ferry quitte le terminal
-        s_time leaving;
+        char leaving[5];
         
         // Notifie l'arrivée d'un ferry
         struct ferry_arriving_protocol {
-            s_time time;
+            char time;
             char ferry_name[STR_LENGTH];
         } ferry_arriving;
     } content;

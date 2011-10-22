@@ -1,5 +1,5 @@
 find_package (Threads)
 
 add_library (
-    Utils Exception.cpp
+    Utils Async.cpp Exception.cpp
 )

@@ -1,4 +1,5 @@
 FILE(REMOVE_RECURSE
+  "CMakeFiles/Utils.dir/Async.cpp.o"
   "CMakeFiles/Utils.dir/Exception.cpp.o"
   "libUtils.pdb"
   "libUtils.a"

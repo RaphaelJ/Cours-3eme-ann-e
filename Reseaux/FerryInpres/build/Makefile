@@ -176,53 +176,53 @@ ThreadPool/fast:
 	$(MAKE) -f ThreadPool/CMakeFiles/ThreadPool.dir/build.make ThreadPool/CMakeFiles/ThreadPool.dir/build
 .PHONY : ThreadPool/fast
 
-client.o: client.cpp.o
-.PHONY : client.o
+Client.o: Client.cpp.o
+.PHONY : Client.o
 
 # target to build an object file
-client.cpp.o:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/client.cpp.o
-.PHONY : client.cpp.o
+Client.cpp.o:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/Client.cpp.o
+.PHONY : Client.cpp.o
 
-client.i: client.cpp.i
-.PHONY : client.i
+Client.i: Client.cpp.i
+.PHONY : Client.i
 
 # target to preprocess a source file
-client.cpp.i:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/client.cpp.i
-.PHONY : client.cpp.i
+Client.cpp.i:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/Client.cpp.i
+.PHONY : Client.cpp.i
 
-client.s: client.cpp.s
-.PHONY : client.s
+Client.s: Client.cpp.s
+.PHONY : Client.s
 
 # target to generate assembly for a file
-client.cpp.s:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/client.cpp.s
-.PHONY : client.cpp.s
+Client.cpp.s:
+	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/Client.cpp.s
+.PHONY : Client.cpp.s
 
-server.o: server.cpp.o
-.PHONY : server.o
+Server.o: Server.cpp.o
+.PHONY : Server.o
 
 # target to build an object file
-server.cpp.o:
-	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/server.cpp.o
-.PHONY : server.cpp.o
+Server.cpp.o:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/Server.cpp.o
+.PHONY : Server.cpp.o
 
-server.i: server.cpp.i
-.PHONY : server.i
+Server.i: Server.cpp.i
+.PHONY : Server.i
 
 # target to preprocess a source file
-server.cpp.i:
-	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/server.cpp.i
-.PHONY : server.cpp.i
+Server.cpp.i:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/Server.cpp.i
+.PHONY : Server.cpp.i
 
-server.s: server.cpp.s
-.PHONY : server.s
+Server.s: Server.cpp.s
+.PHONY : Server.s
 
 # target to generate assembly for a file
-server.cpp.s:
-	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/server.cpp.s
-.PHONY : server.cpp.s
+Server.cpp.s:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/Server.cpp.s
+.PHONY : Server.cpp.s
 
 # Help Target
 help:
@@ -238,12 +238,12 @@ help:
 	@echo "... Sockets"
 	@echo "... IniParser"
 	@echo "... ThreadPool"
-	@echo "... client.o"
-	@echo "... client.i"
-	@echo "... client.s"
-	@echo "... server.o"
-	@echo "... server.i"
-	@echo "... server.s"
+	@echo "... Client.o"
+	@echo "... Client.i"
+	@echo "... Client.s"
+	@echo "... Server.o"
+	@echo "... Server.i"
+	@echo "... Server.s"
 .PHONY : help
 
 

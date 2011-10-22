@@ -2,13 +2,12 @@
 
 #include "IniParser/IniParser.h"
 
-#include "ServerSocket.h"
-#include "ClientSocket.h"
+#include "Sockets/ClientSocket.h"
 
 int main(int argc, char **argv)
 {
     IniParser f("test.csv");
-    cout << f.getValue("hello");
+    cout << f.get_value("hello");
     
     return EXIT_SUCCESS;
 }
