@@ -1,30 +1,34 @@
 #include "Time.h"
 
 // Convertit une chaine au format xx:xx en temps C
-s_time str_to_time(char str_time[])
+// const pour pouvoir être utilisé depuis string.c_str()
+s_time str_to_time(const char *const_str_time)
 {
     s_time ret;
+    char str_time[6];
+    
+    strcpy(str_time, const_str_time); 
     
     str_time[2] = '\0';
     ret.hour = atoi(str_time);
     ret.min = atoi(str_time + 3);
-    str_time[2] = ':';
     
     return ret;
 }
 
-void time_to_str(s_time t, char str_time)
+void time_to_str(const s_time t, char *str_time)
 {
     sprintf(str_time, "%hd:%hd", t.hour, t.min);
 }
 
 s_time current_time()
 {
-    struct tm *t = localtime(time(NULL));
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
     s_time ret;
     
-    ret.hour = t->tm_hour;
-    ret.min = t->tm_min;
+    ret.hour = tm->tm_hour;
+    ret.min = tm->tm_min;
     
     return ret;
 }

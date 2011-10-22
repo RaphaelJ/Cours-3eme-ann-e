@@ -30,7 +30,7 @@ public:
     template <class T>
     inline ssize_t send(const T data)
     {
-        return socket_utils::send(this->_socket, data, sizeof (T), 0);
+        return socket_utils::send(this->_socket, (void *) &data, sizeof (T), 0);
     }
     
     // Envoie un vecteur de données

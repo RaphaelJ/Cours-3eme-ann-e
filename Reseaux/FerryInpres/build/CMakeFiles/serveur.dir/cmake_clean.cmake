@@ -1,5 +1,6 @@
 FILE(REMOVE_RECURSE
   "CMakeFiles/serveur.dir/Server.cpp.o"
+  "CMakeFiles/serveur.dir/TerminalServer.cpp.o"
   "serveur.pdb"
   "serveur"
 )

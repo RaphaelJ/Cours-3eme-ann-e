@@ -224,6 +224,30 @@ Server.cpp.s:
 	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/Server.cpp.s
 .PHONY : Server.cpp.s
 
+TerminalServer.o: TerminalServer.cpp.o
+.PHONY : TerminalServer.o
+
+# target to build an object file
+TerminalServer.cpp.o:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/TerminalServer.cpp.o
+.PHONY : TerminalServer.cpp.o
+
+TerminalServer.i: TerminalServer.cpp.i
+.PHONY : TerminalServer.i
+
+# target to preprocess a source file
+TerminalServer.cpp.i:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/TerminalServer.cpp.i
+.PHONY : TerminalServer.cpp.i
+
+TerminalServer.s: TerminalServer.cpp.s
+.PHONY : TerminalServer.s
+
+# target to generate assembly for a file
+TerminalServer.cpp.s:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/TerminalServer.cpp.s
+.PHONY : TerminalServer.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -244,6 +268,9 @@ help:
 	@echo "... Server.o"
 	@echo "... Server.i"
 	@echo "... Server.s"
+	@echo "... TerminalServer.o"
+	@echo "... TerminalServer.i"
+	@echo "... TerminalServer.s"
 .PHONY : help
 
 

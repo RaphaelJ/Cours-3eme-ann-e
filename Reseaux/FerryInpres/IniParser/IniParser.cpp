@@ -33,9 +33,9 @@ IniParser& IniParser::operator=(const IniParser& other)
     return *this;
 }
 
-string IniParser::get_value(string key) const
+string IniParser::get_value(const string key) const
 {
-    map<string, string>::iterator value = this->_assoc.find(key);
+    map<string, string>::const_iterator value = this->_assoc.find(key);
     
     if (value == this->_assoc.end())
         throw Exception("La clé n'existe pas");

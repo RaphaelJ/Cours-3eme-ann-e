@@ -160,6 +160,30 @@ Exception.cpp.s:
 	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Utils/CMakeFiles/Utils.dir/build.make Utils/CMakeFiles/Utils.dir/Exception.cpp.s
 .PHONY : Exception.cpp.s
 
+Time.o: Time.cpp.o
+.PHONY : Time.o
+
+# target to build an object file
+Time.cpp.o:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Utils/CMakeFiles/Utils.dir/build.make Utils/CMakeFiles/Utils.dir/Time.cpp.o
+.PHONY : Time.cpp.o
+
+Time.i: Time.cpp.i
+.PHONY : Time.i
+
+# target to preprocess a source file
+Time.cpp.i:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Utils/CMakeFiles/Utils.dir/build.make Utils/CMakeFiles/Utils.dir/Time.cpp.i
+.PHONY : Time.cpp.i
+
+Time.s: Time.cpp.s
+.PHONY : Time.s
+
+# target to generate assembly for a file
+Time.cpp.s:
+	cd /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build && $(MAKE) -f Utils/CMakeFiles/Utils.dir/build.make Utils/CMakeFiles/Utils.dir/Time.cpp.s
+.PHONY : Time.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -175,6 +199,9 @@ help:
 	@echo "... Exception.o"
 	@echo "... Exception.i"
 	@echo "... Exception.s"
+	@echo "... Time.o"
+	@echo "... Time.i"
+	@echo "... Time.s"
 .PHONY : help
 
 

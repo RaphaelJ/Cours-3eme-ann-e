@@ -7,3 +7,6 @@ Utils/CMakeFiles/Utils.dir/Async.cpp.o: ../Utils/Async.h
 Utils/CMakeFiles/Utils.dir/Exception.cpp.o: ../Utils/Exception.cpp
 Utils/CMakeFiles/Utils.dir/Exception.cpp.o: ../Utils/Exception.h
 
+Utils/CMakeFiles/Utils.dir/Time.cpp.o: ../Utils/Time.cpp
+Utils/CMakeFiles/Utils.dir/Time.cpp.o: ../Utils/Time.h
+

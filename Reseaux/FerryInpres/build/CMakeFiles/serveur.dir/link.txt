@@ -1,1 +1,1 @@
-/usr/bin/c++   -g -Wall -g    CMakeFiles/serveur.dir/Server.cpp.o  -o serveur -rdynamic Sockets/libSockets.a -lpthread Utils/libUtils.a 
+/usr/bin/c++   -g -Wall -g    CMakeFiles/serveur.dir/Server.cpp.o CMakeFiles/serveur.dir/TerminalServer.cpp.o  -o serveur -rdynamic Sockets/libSockets.a Utils/libUtils.a IniParser/libIniParser.a -lpthread ThreadPool/libThreadPool.a 

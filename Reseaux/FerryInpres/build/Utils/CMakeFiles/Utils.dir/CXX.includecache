@@ -6,11 +6,15 @@
 
 #IncludeRegexTransform: 
 
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Async.cpp
-Async.h
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Async.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Time.cpp
+Time.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Time.h
 
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Async.h
-pthread.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Time.h
+stdlib.h
+-
+stdio.h
+-
+time.h
 -
 

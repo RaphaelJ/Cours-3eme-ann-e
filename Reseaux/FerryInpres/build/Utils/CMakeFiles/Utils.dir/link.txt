@@ -1,2 +1,2 @@
-/usr/bin/ar cr libUtils.a  CMakeFiles/Utils.dir/Async.cpp.o CMakeFiles/Utils.dir/Exception.cpp.o
+/usr/bin/ar cr libUtils.a  CMakeFiles/Utils.dir/Time.cpp.o CMakeFiles/Utils.dir/Async.cpp.o CMakeFiles/Utils.dir/Exception.cpp.o
 /usr/bin/ranlib libUtils.a

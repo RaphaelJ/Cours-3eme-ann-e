@@ -15,7 +15,7 @@ typedef struct _protocol {
     enum protocol_type {
         ACK, FAIL, LOGIN, NEXT_DEPARTURE, DEPARTURE_KNOWN, DEPARTURE_UNKNOWN,
         NO_FERRY, BEGIN_LOADING, END_LOADING, FERRY_LEAVING, ASK_FOR_FERRY,
-        FERRY_ARRIVING, CLOSE
+        FERRY_RESERVED, FERRY_ARRIVING, CLOSE
     } type;
     
     // Contenu de la requête
@@ -39,10 +39,13 @@ typedef struct _protocol {
         // Notifie que le ferry quitte le terminal
         s_time leaving;
         
-        // Notifie l'arrivée d'un ferry
+        // Donne le nom du ferry qui est attribué au terminal
+        int ferry_reserved;
+        
+        // Notifie l'arrivée d'un ferry au terminal
         struct ferry_arriving_protocol {
             s_time time;
-            char ferry_name[STR_LENGTH];
+            int ferry_id;
         } ferry_arriving;
         
         // Notifie l'heure de fermeture
@@ -51,7 +54,7 @@ typedef struct _protocol {
 } protocol;
 
 // Envoie un packet qui ne contient aucune information si ce n'est son type.
-inline void send_flag_packet(ClientSocket sock, protocol::protocol_type type)
+inline void send_flag_packet(ClientSocket sock, const protocol::protocol_type type)
 {
     protocol packet;
     packet.type = type;

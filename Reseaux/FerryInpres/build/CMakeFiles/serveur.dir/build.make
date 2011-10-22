@@ -72,16 +72,43 @@ CMakeFiles/serveur.dir/Server.cpp.o.provides: CMakeFiles/serveur.dir/Server.cpp.
 
 CMakeFiles/serveur.dir/Server.cpp.o.provides.build: CMakeFiles/serveur.dir/Server.cpp.o
 
+CMakeFiles/serveur.dir/TerminalServer.cpp.o: CMakeFiles/serveur.dir/flags.make
+CMakeFiles/serveur.dir/TerminalServer.cpp.o: ../TerminalServer.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles $(CMAKE_PROGRESS_2)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/serveur.dir/TerminalServer.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/serveur.dir/TerminalServer.cpp.o -c /home/rapha/Desktop/Cours/Reseaux/FerryInpres/TerminalServer.cpp
+
+CMakeFiles/serveur.dir/TerminalServer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/serveur.dir/TerminalServer.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/rapha/Desktop/Cours/Reseaux/FerryInpres/TerminalServer.cpp > CMakeFiles/serveur.dir/TerminalServer.cpp.i
+
+CMakeFiles/serveur.dir/TerminalServer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/serveur.dir/TerminalServer.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/rapha/Desktop/Cours/Reseaux/FerryInpres/TerminalServer.cpp -o CMakeFiles/serveur.dir/TerminalServer.cpp.s
+
+CMakeFiles/serveur.dir/TerminalServer.cpp.o.requires:
+.PHONY : CMakeFiles/serveur.dir/TerminalServer.cpp.o.requires
+
+CMakeFiles/serveur.dir/TerminalServer.cpp.o.provides: CMakeFiles/serveur.dir/TerminalServer.cpp.o.requires
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/TerminalServer.cpp.o.provides.build
+.PHONY : CMakeFiles/serveur.dir/TerminalServer.cpp.o.provides
+
+CMakeFiles/serveur.dir/TerminalServer.cpp.o.provides.build: CMakeFiles/serveur.dir/TerminalServer.cpp.o
+
 # Object files for target serveur
 serveur_OBJECTS = \
-"CMakeFiles/serveur.dir/Server.cpp.o"
+"CMakeFiles/serveur.dir/Server.cpp.o" \
+"CMakeFiles/serveur.dir/TerminalServer.cpp.o"
 
 # External object files for target serveur
 serveur_EXTERNAL_OBJECTS =
 
 serveur: CMakeFiles/serveur.dir/Server.cpp.o
+serveur: CMakeFiles/serveur.dir/TerminalServer.cpp.o
 serveur: Sockets/libSockets.a
 serveur: Utils/libUtils.a
+serveur: IniParser/libIniParser.a
+serveur: ThreadPool/libThreadPool.a
 serveur: CMakeFiles/serveur.dir/build.make
 serveur: CMakeFiles/serveur.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable serveur"
@@ -92,6 +119,7 @@ CMakeFiles/serveur.dir/build: serveur
 .PHONY : CMakeFiles/serveur.dir/build
 
 CMakeFiles/serveur.dir/requires: CMakeFiles/serveur.dir/Server.cpp.o.requires
+CMakeFiles/serveur.dir/requires: CMakeFiles/serveur.dir/TerminalServer.cpp.o.requires
 .PHONY : CMakeFiles/serveur.dir/requires
 
 CMakeFiles/serveur.dir/clean:

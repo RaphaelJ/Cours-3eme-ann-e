@@ -168,7 +168,7 @@ IniParser_LIB_DEPENDS:STATIC=
 LIBRARY_OUTPUT_PATH:PATH=
 
 //Dependencies for the target
-Sockets_LIB_DEPENDS:STATIC=general;-lpthread;general;Utils;
+Sockets_LIB_DEPENDS:STATIC=general;-lpthread;general;Utils;general;ThreadPool;
 
 //Dependencies for target
 ThreadPool_LIB_DEPENDS:STATIC=
