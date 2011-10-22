@@ -1,11 +1,11 @@
 #include "SocketsUtils.h"
 
-namespace utils
+namespace socket_utils
 {
     // Initialise un socket. Utilisé par les classes ClientSocket et ServerSocket
     int init_socket(const unsigned int ip, const int port, socket_type type)
     {
-        int _socket = utils::socket(AF_INET, SOCK_STREAM, 0);
+        int _socket = socket_utils::socket(AF_INET, SOCK_STREAM, 0);
     
         struct sockaddr_in dest = {0};
         dest.sin_addr.s_addr = ip;
@@ -13,11 +13,11 @@ namespace utils
         dest.sin_family = AF_INET;
         
         if (type == SERVER_SOCKET) {
-            utils::bind(
+            socket_utils::bind(
                 _socket, (struct sockaddr*) &dest, sizeof (struct sockaddr_in)
             );
         } else {
-            utils::connect(
+            socket_utils::connect(
                 _socket, (struct sockaddr*) &dest, sizeof (struct sockaddr_in)
             );
         }
@@ -65,6 +65,22 @@ namespace utils
         if (fd == -1)
             throw SocketException("Erreur lors de l'acceptation d'une connexion cliente");
         return fd;
+    }
+    
+    ssize_t send(int _socket, const void *buffer, size_t length, int flags)
+    {
+        ssize_t ret = send(_socket, buffer, length, flags); 
+        if (ret == -1)
+            throw SocketException("Erreur lors de l'envoi des données");
+        return ret;
+    }
+    
+    ssize_t recv(int _socket, void *buffer, size_t length, int flags)
+    {
+        ssize_t ret = send(_socket, buffer, length, flags); 
+        if (ret == -1)
+            throw SocketException("Erreur lors de la reception des données");
+        return ret;
     }
     
     int shutdown(int _socket, int how)

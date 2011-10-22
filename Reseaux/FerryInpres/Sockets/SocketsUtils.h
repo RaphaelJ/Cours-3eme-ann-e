@@ -9,7 +9,7 @@
 
 using namespace std;
 
-namespace utils
+namespace socket_utils
 {
     enum socket_type { SERVER_SOCKET, CLIENT_SOCKET };
     
@@ -24,6 +24,8 @@ namespace utils
              socklen_t address_len);
     int listen(int _socket, int backlog);
     int accept(int _socket, struct sockaddr *address, socklen_t *address_len);
+    ssize_t send(int _socket, const void *buffer, size_t length, int flags);
+    ssize_t recv(int _socket, void *buffer, size_t length, int flags);
     int shutdown(int _socket, int how);
     int close(int fildes);
 }

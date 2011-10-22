@@ -1,11 +1,11 @@
 #include "ThreadPool.h"
 
-void *executor(void *v_arg);
+void *_executor(void *v_arg);
 
 typedef struct _executor_arg { 
     queue<routine> *waiting;
-    sem_t *sem;
-    pthread_mutex_t *mutex;
+    sem_t *sem_waiting;
+    pthread_mutex_t *mutex_waiting;
 } executor_arg;
 
 // Lance les différents threads de la pool
@@ -16,7 +16,7 @@ ThreadPool::ThreadPool(int n_threads) : _threads(n_threads)
     
     for (int i = 0; i < n_threads; i++) {
         pthread_t t;
-        pthread_create(&t, NULL, executor, NULL);
+        pthread_create(&t, NULL, _executor, NULL);
         
         this->_threads.push_front(t);
     }
@@ -38,19 +38,19 @@ ThreadPool& ThreadPool::operator=(const ThreadPool& other)
 }
 
 // Attends des procédures à exécuter dans la queue.
-void *executor(void* v_arg) 
+void *_executor(void *v_arg) 
 {
     executor_arg *arg = (executor_arg *) v_arg;
     
     for (;;) {
         // Attends une nouvelle routine
-        sem_wait(arg->sem);
+        sem_wait(arg->sem_waiting);
         
         // Retire la nouvelle routine
-        pthread_mutex_lock(arg->mutex);
+        pthread_mutex_lock(arg->mutex_waiting);
         routine r = arg->waiting->front();
         arg->waiting->pop();
-        pthread_mutex_unlock(arg->mutex);
+        pthread_mutex_unlock(arg->mutex_waiting);
         
         // Exécute le routine
         r.fct(r.arg);

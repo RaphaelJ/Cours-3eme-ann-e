@@ -7,26 +7,26 @@ typedef struct _thread_args {
     int client_fd;
 } thread_args;
 
-void thread_routine(void *v_args);
+void _thread_routine(void *v_args);
 
 // Lance un serveur écoutant sur un port et gérant les connexions sur
 // plusieurs threads en utilisant une pool de thread.
 void with_server_socket(const int port, void (*action)(ClientSocket sock))
 {
-    int _socket = utils::init_socket(INADDR_ANY, port, utils::SERVER_SOCKET);
+    int _socket = socket_utils::init_socket(INADDR_ANY, port, socket_utils::SERVER_SOCKET);
     ThreadPool pool(4);
     
-    utils::listen(_socket, 0);
+    socket_utils::listen(_socket, 0);
     
     for (;;) {
         // Lance la gestion du client dans un nouveau thread.
-        int client_fd = utils::accept(_socket, NULL, NULL);
+        int client_fd = socket_utils::accept(_socket, NULL, NULL);
     
         thread_args *args = new thread_args;
         args->action = action;
         args->client_fd = client_fd;
         
-        pool.inject(thread_routine, (void *) args);
+        pool.inject(_thread_routine, (void *) args);
     }
     
     shutdown(_socket, SHUT_RDWR);
@@ -35,7 +35,7 @@ void with_server_socket(const int port, void (*action)(ClientSocket sock))
 
 // Appelle l'action de gestion du client depuis le nouveau thread
 // (extrait l'object socket des arguments de lancement du thread).
-void thread_routine(void *v_args)
+void _thread_routine(void *v_args)
 {
     thread_args *args = (thread_args*) v_args;
     ClientSocket sock(args->client_fd); 

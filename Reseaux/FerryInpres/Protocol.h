@@ -1,17 +1,13 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
+#include <stdio.h>
 #include <time.h>
 
 #include "Sockets/ClientSocket.h"
+#include "Utils/Time.h"
 
 #define STR_LENGTH 30
-
-// Stocke l'heure
-typedef struct _s_time {
-    short hour;
-    short min;
-} s_time;
 
 // Requête transmise/reçue via le réseau.
 typedef struct _protocol {
@@ -32,22 +28,25 @@ typedef struct _protocol {
         } login;
         
         // Donne l'heure du prochain départ
-        char departure_known[5];
+        s_time departure_known;
         
         // Demande l'autorisation du début de l'embarquement
-        char begin_loading[5];
+        s_time begin_loading;
         
         // Notifie la fin de l'embarquement et demande l'autorisation de partir
-        char end_loading[5];
+        s_time end_loading;
         
         // Notifie que le ferry quitte le terminal
-        char leaving[5];
+        s_time leaving;
         
         // Notifie l'arrivée d'un ferry
         struct ferry_arriving_protocol {
-            char time;
+            s_time time;
             char ferry_name[STR_LENGTH];
         } ferry_arriving;
+        
+        // Notifie l'heure de fermeture
+        s_time close;
     } content;
 } protocol;
 

@@ -8,7 +8,7 @@ ClientSocket::ClientSocket(const char* ip, const int port)
 {
     unsigned int ip_bin;
     inet_pton(AF_INET, ip, &ip_bin);
-    this->_socket = utils::init_socket(ip_bin, port, utils::CLIENT_SOCKET);
+    this->_socket = socket_utils::init_socket(ip_bin, port, socket_utils::CLIENT_SOCKET);
 }
 
 // Initialise l'object socket à partir d'un descripteur de socket existant
@@ -29,6 +29,6 @@ ClientSocket& ClientSocket::operator=(const ClientSocket& other)
 
 void ClientSocket::close()
 {
-    utils::shutdown(this->_socket, SHUT_RDWR);
-    utils::close(this->_socket);
+    socket_utils::shutdown(this->_socket, SHUT_RDWR);
+    socket_utils::close(this->_socket);
 }

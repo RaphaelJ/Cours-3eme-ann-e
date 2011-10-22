@@ -26,44 +26,17 @@ public:
     
     int get_socket_fd() const { return this->_socket; }
     
-    // Envoie un vecteur de données
-    template <class T>
-    inline void send(const vector<T> data)
-    {
-        // Copie le contenu du vecteur dans un buffer
-        T *buffer = new T[data.size()];
-        size_t length = data.size() * sizeof (T);
-        
-        for (int i = 0; i < data.size(); i++) 
-            buffer[i] = data[i];
-        
-        // Envoie le buffer
-        if (send(this->_socket, buffer, length, 0) == -1)
-            throw SocketException("Erreur lors de l'envoi des données");
-    }
-    
     // Envoie une donnée
     template <class T>
-    inline void send(const T data)
+    inline ssize_t send(const T data)
     {
-        if (send(this->_socket, data, sizeof (T), 0) == -1)
-            throw SocketException("Erreur lors de l'envoi des données");
+        return socket_utils::send(this->_socket, data, sizeof (T), 0);
     }
     
-    // Reçoit un vecteur de données
-    template <class T>
-    inline vector<T> receive(const size_t n_elems)
+    // Envoie un vecteur de données
+    inline ssize_t send(const void *data, size_t length)
     {
-        // Recoit dans un buffer
-        T *buffer = new T[n_elems];
-        
-        if (recv(this->_socket, buffer, n_elems *  sizeof (T), 0) == -1)
-            throw SocketException("Erreur lors de la réception des données");
-        
-        // Copie le buffer dans un vector
-        vector<T> data(buffer, buffer + n_elems);
-        
-        return data;
+	return socket_utils::send(this->_socket, data, length, 0);
     }
     
     // Reçoit une donnée
@@ -72,10 +45,17 @@ public:
     {
         T data;
         
-        if (recv(this->_socket, &data, sizeof (T), 0) == -1)
-            throw SocketException("Erreur lors de la réception des données");
+        if (socket_utils::recv(this->_socket, &data, sizeof (T), 0) != sizeof (T))
+            throw SocketException("Réception incomplète des données");
         
         return data;
+    }
+    
+    // Reçoit un vecteur de données
+    template <class T>
+    inline ssize_t receive(void *data, size_t length)
+    {        
+        return socket_utils::recv(this->_socket, data, length, 0);
     }
     
     void close();    

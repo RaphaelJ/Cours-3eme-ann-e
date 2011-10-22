@@ -25,7 +25,7 @@ IniParser::IniParser(const char* path)
 
 IniParser::IniParser(const IniParser& other)
 {
-    this->_assoc = other.getAssoc();
+    this->_assoc = other.get_assoc();
 }
 
 IniParser& IniParser::operator=(const IniParser& other)
