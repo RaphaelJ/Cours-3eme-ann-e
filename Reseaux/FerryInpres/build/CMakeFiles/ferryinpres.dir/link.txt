@@ -1,1 +1,0 @@
-/usr/bin/c++   -g -Wall -g    CMakeFiles/ferryinpres.dir/main.o  -o ferryinpres -rdynamic -L/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets Sockets/libSockets.a -lpthread 

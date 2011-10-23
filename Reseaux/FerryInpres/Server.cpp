@@ -2,7 +2,7 @@
 
 // Vecteur donnant le numero du ferry présent dans chaque terminal
 // (0 si aucun ferry)
-int docked_ferries[];
+int docked_ferries[] = { 1, 4, 0, 3, 7, 0 };
 
 // Ferrys en attente de traitement dans l'un des terminaux
 queue<int> waiting_ferries;

@@ -4,7 +4,7 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_CXX
-  "/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Client.cpp" "/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles/client.dir/Client.cpp.o"
+  "/home/rapha/Desktop/Cours/Reseaux/FerryInpres/TerminalClient.cpp" "/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles/terminal_client.dir/TerminalClient.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -12,5 +12,6 @@ SET(CMAKE_CXX_COMPILER_ID "GNU")
 SET(CMAKE_TARGET_LINKED_INFO_FILES
   "/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets/CMakeFiles/Sockets.dir/DependInfo.cmake"
   "/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Utils/CMakeFiles/Utils.dir/DependInfo.cmake"
+  "/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/IniParser/CMakeFiles/IniParser.dir/DependInfo.cmake"
   "/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/ThreadPool/CMakeFiles/ThreadPool.dir/DependInfo.cmake"
   )

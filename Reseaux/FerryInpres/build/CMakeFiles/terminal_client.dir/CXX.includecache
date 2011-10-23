@@ -12,14 +12,6 @@ exception
 string
 -
 
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Client.cpp
-iostream
--
-IniParser/IniParser.h
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/IniParser/IniParser.h
-Sockets/ClientSocket.h
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.h
-
 /home/rapha/Desktop/Cours/Reseaux/FerryInpres/IniParser/IniParser.h
 stdlib.h
 -
@@ -35,6 +27,16 @@ string
 -
 Utils/Exception.h
 /home/rapha/Desktop/Cours/Reseaux/FerryInpres/IniParser/Utils/Exception.h
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Protocol.h
+stdio.h
+-
+time.h
+-
+Sockets/ClientSocket.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.h
+Utils/Time.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Time.h
 
 /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.h
 arpa/inet.h
@@ -65,4 +67,26 @@ unistd.h
 -
 SocketException.h
 /home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/TerminalClient.cpp
+iostream
+-
+IniParser/IniParser.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/IniParser/IniParser.h
+Sockets/ClientSocket.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.h
+Utils/Time.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Time.h
+Protocol.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Protocol.h
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Time.h
+stdlib.h
+-
+stdio.h
+-
+string.h
+-
+time.h
+-
 

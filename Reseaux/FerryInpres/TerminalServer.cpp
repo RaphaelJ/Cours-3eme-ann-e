@@ -14,8 +14,9 @@ void *terminal_server(void* arg)
     IniParser properties("terminal_server.ini");
     
     int port = atoi(properties.get_value("port").c_str());
+    int n_clients = atoi(properties.get_value("n_clients").c_str());
     
-    with_server_socket(port, _user_login);
+    with_server_socket(port, n_clients, _user_login);
     return NULL;
 }
 

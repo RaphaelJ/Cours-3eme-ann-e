@@ -12,7 +12,7 @@ Extra Arguments=
 ProjectRootRelative=./
 
 [Launch]
-Launch Configurations=Launch Configuration 1,Launch Configuration 0
+Launch Configurations=Launch Configuration 1,Launch Configuration 0,Launch Configuration 2
 
 [Launch][Launch Configuration 0]
 Configured Launch Modes=execute
@@ -49,6 +49,18 @@ Executable=
 External Terminal=konsole --noclose --workdir %workdir -e %exe
 Project Target=FerryInpres,client
 Use External Terminal=false
+Working Directory=file:///home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/
+isExecutable=false
+
+[Launch][Launch Configuration 2]
+Configured Launch Modes=debug
+Configured Launchers=gdb
+Name=terminal_client
+Type=Native Application
+
+[Launch][Launch Configuration 2][Data]
+Configured from ProjectItem=FerryInpres,terminal_client
+Project Target=FerryInpres,terminal_client
 Working Directory=file:///home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/
 isExecutable=false
 

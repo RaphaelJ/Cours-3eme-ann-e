@@ -10,6 +10,7 @@
 
 using namespace std;
 
-void with_server_socket(const int port, void (*action)(ClientSocket sock));
+void with_server_socket(const int port, const int n_threads,
+                        void (*action)(ClientSocket sock));
 
 #endif // SERVERSOCKET_H

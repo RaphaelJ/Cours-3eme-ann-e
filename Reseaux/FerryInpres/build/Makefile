@@ -99,19 +99,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named client
-
-# Build rule for target.
-client: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 client
-.PHONY : client
-
-# fast build rule for target.
-client/fast:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/build
-.PHONY : client/fast
-
-#=============================================================================
 # Target rules for targets named serveur
 
 # Build rule for target.
@@ -123,6 +110,19 @@ serveur: cmake_check_build_system
 serveur/fast:
 	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/build
 .PHONY : serveur/fast
+
+#=============================================================================
+# Target rules for targets named terminal_client
+
+# Build rule for target.
+terminal_client: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 terminal_client
+.PHONY : terminal_client
+
+# fast build rule for target.
+terminal_client/fast:
+	$(MAKE) -f CMakeFiles/terminal_client.dir/build.make CMakeFiles/terminal_client.dir/build
+.PHONY : terminal_client/fast
 
 #=============================================================================
 # Target rules for targets named Utils
@@ -176,30 +176,6 @@ ThreadPool/fast:
 	$(MAKE) -f ThreadPool/CMakeFiles/ThreadPool.dir/build.make ThreadPool/CMakeFiles/ThreadPool.dir/build
 .PHONY : ThreadPool/fast
 
-Client.o: Client.cpp.o
-.PHONY : Client.o
-
-# target to build an object file
-Client.cpp.o:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/Client.cpp.o
-.PHONY : Client.cpp.o
-
-Client.i: Client.cpp.i
-.PHONY : Client.i
-
-# target to preprocess a source file
-Client.cpp.i:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/Client.cpp.i
-.PHONY : Client.cpp.i
-
-Client.s: Client.cpp.s
-.PHONY : Client.s
-
-# target to generate assembly for a file
-Client.cpp.s:
-	$(MAKE) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/Client.cpp.s
-.PHONY : Client.cpp.s
-
 Server.o: Server.cpp.o
 .PHONY : Server.o
 
@@ -223,6 +199,30 @@ Server.s: Server.cpp.s
 Server.cpp.s:
 	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/Server.cpp.s
 .PHONY : Server.cpp.s
+
+TerminalClient.o: TerminalClient.cpp.o
+.PHONY : TerminalClient.o
+
+# target to build an object file
+TerminalClient.cpp.o:
+	$(MAKE) -f CMakeFiles/terminal_client.dir/build.make CMakeFiles/terminal_client.dir/TerminalClient.cpp.o
+.PHONY : TerminalClient.cpp.o
+
+TerminalClient.i: TerminalClient.cpp.i
+.PHONY : TerminalClient.i
+
+# target to preprocess a source file
+TerminalClient.cpp.i:
+	$(MAKE) -f CMakeFiles/terminal_client.dir/build.make CMakeFiles/terminal_client.dir/TerminalClient.cpp.i
+.PHONY : TerminalClient.cpp.i
+
+TerminalClient.s: TerminalClient.cpp.s
+.PHONY : TerminalClient.s
+
+# target to generate assembly for a file
+TerminalClient.cpp.s:
+	$(MAKE) -f CMakeFiles/terminal_client.dir/build.make CMakeFiles/terminal_client.dir/TerminalClient.cpp.s
+.PHONY : TerminalClient.cpp.s
 
 TerminalServer.o: TerminalServer.cpp.o
 .PHONY : TerminalServer.o
@@ -254,20 +254,20 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... client"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... serveur"
+	@echo "... terminal_client"
 	@echo "... Utils"
 	@echo "... Sockets"
 	@echo "... IniParser"
 	@echo "... ThreadPool"
-	@echo "... Client.o"
-	@echo "... Client.i"
-	@echo "... Client.s"
 	@echo "... Server.o"
 	@echo "... Server.i"
 	@echo "... Server.s"
+	@echo "... TerminalClient.o"
+	@echo "... TerminalClient.i"
+	@echo "... TerminalClient.s"
 	@echo "... TerminalServer.o"
 	@echo "... TerminalServer.i"
 	@echo "... TerminalServer.s"
