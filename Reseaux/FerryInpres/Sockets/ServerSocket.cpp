@@ -11,10 +11,11 @@ void _thread_routine(void *v_args);
 
 // Lance un serveur écoutant sur un port et gérant les connexions sur
 // plusieurs threads en utilisant une pool de thread.
-void with_server_socket(const int port, void (*action)(ClientSocket sock))
+void with_server_socket(const int port, const int n_threads,
+                        void (*action)(ClientSocket sock))
 {
     int _socket = socket_utils::init_socket(INADDR_ANY, port, socket_utils::SERVER_SOCKET);
-    ThreadPool pool(4);
+    ThreadPool pool(n_threads);
     
     socket_utils::listen(_socket, 0);
     

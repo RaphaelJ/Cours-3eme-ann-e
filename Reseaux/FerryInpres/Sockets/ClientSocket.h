@@ -41,14 +41,14 @@ public:
     
     // Reçoit une donnée
     template <class T>
-    inline T receive()
-    {
-        T data;
+    inline ssize_t receive(T *data)
+    {   
+        ssize_t ret = socket_utils::recv(this->_socket, data, sizeof (T), 0);
         
-        if (socket_utils::recv(this->_socket, &data, sizeof (T), 0) != sizeof (T))
+        if (ret != sizeof (T))
             throw SocketException("Réception incomplète des données");
         
-        return data;
+        return ret;
     }
     
     // Reçoit un vecteur de données

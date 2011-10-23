@@ -1,5 +1,7 @@
 #include "SocketsUtils.h"
 
+#include <stdio.h>
+
 namespace socket_utils
 {
     // Initialise un socket. Utilisé par les classes ClientSocket et ServerSocket
@@ -30,7 +32,7 @@ namespace socket_utils
     int socket(int domain, int type, int protocol)
     {
         int _socket;
-        _socket = socket(domain, type, protocol);
+        _socket = ::socket(domain, type, protocol);
         
         if (_socket == -1)
             throw SocketException("Erreur lors de l'initialisation de la socket");
@@ -67,8 +69,7 @@ namespace socket_utils
         return fd;
     }
     
-    ssize_t send(int _socket, const void *buffer, size_t length, int flags)
-    {
+    ssize_t send(int _socket, const void *buffer, size_t length, int flags)    {
         ssize_t ret = send(_socket, buffer, length, flags); 
         if (ret == -1)
             throw SocketException("Erreur lors de l'envoi des données");

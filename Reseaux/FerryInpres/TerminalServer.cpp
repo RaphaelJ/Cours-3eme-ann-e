@@ -1,15 +1,21 @@
 #include "TerminalServer.h"
 
 void _user_login(ClientSocket sock);
-s_time _ferry_departure(int ferry_id);
 void _next_departure(ClientSocket sock, int terminal_id);
+void _manage_begin_loading(ClientSocket sock, int terminal_id);
+void _manage_end_loading(ClientSocket sock, int terminal_id, s_time loading);
 void _manage_leaving(ClientSocket sock, int terminal_id);
+void _manage_ask_for_ferry(ClientSocket sock, int terminal_id);
 void _manage_docking(ClientSocket sock, int terminal_id);
 
 // Serveur assurant la gestion des terminaux.
 void *terminal_server(void* arg)
 {
-    with_server_socket(39001, _user_login);
+    IniParser properties("terminal_server.ini");
+    
+    int port = atoi(properties.get_value("port").c_str());
+    
+    with_server_socket(port, _user_login);
     return NULL;
 }
 
@@ -17,7 +23,8 @@ void *terminal_server(void* arg)
 // Si les informations de connexion ne sont pas valides, termine la connexion.
 void _user_login(ClientSocket sock)
 {
-    protocol packet = sock.receive<protocol>();
+    protocol packet;
+    sock.receive<protocol>(&packet);
     
     if (packet.type == protocol::LOGIN) {
         try {
@@ -37,11 +44,6 @@ void _user_login(ClientSocket sock)
             send_flag_packet(sock, protocol::FAIL);
         }
     }
-    
-    // Lors d'erreur ou lors de la fin de la session, envoie un packet CLOSE
-    packet.type = protocol::CLOSE;
-    packet.content.close = current_time();
-    sock.send<protocol>(packet);
 }
 
 // Donne l'heure de départ du ferry depuis le fichier derpartures.ini
@@ -60,14 +62,15 @@ s_time _ferry_departure(int ferry_id)
 // terminal
 void _next_departure(ClientSocket sock, int terminal_id)
 {
-    protocol packet = sock.receive<protocol>();
+    protocol packet;
+    sock.receive<protocol>(&packet);
     
     if (packet.type == protocol::NEXT_DEPARTURE) {
-        if (docked_ferries[terminal_id].state != ferry::NO_FERRY) {
+        if (docked_ferries[terminal_id] != 0) {
             try { // Départ connu
                 packet.type = protocol::DEPARTURE_KNOWN;
                 packet.content.departure_known = _ferry_departure(
-                    docked_ferries[terminal_id].id
+                    docked_ferries[terminal_id]
                 );
                 sock.send<protocol>(packet);
                 
@@ -78,100 +81,112 @@ void _next_departure(ClientSocket sock, int terminal_id)
             }
         } else { // Pas de ferry sur ce terminal
             send_flag_packet(sock, protocol::NO_FERRY);
-            return _manage_docking(sock, terminal_id); // Gère l'accostage
+            return _manage_ask_for_ferry(sock, terminal_id); // Gère l'accostage
         }
     }
 }
 
-// Gère les opérations qu'un ferry peut effectuer lorsqu'il est présent à 
-// un terminal pour la préparation de son appareillage.
-void _manage_leaving(ClientSocket sock, int terminal_id)
+// Gère la demande de commencement de l'embarquement
+void _manage_begin_loading(ClientSocket sock, int terminal_id)
 {
-    protocol packet = sock.receive<protocol>();
+    protocol packet;
+    sock.receive<protocol>(&packet);
     
-    if (docked_ferries[terminal_id].state == ferry::DOCKED
-        && packet.type == protocol::BEGIN_LOADING) {
+    if (packet.type == protocol::BEGIN_LOADING) {
         // Demande le début du chargement
-        s_time departure = _ferry_departure(
-            docked_ferries[terminal_id].id
-        );
+        s_time departure = _ferry_departure(docked_ferries[terminal_id]);
         s_time loading = packet.content.begin_loading;
         
         if (time_span(loading, departure) <= 45) {
             // Le chargement ne peut commencer que 45 minutes avant le départ
-            docked_ferries[terminal_id].state = ferry::LOADING;
-            docked_ferries[terminal_id].last_change = loading;
             send_flag_packet(sock, protocol::ACK);
+            return _manage_end_loading(sock, terminal_id, loading);
         } else {
             send_flag_packet(sock, protocol::FAIL);
-        }
-        
-        return _manage_leaving(sock, terminal_id);
-    } else if (docked_ferries[terminal_id].state == ferry::LOADING
-               && packet.type == protocol::END_LOADING) {
+            return _manage_begin_loading(sock, terminal_id);
+        }   
+    }
+}
+
+// Gère la notification de fin d'embarquement
+void _manage_end_loading(ClientSocket sock, int terminal_id, s_time loading)
+{
+    protocol packet;
+    sock.receive<protocol>(&packet);
+    
+    if (packet.type == protocol::END_LOADING) {
         // Confirme la fin du chargement
-        s_time start_loading = docked_ferries[terminal_id].last_change;
         s_time end_loading = packet.content.end_loading;
         
-        if (time_span(start_loading, end_loading) >= 15) {
+        if (time_span(loading, end_loading) >= 15) {
             // Le chargement dure au minimum 15 minutes
-            docked_ferries[terminal_id].state = ferry::LOADED;
-            docked_ferries[terminal_id].last_change = end_loading;
             send_flag_packet(sock, protocol::ACK);
+            return _manage_leaving(sock, terminal_id);
         } else {
             send_flag_packet(sock, protocol::FAIL);
+            return _manage_end_loading(sock, terminal_id, loading);
         }
         
-        return _manage_leaving(sock, terminal_id);
-    } else if (docked_ferries[terminal_id].state == ferry::LOADED
-               && packet.type == protocol::FERRY_LEAVING) {
+    }
+}
+
+// Gère la notification de départ
+void _manage_leaving(ClientSocket sock, int terminal_id)
+{
+    protocol packet;
+    sock.receive<protocol>(&packet);
+    
+    if (packet.type == protocol::FERRY_LEAVING) {
         // Ajoute le ferry aux ferry en cours de départ
         pthread_mutex_lock(&mutex_leaving);
-        leaving_ferries.push_front(docked_ferries[terminal_id].id);
+        leaving_ferries.push_front(docked_ferries[terminal_id]);
         pthread_mutex_unlock(&mutex_leaving);
         
         // Supprime le ferry du terminal
-        docked_ferries[terminal_id].id = 0;
-        docked_ferries[terminal_id].state = ferry::NO_FERRY;
+        docked_ferries[terminal_id] = 0;
         
-        return _manage_docking(sock, terminal_id); // Terminal vide.
+        return _manage_ask_for_ferry(sock, terminal_id); // Terminal vide.
     }
 }
 
 // Gère les opérations de dockage d'un ferry lorsque le terminal est vide
-void _manage_docking(ClientSocket sock, int terminal_id)
+void _manage_ask_for_ferry(ClientSocket sock, int terminal_id)
 {
-    protocol packet = sock.receive<protocol>();
+    protocol packet;
+    sock.receive<protocol>(&packet);
     
-    if (docked_ferries[terminal_id].state == ferry::NO_FERRY
-        && packet.type == protocol::ASK_FOR_FERRY) {
+    if (packet.type == protocol::ASK_FOR_FERRY) {
         // Attribue un nouveau ferry au terminal
         pthread_mutex_lock(&mutex_waiting);
         if (waiting_ferries.empty()) { // Pas de ferry en attente
             pthread_mutex_unlock(&mutex_waiting);
             
             send_flag_packet(sock, protocol::FAIL);
+            return _manage_ask_for_ferry(sock, terminal_id);
         } else { // Un ferry en attente
             int ferry_id = waiting_ferries.front();
             waiting_ferries.pop();
             pthread_mutex_unlock(&mutex_waiting);
     
-            docked_ferries[terminal_id].id = ferry_id;
-            docked_ferries[terminal_id].state = ferry::ARRIVING;
+            docked_ferries[terminal_id] = ferry_id;
             
             packet.type = protocol::FERRY_RESERVED;
             packet.content.ferry_reserved = ferry_id;
             sock.send<protocol>(packet);
-        }
-        
-        return _manage_docking(sock, terminal_id);
-    } else if (docked_ferries[terminal_id].state == ferry::ARRIVING
-               && packet.type == protocol::FERRY_ARRIVING) {
+            return _manage_docking(sock, terminal_id);
+        }   
+    }
+}
+
+void _manage_docking(ClientSocket sock, int terminal_id)
+{
+    protocol packet;
+    sock.receive<protocol>(&packet);
+       
+    if (packet.type == protocol::FERRY_ARRIVING) {
         int remote_ferry_id = packet.content.ferry_arriving.ferry_id;
-        if (docked_ferries[terminal_id].id == remote_ferry_id) {
-            // Le ferry en attente est bien arrivé au terminale
-            docked_ferries[terminal_id].state = ferry::DOCKED;
-            
+        if (docked_ferries[terminal_id] == remote_ferry_id) {
+            // Le ferry en attente est bien arrivé au terminale            
             send_flag_packet(sock, protocol::ACK);
             
             return _next_departure(sock, terminal_id);

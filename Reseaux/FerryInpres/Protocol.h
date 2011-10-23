@@ -37,7 +37,7 @@ typedef struct _protocol {
         s_time end_loading;
         
         // Notifie que le ferry quitte le terminal
-        s_time leaving;
+        s_time ferry_leaving;
         
         // Donne le nom du ferry qui est attribué au terminal
         int ferry_reserved;

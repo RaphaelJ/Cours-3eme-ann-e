@@ -14,20 +14,25 @@ typedef struct _routine {
     void *arg;
 } routine;
 
+typedef struct _executor_arg { 
+    queue<routine> waiting; // Routines en attente d'exécution
+     
+    // Verrouille et patiente sur la liste des routines en attente
+    sem_t sem_waiting;
+    pthread_mutex_t mutex_waiting;
+} executor_args;
+
 class ThreadPool
 {
 private:    
     list<pthread_t> _threads;
-    queue<routine> _waiting; // Routines en attente d'exécution
-    
-    // Verrouille et patiente sur la liste des routines en attente
-    sem_t _sem_waiting;
-    pthread_mutex_t _mutex_waiting;
+
+    executor_args _queue;
 
     ThreadPool(const ThreadPool& other) {};
     
 public:
-    ThreadPool(int n_threads);
+    ThreadPool(const int n_threads);
     virtual ~ThreadPool();
     virtual ThreadPool& operator=(const ThreadPool& other);
     
