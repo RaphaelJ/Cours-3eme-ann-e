@@ -15,15 +15,21 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-    'mysql': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'uk',
+    'sqlite': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'uk.sqlite3',
+    },
+    'oracle': {
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': 'oracle',
         'USER': 'uk',
         'PASSWORD': 'pass',
         'HOST': '127.0.0.1',
+        'PORT': '1521',
     }
 }
-DATABASES['default'] = DATABASES['mysql']
+DATABASES['default'] = DATABASES['oracle']
+
 
 SITE = False
 CATEGORIES = (

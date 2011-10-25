@@ -3,10 +3,12 @@ import Control.Monad.IO.Class
 import Database.CouchDB
 import Database.HDBC.Types
 import Database.HDBC.ODBC
+import Data.Char
 import Data.Digits
 import Data.List
 import Data.HashTable (hashString)
 import Data.Maybe
+import qualified Data.Set as S
 import Text.JSON
 
 import Debug.Trace
@@ -32,8 +34,8 @@ data Connexion = Connexion Connection String -- DBConnection Origine
 
 main = do
     connBe <- oracleConn beHote "be"
-    connUsa <- oracleConn usaHote "usa"
-    connUk <- mysqlConn ukHote "uk"
+    connUsa <- oracleConn usaHote "usa2"
+    connUk <- oracleConn ukHote "uk"
     menu True [ ("Insérer dans BE"
                 , insertionBe $ Connexion connBe "BE")
               , ("Insérer dans USA"
@@ -46,7 +48,7 @@ main = do
   where
     oracleConn hote user =
         connectODBC $ "DRIVER=oracle;Dbq=//"++hote++":1521/oracle.oracle;\
-                      \UID="++user++";PWD=pass"
+                         \UID="++user++";PWD=pass"
                        
     mysqlConn hote user =
         connectODBC $ "DRIVER=mysql;SERVER="++hote++";DATABASE="++user++";\
@@ -109,13 +111,17 @@ gestionFiltres filtres = do
 -- | Donne la liste des ids des documents qui respectent tous les filtres.
 idsFiltres [] = queryViewKeys couchDb couchDesign (doc "by_asin") []
 idsFiltres filtres = do
+    liftIO $ putStrLn "Recuperation des IDs"
     -- Ids retournés par chaque filtre
     ids <- forM (map requeteFiltre filtres) $ \(vue, options) ->
         queryViewKeys couchDb couchDesign vue options
+
+    -- Retourne les ids communs uniques
+    liftIO $ putStrLn "Intersection des IDs"
+    let ids_set = map S.fromList ids
+    return $ S.toList $ foldl1 S.intersection ids_set
     
-    return $ foldl1' intersect (nub ids) -- Retourne les ids communs uniques
-    
-  where
+  where      
     requeteFiltre :: Filtre -> (Doc, [(String, JSValue)])
     requeteFiltre (Artiste nom) =
         (doc "by_artist", [("key", JSString $ toJSString nom)])
@@ -140,7 +146,7 @@ idsFiltres filtres = do
         (doc "by_asin", [("key", JSString $ toJSString amazon_asin)])
 
 insertionUk = insertion [Langue En, Categorie Film]
-insertionBe = insertion [Langue Fr]
+insertionBe = insertion [Langue Fr{-, Categorie Musique-}]
 insertionUsa = insertion [Langue En, Categorie Livre]
 
 -- | Demande les filtres l'utilisateur, récupère les documents et les insère
@@ -168,16 +174,22 @@ inserer id_docs (Connexion conn origine) = do
   where
     insererMusique doc = do
         let amazon_asin = toString $ fromJust $ lookup "asin" doc
-        print $ "Insertion musique ("++ amazon_asin ++") ..."
+        putStrLn $ "Insertion musique: " ++ amazon_asin
         produit_ean <- insererProduit doc
         
         when (isJust produit_ean) $ do
             insererArtistes $ fromJust $ lookup "artist" doc
-            let Just label = fmap toString $ lookup "label" doc
+            let label = case fmap toString $ lookup "label" doc of
+                    Just e  -> e
+                    Nothing -> "Unknown"
             insererEditeur label
             let support = ""
-            let Just disques = fmap (floor . fromJRational) $ lookup "discs" doc
-            let Just publication = fmap toString $ lookup "release_date" doc
+            let disques = case fmap (floor . fromJRational) $ lookup "discs" doc of
+                    Just e  -> e
+                    Nothing -> 1
+            let publication = case fmap toString $ lookup "release_date" doc of
+                    Just e  -> e
+                    Nothing -> "Unknown"
             req <- prepare conn "INSERT INTO site_musique VALUES (?, ?, ?, ?, ?)"
             execute req [ SqlInteger $ fromJust $ produit_ean, SqlString label
                         , SqlString support, SqlInteger disques
@@ -186,16 +198,17 @@ inserer id_docs (Connexion conn origine) = do
 
     insererLivre doc = do
         let amazon_asin = toString $ fromJust $ lookup "asin" doc
-        print $ "Insertion livre ("++ amazon_asin ++") ..."
+        putStrLn $ "Insertion livre: " ++ amazon_asin
         produit_ean <- insererProduit doc
 
         when (isJust produit_ean) $ do
-            case lookup "autors" doc of
+            case lookup "authors" doc of
                 Just e  -> insererArtistes e
                 Nothing -> return ()
-            editeur <- case fmap toString $ lookup "editeur" doc of
-                    Just e  -> insererEditeur e >> return e
-                    Nothing -> return ""
+            let editeur = case fmap toString $ lookup "publisher" doc of
+                    Just e  -> e
+                    Nothing -> "Unknown"
+            insererEditeur editeur
             let Just isbn = fmap toString $ lookup "asin" doc
             let Just reliure = fmap toString $ lookup "format" doc
             let pages = case fmap (floor . fromJRational) $ lookup "pages" doc of
@@ -216,7 +229,7 @@ inserer id_docs (Connexion conn origine) = do
             
     insererFilm doc = do
         let amazon_asin = toString $ fromJust $ lookup "asin" doc
-        print $ "Insertion film ("++ amazon_asin ++") ..."
+        putStrLn $ "Insertion film: "++ amazon_asin
 
         produit_ean <- insererProduit doc
 
@@ -232,7 +245,9 @@ inserer id_docs (Connexion conn origine) = do
             let support = case lookup "format" doc of
                             Just s  -> toString s
                             Nothing -> ""
-            let Just disques = fmap (floor . fromJRational) $ lookup "discs" doc
+            let disques = case lookup "discs" doc of
+                            Just s  -> floor $ fromJRational s
+                            Nothing -> 1
             let note = case lookup "rating" doc of
                             Just s  -> toString s
                             Nothing -> ""
@@ -247,39 +262,37 @@ inserer id_docs (Connexion conn origine) = do
             
     -- Insère les artistes non existants
     insererArtistes (JSArray artistes) = do
-        req <- prepare conn "SELECT nom FROM site_artiste WHERE nom = ?;"
-        req_insert <- prepare conn "INSERT INTO site_artiste VALUES (?);"
+        req_insert <- prepare conn "INSERT INTO site_artiste \
+                                   \(SELECT ? FROM DUAL WHERE NOT EXISTS \
+                                   \    (SELECT * FROM site_artiste WHERE nom = ?));"
         forM_ artistes $ \a -> do
             let a_str = toString a
-            execute req [SqlString a_str]
-            existe <- fetchRow req
-            when (isNothing existe) $ do -- Artiste non existant
-                execute req_insert [SqlString a_str]
-                return ()
+            putStrLn $ "    Insertion artiste: " ++ a_str
+            execute req_insert [SqlString a_str, SqlString a_str]
+            return ()
 
     -- Insère l'editeur s'il n'exite pas
     insererEditeur editeur = do
-        req <- prepare conn "SELECT nom FROM site_editeur WHERE nom = ?;"
-        execute req [SqlString editeur]
-        existe <- fetchRow req
-        when (isNothing existe) $ do -- Editeur non existant
-            req_insert <- prepare conn "INSERT INTO site_editeur \
-                                       \(SELECT ? FROM DUAL WHERE NOT EXISTS \
-                                       \    (SELECT * FROM site_editeur WHERE nom = ?));"
-            execute req_insert [SqlString editeur, SqlString editeur]
-            return ()
+        putStrLn $ "    Insertion editeur: " ++ editeur
+        req_insert <- prepare conn "INSERT INTO site_editeur \
+                                   \(SELECT ? FROM DUAL WHERE NOT EXISTS \
+                                   \    (SELECT * FROM site_editeur WHERE nom = ?));"
+        execute req_insert [SqlString editeur, SqlString editeur]
+        return ()
 
     -- Insère un produit dans la base et retourne l'ean.
     -- Retourne Nothing si le produit existe déjà
     insererProduit doc = do
         let Just amazon_asin = fmap toString $ lookup "asin" doc
         let produit_ean = ean amazon_asin
-
+        putStrLn $ "    Insertion produit: " ++ amazon_asin
         req <- prepare conn "SELECT ean FROM site_produit WHERE ean = ?;"
         execute req [SqlInteger produit_ean]
         existe <- fetchRow req
         if isJust existe
-           then return Nothing -- Produit existant
+           then do
+               putStrLn "    Produit existant"
+               return Nothing -- Produit existant
            else do
                let titre = case lookup "title" doc of
                                 Just l  -> toString l
@@ -300,7 +313,6 @@ inserer id_docs (Connexion conn origine) = do
                            , SqlDouble $ fromRational $ prix, SqlString devise
                            , SqlInteger codeFournisseurAmazon
                            , SqlString origine ]
-               
                return $ Just produit_ean
 
     -- Génère un code EAN depuis le code Amazon
@@ -313,5 +325,6 @@ inserer id_docs (Connexion conn origine) = do
             checksum = (10 - ((3*sumPairs + sumImpairs) `mod` 10)) `mod` 10
         in code + checksum
 
-    toString (JSString s) = fromJSString s
+    toString (JSString s) = toAscii $ fromJSString s
     fromJRational (JSRational _ r) = r
+    toAscii = filter isAscii
