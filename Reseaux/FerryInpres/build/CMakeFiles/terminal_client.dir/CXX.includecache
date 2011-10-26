@@ -6,7 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/IniParser/IniParser.h
+../Utils/Exception.h
+exception
+-
+string
+-
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/IniParser/IniParser.h
 stdlib.h
 -
 stdio.h
@@ -20,9 +26,9 @@ map
 string
 -
 Utils/Exception.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/IniParser/Utils/Exception.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/IniParser/Utils/Exception.h
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.h
 arpa/inet.h
 -
 sys/socket.h
@@ -34,17 +40,17 @@ iostream
 vector
 -
 SocketsUtils.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.h
 SocketException.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
 string
 -
 Utils/Exception.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/Utils/Exception.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/Utils/Exception.h
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.h
 arpa/inet.h
 -
 sys/socket.h
@@ -52,37 +58,35 @@ sys/socket.h
 unistd.h
 -
 SocketException.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/TerminalClient.cpp
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/StatusProtocol.h
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/TerminalClient.cpp
 iostream
 -
 IniParser/IniParser.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/IniParser/IniParser.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/IniParser/IniParser.h
 Sockets/ClientSocket.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.h
+Utils/Async.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Async.h
 Utils/Time.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Time.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Time.h
 TerminalProtocol.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/TerminalProtocol.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/TerminalProtocol.h
+StatusProtocol.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/StatusProtocol.h
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/TerminalProtocol.h
-stdio.h
--
-time.h
--
-Sockets/ClientSocket.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/TerminalProtocol.h
 Utils/Time.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Time.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Time.h
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Exception.h
-exception
--
-string
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Async.h
+pthread.h
 -
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Time.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Time.h
 stdlib.h
 -
 stdio.h

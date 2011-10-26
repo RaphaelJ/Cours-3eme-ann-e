@@ -39,7 +39,7 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/rapha/Bureau/Cours/Reseaux/FerryInpres
+CMAKE_SOURCE_DIR = /home/rapha/Desktop/Cours/Reseaux/FerryInpres
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build
@@ -248,6 +248,30 @@ Server.cpp.s:
 	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/Server.cpp.s
 .PHONY : Server.cpp.s
 
+StatusServer.o: StatusServer.cpp.o
+.PHONY : StatusServer.o
+
+# target to build an object file
+StatusServer.cpp.o:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/StatusServer.cpp.o
+.PHONY : StatusServer.cpp.o
+
+StatusServer.i: StatusServer.cpp.i
+.PHONY : StatusServer.i
+
+# target to preprocess a source file
+StatusServer.cpp.i:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/StatusServer.cpp.i
+.PHONY : StatusServer.cpp.i
+
+StatusServer.s: StatusServer.cpp.s
+.PHONY : StatusServer.s
+
+# target to generate assembly for a file
+StatusServer.cpp.s:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/StatusServer.cpp.s
+.PHONY : StatusServer.cpp.s
+
 TerminalClient.o: TerminalClient.cpp.o
 .PHONY : TerminalClient.o
 
@@ -319,6 +343,9 @@ help:
 	@echo "... Server.o"
 	@echo "... Server.i"
 	@echo "... Server.s"
+	@echo "... StatusServer.o"
+	@echo "... StatusServer.i"
+	@echo "... StatusServer.s"
 	@echo "... TerminalClient.o"
 	@echo "... TerminalClient.i"
 	@echo "... TerminalClient.s"

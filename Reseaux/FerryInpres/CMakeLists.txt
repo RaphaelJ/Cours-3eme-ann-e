@@ -11,6 +11,7 @@ add_subdirectory (ThreadPool)
 
 add_executable (
     serveur Server.cpp TerminalServer.cpp InOutServer.cpp AdminServer.cpp
+    StatusServer.cpp
 ) 
 target_link_libraries (serveur Sockets Utils IniParser)
 

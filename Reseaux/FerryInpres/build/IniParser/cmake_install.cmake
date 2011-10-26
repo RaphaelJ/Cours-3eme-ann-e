@@ -1,4 +1,4 @@
-# Install script for directory: /home/rapha/Bureau/Cours/Reseaux/FerryInpres/IniParser
+# Install script for directory: /home/rapha/Desktop/Cours/Reseaux/FerryInpres/IniParser
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)

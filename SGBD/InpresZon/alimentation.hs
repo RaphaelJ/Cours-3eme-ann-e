@@ -116,10 +116,10 @@ idsFiltres filtres = do
     ids <- forM (map requeteFiltre filtres) $ \(vue, options) ->
         queryViewKeys couchDb couchDesign vue options
 
-    -- Retourne les ids communs uniques
+    -- Retourne les ids communs uniques en effectuant une intersections
+	-- entre tous les filtres (ids stockés dans des arbres binaires). 
     liftIO $ putStrLn "Intersection des IDs"
-    let ids_set = map S.fromList ids
-    return $ S.toList $ foldl1 S.intersection ids_set
+    return $ S.toList $ foldl1 S.intersection $ map S.fromList ids
     
   where      
     requeteFiltre :: Filtre -> (Doc, [(String, JSValue)])

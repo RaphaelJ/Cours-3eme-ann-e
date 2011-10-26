@@ -167,7 +167,7 @@ Utils_LIB_DEPENDS:STATIC=
 ferryinpres_BINARY_DIR:STATIC=/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build
 
 //Value Computed by CMake
-ferryinpres_SOURCE_DIR:STATIC=/home/rapha/Bureau/Cours/Reseaux/FerryInpres
+ferryinpres_SOURCE_DIR:STATIC=/home/rapha/Desktop/Cours/Reseaux/FerryInpres
 
 
 ########################
@@ -252,7 +252,7 @@ CMAKE_HAVE_PTHREAD_CREATE:INTERNAL=1
 CMAKE_HAVE_PTHREAD_H:INTERNAL=1
 //Start directory with the top level CMakeLists.txt file for this
 // project
-CMAKE_HOME_DIRECTORY:INTERNAL=/home/rapha/Bureau/Cours/Reseaux/FerryInpres
+CMAKE_HOME_DIRECTORY:INTERNAL=/home/rapha/Desktop/Cours/Reseaux/FerryInpres
 //Install .so files without execute permission.
 CMAKE_INSTALL_SO_NO_EXE:INTERNAL=0
 //ADVANCED property for variable: CMAKE_LINKER

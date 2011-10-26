@@ -8,6 +8,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import status_client.StatusClient;
         
 /**
  *
@@ -21,11 +22,17 @@ public class Main {
     {        
         Properties prop = new Properties();
         prop.load(new FileInputStream("inout_client.properties"));
-        
-        Socket sock = new Socket(
-            prop.getProperty("server_ip"),
-            Integer.parseInt(prop.getProperty("server_port"))
+                
+        String ip = prop.getProperty("server_ip");
+        int server_port = Integer.parseInt(prop.getProperty("server_port"));
+        int status_server_port = Integer.parseInt(
+            prop.getProperty("status_server_port")
         );
+        
+        StatusClient status_client = new StatusClient(ip, status_server_port);
+        status_client.start();
+        
+        Socket sock = new Socket(ip, server_port);
         InputStream in = sock.getInputStream();
         OutputStream out = sock.getOutputStream();
         

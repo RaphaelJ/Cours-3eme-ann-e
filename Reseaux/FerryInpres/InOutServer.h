@@ -1,5 +1,5 @@
-#ifndef INOUT_SERVER_H
-#define INOUT_SERVER_H
+#ifndef INOUTSERVER_H
+#define INOUTSERVER_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -19,4 +19,4 @@
 
 void *inout_server(void* arg);
 
-#endif // INOUT_SERVER_H
+#endif // INOUTSERVER_H

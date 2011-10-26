@@ -16,11 +16,16 @@ pthread_mutex_t mutex_leaving;
 list<int> connected_clients;
 pthread_mutex_t mutex_connected;
 
+// Liste des sockets des clients connectés sur le serveur de status
+list<ClientSocket> status_clients;
+pthread_mutex_t mutex_status;
+
 int main(void)
 {   
     pthread_mutex_init(&mutex_waiting, NULL);
     pthread_mutex_init(&mutex_leaving, NULL);
     pthread_mutex_init(&mutex_connected, NULL);
+    pthread_mutex_init(&mutex_status, NULL);
     
     pthread_mutex_init(&mutex_pause, NULL);
     
@@ -33,6 +38,7 @@ int main(void)
         printf("    Terminal %d: %d\n", i+1, docked_ferries[i]);
     }
     
+    async_call(status_server, NULL);
     async_call(terminal_server, NULL);
     async_call(admin_server, NULL);
     inout_server(NULL);
@@ -40,6 +46,7 @@ int main(void)
     pthread_mutex_destroy(&mutex_leaving);
     pthread_mutex_destroy(&mutex_waiting);
     pthread_mutex_destroy(&mutex_connected);
+    pthread_mutex_destroy(&mutex_status);
     
     pthread_mutex_destroy(&mutex_pause);
     

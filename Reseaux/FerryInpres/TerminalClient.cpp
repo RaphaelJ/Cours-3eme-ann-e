@@ -2,9 +2,13 @@
 
 #include "IniParser/IniParser.h"
 #include "Sockets/ClientSocket.h"
+#include "Utils/Async.h"
 #include "Utils/Time.h"
 
 #include "TerminalProtocol.h"
+#include "StatusProtocol.h"
+
+void *_status_listener(void *arg);
 
 void _user_login(ClientSocket sock);
 void _next_departure(ClientSocket sock);
@@ -20,27 +24,50 @@ int main(int argc, char **argv)
 {
     IniParser properties("terminal_client.ini");
     int server_port = atoi(properties.get_value("server_port").c_str());
+    int status_server_port = atoi(
+        properties.get_value("status_server_port").c_str()
+    );
     const char *ip = properties.get_value("server_ip").c_str();
     
-    ClientSocket sock(ip, server_port);
-        
-    _user_login(sock);
-
-//     // Lors d'erreur ou lors de la fin de la session, envoie un packet CLOSE
-//     protocol packet; 
-//     packet.type = protocol::CLOSE;
-//     packet.content.close = current_time();
-//     sock.send<protocol>(&packet);
+    // Se connecte au serveur status
+    ClientSocket status_sock(ip, status_server_port);
+    async_call(_status_listener, (void*) &status_sock);
     
+    // Se connecte au serveur des terminaux
+    ClientSocket sock(ip, server_port);
+    _user_login(sock);
+    
+    status_sock.close();
     sock.close();
     
     printf("Fin de la connexion\n");
+}
+
+// Ecoute les annonces de status du serveur
+void *_status_listener(void *arg) 
+{
+    ClientSocket sock = *((ClientSocket *) arg);
+    
+    for (;;) {
+        char status;
+        sock.receive<char>(&status);
+        
+        if (status == status_protocol::PAUSE) 
+            printf("Le serveur est en pause\n");
+        else if (status == status_protocol::STOP) {
+            printf("Fermeture du serveur\n");
+            exit(1);
+        }
+            
+    }
 }
 
 // Identifie l'utilisateur au serveur des terminaux
 void _user_login(ClientSocket sock)
 {
     terminal_protocol packet;
+    
+    pthread_mutex_init(&mutex_pause, NULL);
     
     // Envoi des informations de connexion
     packet.type = terminal_protocol::LOGIN;
@@ -60,6 +87,8 @@ void _user_login(ClientSocket sock)
         printf("Identification reussie\n");
         return _next_departure(sock);
     }
+    
+    pthread_mutex_destroy(&mutex_pause);
 }
 
 // Demande l'heure du prochain départ

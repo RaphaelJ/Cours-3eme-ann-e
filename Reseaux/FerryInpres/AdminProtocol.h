@@ -1,13 +1,5 @@
-#ifndef ADMIN_PROTOCOL_H
-#define ADMIN_PROTOCOL_H
-
-#include <stdio.h>
-#include <time.h>
-
-#include <list>
-
-#include "Sockets/ClientSocket.h"
-#include "Utils/Time.h"
+#ifndef ADMINPROTOCOL_H
+#define ADMINPROTOCOL_H
 
 #define STR_LENGTH 30
 #define TIME_LENGTH 6
@@ -16,11 +8,7 @@
 // Requête transmise/reçue via le réseau.
 typedef struct _admin_protocol {
     enum protocol_type : char {
-        ACK = 'A',
-        FAIL = 'F',
-        LOGIN = 'L',
-        LCLIENTS = 'C',
-        PAUSE = 'P',
+        ACK = 'A', FAIL = 'F', LOGIN = 'L', LCLIENTS = 'C', PAUSE = 'P',
         STOP = 'S'
     } type;
     
@@ -42,4 +30,4 @@ typedef struct _admin_protocol {
     } content;
 } admin_protocol;
 
-#endif // ADMIN_PROTOCOL_H
+#endif // ADMINPROTOCOL_H

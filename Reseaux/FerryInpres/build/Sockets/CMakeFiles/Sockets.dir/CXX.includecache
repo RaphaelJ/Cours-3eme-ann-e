@@ -6,15 +6,23 @@
 
 #IncludeRegexTransform: 
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.cpp
-stdlib.h
+../ThreadPool/ThreadPool.h
+pthread.h
 -
-string.h
+semaphore.h
 -
-ClientSocket.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.h
+list
+-
+queue
+-
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.h
+../Utils/Exception.h
+exception
+-
+string
+-
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.h
 arpa/inet.h
 -
 sys/socket.h
@@ -26,31 +34,31 @@ iostream
 vector
 -
 SocketsUtils.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.h
 SocketException.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/ServerSocket.cpp
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ServerSocket.cpp
 ServerSocket.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/ServerSocket.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ServerSocket.h
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/ServerSocket.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ServerSocket.h
 pthread.h
 -
 ThreadPool/ThreadPool.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/ThreadPool/ThreadPool.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ThreadPool/ThreadPool.h
 SocketsUtils.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.h
 ClientSocket.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/ClientSocket.h
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
 string
 -
 Utils/Exception.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/Utils/Exception.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/Utils/Exception.h
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketsUtils.h
 arpa/inet.h
 -
 sys/socket.h
@@ -58,21 +66,5 @@ sys/socket.h
 unistd.h
 -
 SocketException.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
-
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/ThreadPool/ThreadPool.h
-pthread.h
--
-semaphore.h
--
-list
--
-queue
--
-
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Exception.h
-exception
--
-string
--
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Sockets/SocketException.h
 

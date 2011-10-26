@@ -1,5 +1,5 @@
-#ifndef ADMIN_SERVER_H
-#define ADMIN_SERVER_H
+#ifndef ADMINSERVER_H
+#define ADMINSERVER_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -16,7 +16,8 @@
 
 #include "AdminProtocol.h"
 #include "Server.h"
+#include "StatusServer.h"
 
 void *admin_server(void* arg);
 
-#endif // ADMIN_SERVER_H
+#endif // ADMINSERVER_H

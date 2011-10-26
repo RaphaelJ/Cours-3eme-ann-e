@@ -43,6 +43,6 @@ void _thread_routine(void *v_args)
     
     args->action(sock);
     
-    sock.close();
+//     sock.close();
     delete args;
 }

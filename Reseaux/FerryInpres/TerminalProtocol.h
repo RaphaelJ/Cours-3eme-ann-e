@@ -1,10 +1,6 @@
-#ifndef TERMINAL_PROTOCOL_H
-#define TERMINAL_PROTOCOL_H
+#ifndef TERMINALPROTOCOL_H
+#define TERMINALPROTOCOL_H
 
-#include <stdio.h>
-#include <time.h>
-
-#include "Sockets/ClientSocket.h"
 #include "Utils/Time.h"
 
 #define STR_LENGTH 30
@@ -61,4 +57,4 @@ inline void send_flag_packet(ClientSocket sock, const terminal_protocol::protoco
     sock.send<terminal_protocol>(&packet);
 }
 
-#endif // TERMINAL_PROTOCOL_H
+#endif // TERMINALPROTOCOL_H

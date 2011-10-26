@@ -76,6 +76,7 @@ void _user_login(ClientSocket sock)
             send_flag_packet(sock, terminal_protocol::FAIL);
         }
     }
+    sock.close();
 }
 
 // Donne l'heure de départ du ferry depuis le fichier derpartures.ini

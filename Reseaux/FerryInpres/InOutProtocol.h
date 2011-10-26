@@ -1,11 +1,5 @@
-#ifndef INOUT_PROTOCOL_H
-#define INOUT_PROTOCOL_H
-
-#include <stdio.h>
-#include <time.h>
-
-#include "Sockets/ClientSocket.h"
-#include "Utils/Time.h"
+#ifndef INOUTPROTOCOL_H
+#define INOUTPROTOCOL_H
 
 #define TIME_LENGTH 6
 #define INT_LENGTH 12
@@ -21,4 +15,4 @@ typedef struct _inout_protocol {
     char time[TIME_LENGTH];
 } inout_protocol;
 
-#endif // INOUT_PROTOCOL_H
+#endif // INOUTPROTOCOL_H

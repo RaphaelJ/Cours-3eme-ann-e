@@ -6,11 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/IniParser/IniParser.cpp
-IniParser.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/IniParser/IniParser.h
+../Utils/Exception.h
+exception
+-
+string
+-
 
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/IniParser/IniParser.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/IniParser/IniParser.cpp
+IniParser.h
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/IniParser/IniParser.h
+
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/IniParser/IniParser.h
 stdlib.h
 -
 stdio.h
@@ -24,11 +30,5 @@ map
 string
 -
 Utils/Exception.h
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/IniParser/Utils/Exception.h
-
-/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Exception.h
-exception
--
-string
--
+/home/rapha/Desktop/Cours/Reseaux/FerryInpres/IniParser/Utils/Exception.h
 

@@ -46,6 +46,7 @@ void _admin_login(ClientSocket sock)
             sock.send<char>((char *) &packet);
         }
     }
+    sock.close();
 }
 
 // Gère les actions de l'administrateur
@@ -77,6 +78,7 @@ void _actions(ClientSocket sock)
         break;
     case admin_protocol::PAUSE:
         printf("L'administrateur met en pause le serveur pour 20 secondes\n");
+        signal_status(status_protocol::PAUSE);
         pthread_mutex_lock(&mutex_pause);
         sleep(20);
         pthread_mutex_unlock(&mutex_pause);
@@ -90,6 +92,7 @@ void _actions(ClientSocket sock)
         printf(
             "L'administrateur arrete le serveur dans %d secondes\n", sleep_time
         );
+        signal_status(status_protocol::STOP);
         sleep(sleep_time);
         printf("Arret du serveur\n");
         exit(EXIT_SUCCESS);

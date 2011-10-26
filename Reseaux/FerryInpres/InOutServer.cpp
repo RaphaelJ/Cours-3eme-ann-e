@@ -33,4 +33,5 @@ void _inout(ClientSocket sock)
         printf("%s: Sortie du du ferry numero %d\n", packet.time, ferry_id);
         return _inout(sock);
     }
+    sock.close();
 }
