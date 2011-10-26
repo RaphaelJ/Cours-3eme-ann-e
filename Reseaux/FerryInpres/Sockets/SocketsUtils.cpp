@@ -69,8 +69,8 @@ namespace socket_utils
         return fd;
     }
     
-    ssize_t send(int _socket, const void *buffer, size_t length, int flags)    {
-        ssize_t ret = send(_socket, buffer, length, flags); 
+    ssize_t send(int _socket, const void *buffer, size_t length, int flags) {
+        ssize_t ret = ::send(_socket, buffer, length, flags);
         if (ret == -1)
             throw SocketException("Erreur lors de l'envoi des données");
         return ret;
@@ -78,7 +78,7 @@ namespace socket_utils
     
     ssize_t recv(int _socket, void *buffer, size_t length, int flags)
     {
-        ssize_t ret = send(_socket, buffer, length, flags); 
+        ssize_t ret = ::recv(_socket, buffer, length, flags); 
         if (ret == -1)
             throw SocketException("Erreur lors de la reception des données");
         return ret;

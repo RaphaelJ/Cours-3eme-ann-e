@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <algorithm>
 #include <iostream>
 #include <list>
 #include <queue>
@@ -14,7 +15,7 @@
 #include "Utils/Exception.h"
 #include "Utils/Time.h"
 
-#include "Protocol.h"
+#include "TerminalProtocol.h"
 #include "Server.h"
 
 void *terminal_server(void* arg);

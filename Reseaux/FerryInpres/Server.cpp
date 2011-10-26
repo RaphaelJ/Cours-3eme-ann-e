@@ -12,12 +12,36 @@ pthread_mutex_t mutex_waiting;
 list<int> leaving_ferries;
 pthread_mutex_t mutex_leaving;
 
+// Liste des clients connectés au serveur (numero du terminal)
+list<int> connected_clients;
+pthread_mutex_t mutex_connected;
+
 int main(void)
-{
+{   
     pthread_mutex_init(&mutex_waiting, NULL);
     pthread_mutex_init(&mutex_leaving, NULL);
+    pthread_mutex_init(&mutex_connected, NULL);
     
-    terminal_server(NULL);
+    pthread_mutex_init(&mutex_pause, NULL);
+    
+    waiting_ferries.push(5);
+    waiting_ferries.push(2);
+    waiting_ferries.push(6);
+    
+    printf("Occupation des terminaux: \n");
+    for (int i = 0; i < 6; i++) {
+        printf("    Terminal %d: %d\n", i+1, docked_ferries[i]);
+    }
+    
+    async_call(terminal_server, NULL);
+    async_call(admin_server, NULL);
+    inout_server(NULL);
+    
+    pthread_mutex_destroy(&mutex_leaving);
+    pthread_mutex_destroy(&mutex_waiting);
+    pthread_mutex_destroy(&mutex_connected);
+    
+    pthread_mutex_destroy(&mutex_pause);
     
     return 0;
 }

@@ -1,4 +1,4 @@
-# Install script for directory: /home/rapha/Desktop/Cours/Reseaux/FerryInpres
+# Install script for directory: /home/rapha/Bureau/Cours/Reseaux/FerryInpres
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)

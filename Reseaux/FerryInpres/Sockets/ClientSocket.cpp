@@ -3,6 +3,9 @@
 
 #include "ClientSocket.h"
 
+// Mutex verrouillant les accès réseau
+pthread_mutex_t mutex_pause;
+
 // Initialise et connecte la socket à une socket serveur
 ClientSocket::ClientSocket(const char* ip, const int port)
 {

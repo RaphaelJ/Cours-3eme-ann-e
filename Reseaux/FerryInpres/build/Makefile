@@ -39,7 +39,7 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/rapha/Desktop/Cours/Reseaux/FerryInpres
+CMAKE_SOURCE_DIR = /home/rapha/Bureau/Cours/Reseaux/FerryInpres
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = /home/rapha/Desktop/Cours/Reseaux/FerryInpres/build
@@ -176,6 +176,54 @@ ThreadPool/fast:
 	$(MAKE) -f ThreadPool/CMakeFiles/ThreadPool.dir/build.make ThreadPool/CMakeFiles/ThreadPool.dir/build
 .PHONY : ThreadPool/fast
 
+AdminServer.o: AdminServer.cpp.o
+.PHONY : AdminServer.o
+
+# target to build an object file
+AdminServer.cpp.o:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/AdminServer.cpp.o
+.PHONY : AdminServer.cpp.o
+
+AdminServer.i: AdminServer.cpp.i
+.PHONY : AdminServer.i
+
+# target to preprocess a source file
+AdminServer.cpp.i:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/AdminServer.cpp.i
+.PHONY : AdminServer.cpp.i
+
+AdminServer.s: AdminServer.cpp.s
+.PHONY : AdminServer.s
+
+# target to generate assembly for a file
+AdminServer.cpp.s:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/AdminServer.cpp.s
+.PHONY : AdminServer.cpp.s
+
+InOutServer.o: InOutServer.cpp.o
+.PHONY : InOutServer.o
+
+# target to build an object file
+InOutServer.cpp.o:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/InOutServer.cpp.o
+.PHONY : InOutServer.cpp.o
+
+InOutServer.i: InOutServer.cpp.i
+.PHONY : InOutServer.i
+
+# target to preprocess a source file
+InOutServer.cpp.i:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/InOutServer.cpp.i
+.PHONY : InOutServer.cpp.i
+
+InOutServer.s: InOutServer.cpp.s
+.PHONY : InOutServer.s
+
+# target to generate assembly for a file
+InOutServer.cpp.s:
+	$(MAKE) -f CMakeFiles/serveur.dir/build.make CMakeFiles/serveur.dir/InOutServer.cpp.s
+.PHONY : InOutServer.cpp.s
+
 Server.o: Server.cpp.o
 .PHONY : Server.o
 
@@ -262,6 +310,12 @@ help:
 	@echo "... Sockets"
 	@echo "... IniParser"
 	@echo "... ThreadPool"
+	@echo "... AdminServer.o"
+	@echo "... AdminServer.i"
+	@echo "... AdminServer.s"
+	@echo "... InOutServer.o"
+	@echo "... InOutServer.i"
+	@echo "... InOutServer.s"
 	@echo "... Server.o"
 	@echo "... Server.i"
 	@echo "... Server.s"

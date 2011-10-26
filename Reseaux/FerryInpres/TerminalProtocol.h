@@ -1,5 +1,5 @@
-#ifndef PROTOCOL_H
-#define PROTOCOL_H
+#ifndef TERMINAL_PROTOCOL_H
+#define TERMINAL_PROTOCOL_H
 
 #include <stdio.h>
 #include <time.h>
@@ -10,7 +10,7 @@
 #define STR_LENGTH 30
 
 // Requête transmise/reçue via le réseau.
-typedef struct _protocol {
+typedef struct _terminal_protocol {
     // Type de requête
     enum protocol_type {
         ACK, FAIL, LOGIN, NEXT_DEPARTURE, DEPARTURE_KNOWN, DEPARTURE_UNKNOWN,
@@ -51,14 +51,14 @@ typedef struct _protocol {
         // Notifie l'heure de fermeture
         s_time close;
     } content;
-} protocol;
+} terminal_protocol;
 
 // Envoie un packet qui ne contient aucune information si ce n'est son type.
-inline void send_flag_packet(ClientSocket sock, const protocol::protocol_type type)
+inline void send_flag_packet(ClientSocket sock, const terminal_protocol::protocol_type type)
 {
-    protocol packet;
+    terminal_protocol packet;
     packet.type = type;
-    sock.send<protocol>(packet);
+    sock.send<terminal_protocol>(&packet);
 }
 
-#endif // PROTOCOL_H
+#endif // TERMINAL_PROTOCOL_H

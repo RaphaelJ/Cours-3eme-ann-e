@@ -12,7 +12,7 @@ Extra Arguments=
 ProjectRootRelative=./
 
 [Launch]
-Launch Configurations=Launch Configuration 1,Launch Configuration 0,Launch Configuration 2
+Launch Configurations=Launch Configuration 0,Launch Configuration 2
 
 [Launch][Launch Configuration 0]
 Configured Launch Modes=execute
@@ -30,26 +30,7 @@ Executable=
 External Terminal=konsole --noclose --workdir %workdir -e %exe
 Project Target=FerryInpres,serveur
 Use External Terminal=false
-Working Directory=file:///home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/
-isExecutable=false
-
-[Launch][Launch Configuration 1]
-Configured Launch Modes=execute
-Configured Launchers=nativeAppLauncher
-Name=client
-Type=Native Application
-
-[Launch][Launch Configuration 1][Data]
-Arguments=
-Configured from ProjectItem=FerryInpres,client
-Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
-Dependency Action=Nothing
-EnvironmentGroup=default
-Executable=
-External Terminal=konsole --noclose --workdir %workdir -e %exe
-Project Target=FerryInpres,client
-Use External Terminal=false
-Working Directory=file:///home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/
+Working Directory=file:///home/rapha/Bureau/Cours/Reseaux/FerryInpres/build/
 isExecutable=false
 
 [Launch][Launch Configuration 2]
@@ -59,10 +40,21 @@ Name=terminal_client
 Type=Native Application
 
 [Launch][Launch Configuration 2][Data]
+Arguments=
 Configured from ProjectItem=FerryInpres,terminal_client
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Nothing
+EnvironmentGroup=default
+Executable=
+External Terminal=konsole --noclose --workdir %workdir -e %exe
 Project Target=FerryInpres,terminal_client
-Working Directory=file:///home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/
+Use External Terminal=false
+Working Directory=file:///home/rapha/Bureau/Cours/Reseaux/FerryInpres/build/
 isExecutable=false
+
+[MakeBuilder]
+Default Make Environment Profile=0
+Number Of Jobs=1
 
 [Project]
 VersionControlSupport=kdevgit

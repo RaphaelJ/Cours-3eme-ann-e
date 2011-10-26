@@ -16,6 +16,9 @@ IniParser::IniParser(const char* path)
         key = strtok_r(buffer, "=", &reetrant_buffer);
         value = strtok_r(NULL, "=", &reetrant_buffer);
         
+        // Supprime le \n final
+        value[strlen(value) - 1] = '\0';
+        
         this->_assoc.insert(pair<string, string>(string(key), string(value)));
     }
     

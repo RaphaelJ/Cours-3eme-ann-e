@@ -10,8 +10,10 @@
 
 #include "Utils/Async.h"
 
-#include "Protocol.h"
+#include "Sockets/ClientSocket.h"
 #include "TerminalServer.h"
+#include "AdminServer.h"
+#include "InOutServer.h"
 
 extern int docked_ferries[];
 
@@ -20,5 +22,8 @@ extern pthread_mutex_t mutex_waiting;
 
 extern list<int> leaving_ferries;
 extern pthread_mutex_t mutex_leaving;
+
+extern list<int> connected_clients;
+extern pthread_mutex_t mutex_connected;
 
 #endif // SERVER_H

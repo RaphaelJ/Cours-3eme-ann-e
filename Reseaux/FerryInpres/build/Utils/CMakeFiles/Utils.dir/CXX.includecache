@@ -6,29 +6,29 @@
 
 #IncludeRegexTransform: 
 
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Async.cpp
+/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Async.cpp
 Async.h
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Async.h
+/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Async.h
 
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Async.h
+/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Async.h
 pthread.h
 -
 
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Exception.cpp
+/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Exception.cpp
 Exception.h
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Exception.h
+/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Exception.h
 
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Exception.h
+/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Exception.h
 exception
 -
 string
 -
 
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Time.cpp
+/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Time.cpp
 Time.h
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Time.h
+/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Time.h
 
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/Utils/Time.h
+/home/rapha/Bureau/Cours/Reseaux/FerryInpres/Utils/Time.h
 stdlib.h
 -
 stdio.h
