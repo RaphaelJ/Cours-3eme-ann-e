@@ -26,6 +26,7 @@ void _user_login(ClientSocket sock)
 {
     terminal_protocol packet;
     printf("Nouveau client\n");
+    
     sock.receive<terminal_protocol>(&packet);
     if (packet.type == terminal_protocol::LOGIN) {
         try {
