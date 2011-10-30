@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE names SYSTEM "names.dtd" [
+]>
+<names>
+    <name>
+        <last_name>Kennedy</last_name>
+    </name>
+    <name>
+        <first_name>Robert</first_name>
+    </name>
+    <name>
+        <first_name>Robert</first_name>
+        <middle_name>Jr.</middle_name>
+        <middle_name>Mc.</middle_name>
+        <last_name>Kennedy</last_name>
+    </name>
+    <name>
+        <first_name>Robert</first_name>
+        <last_name>Jr.</last_name>
+    </name>
+</names>

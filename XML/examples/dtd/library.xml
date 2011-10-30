@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library SYSTEM "http://cours.khi.be/dtd/library.dtd">
+<library>
+	<book isbn="0-596-00197-5">
+		<title>Java &amp; XML</title>
+		<author>
+			<firstname>Brett</firstname>
+			<lastname>McLaughlin</lastname>
+		</author>
+		<publisher>O'Reilly</publisher>
+		<edition>2nd</edition>
+	</book>
+	<book isbn="0-262-06217-8">
+		<title>Essentials of Programming Languages</title>
+		<author>
+			<firstname>Daniel</firstname>
+			<lastname>P. Friedman</lastname>
+		</author>
+		<author>
+			<firstname>Mitchell</firstname>
+			<lastname>Wand</lastname>
+		</author>
+		<author>
+			<firstname>Christopher</firstname>
+			<lastname>T. Haynes</lastname>
+		</author>
+		<edition>2nd</edition>
+	</book>
+</library>

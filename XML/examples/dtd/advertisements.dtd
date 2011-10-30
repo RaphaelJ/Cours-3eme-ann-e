@@ -1,0 +1,12 @@
+<!ELEMENT advertisements (studio | apartment | house)*>
+<!ELEMENT studio (address, rooms, bathrooms, rent)>
+<!ELEMENT apartment (address, rooms, bathrooms, rent)>
+<!ELEMENT house (address, rooms, bathrooms, sale, garden)>
+<!ELEMENT address (#PCDATA)>
+<!ELEMENT rooms (#PCDATA)>
+<!ELEMENT bathrooms (#PCDATA)>
+<!ELEMENT rent (#PCDATA)>
+<!ATTLIST rent charges (included | not_included) #REQUIRED>
+<!ELEMENT sale (#PCDATA)>
+<!ELEMENT garden EMPTY>
+<!ATTLIST garden area CDATA #REQUIRED>

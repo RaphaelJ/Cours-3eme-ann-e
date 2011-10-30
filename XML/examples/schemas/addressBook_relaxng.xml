@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="addressBook.rng" type="xml"?>
+<?oxygen RNGSchema="addressBook.rnc" type="compact"?>
+<addressBook>
+    <card>
+        <name>John Smith</name>
+        <email>js@example.com</email>
+    </card>
+    <card>
+        <name>Fred Bloggs</name>
+        <email>fb@example.net</email>
+    </card>
+</addressBook>

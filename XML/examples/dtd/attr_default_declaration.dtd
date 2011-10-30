@@ -1,0 +1,6 @@
+<!ELEMENT books (book*)>
+<!ELEMENT book EMPTY >
+<!ATTLIST book added_at CDATA #IMPLIED
+               added_in ( library | archives ) #REQUIRED
+               added_by CDATA "Ludovic"
+               xmlns CDATA #FIXED "http://ns.khi.be/library">

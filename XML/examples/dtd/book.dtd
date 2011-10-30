@@ -1,0 +1,9 @@
+<!ELEMENT isbn (#PCDATA)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT firstname (#PCDATA)>
+<!ELEMENT lastname (#PCDATA)>
+<!ELEMENT publisher (#PCDATA)>
+<!ELEMENT edition (#PCDATA)>
+<!ELEMENT author (firstname, lastname)>
+<!ELEMENT book (isbn, title, author+, publisher?, edition)>
+<!ATTLIST book added_at CDATA #REQUIRED>

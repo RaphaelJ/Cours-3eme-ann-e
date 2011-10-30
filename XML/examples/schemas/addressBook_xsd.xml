@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addressBook xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="addressBook.xsd">
+    <card>
+        <name>John Smith</name>
+        <email>js@example.com</email>
+    </card>
+    <card>
+        <name>Fred Bloggs</name>
+        <email>fb@example.net</email>
+    </card>
+</addressBook>

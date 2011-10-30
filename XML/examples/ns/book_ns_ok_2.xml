@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE b:book SYSTEM "book_ns_ok.dtd" [
+	<!ENTITY % book.prefix "b">
+]>
+<b:book xmlns:b="http://cours.khi.be/ns/book" added_at="2011/07/15 15:02">
+	<b:isbn>0-596-00197-5</b:isbn>
+	<b:title>Java &amp; XML</b:title>
+	<b:author>
+		<b:firstname>Brett</b:firstname>
+		<b:lastname>McLaughlin</b:lastname>
+	</b:author>
+	<b:publisher>O'Reilly</b:publisher>
+	<b:edition>2nd</b:edition>
+</b:book>

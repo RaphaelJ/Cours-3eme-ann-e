@@ -1,0 +1,23 @@
+<!ENTITY % common_content "address, rooms, bathrooms">
+
+<!ENTITY % rent_price "rent">
+<!ENTITY % sale_price "sale">
+
+<!ENTITY % studio_price "%rent_price;">
+<!ENTITY % apartment_price "%rent_price;">
+<!ENTITY % house_price "%sale_price;">
+
+<!ENTITY % extra_house "">
+
+<!ELEMENT advertisements (studio | apartment | house)*>
+<!ELEMENT studio (%common_content;, %studio_price;)>
+<!ELEMENT apartment (%common_content;, %apartment_price;)>
+<!ELEMENT house (%common_content;, %house_price;, garden %extra_house;)>
+<!ELEMENT address (#PCDATA)>
+<!ELEMENT rooms (#PCDATA)>
+<!ELEMENT bathrooms (#PCDATA)>
+<!ELEMENT rent (#PCDATA)>
+<!ATTLIST rent charges (included | not_included) #REQUIRED>
+<!ELEMENT sale (#PCDATA)>
+<!ELEMENT garden EMPTY>
+<!ATTLIST garden area CDATA #REQUIRED>

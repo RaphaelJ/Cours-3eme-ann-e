@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book SYSTEM "../DTD/book.dtd">
+<?xml-stylesheet href="..." type="..."?>
+<book added_at="2011/07/15 15:02">
+	<isbn>0-596-00197-5</isbn>
+	<title>Java &amp; XML</title>
+	<author>
+		<firstname>Brett</firstname>
+		<lastname>McLaughlin</lastname>
+	</author>
+	<publisher>O'Reilly</publisher>
+	<edition>2nd</edition>
+</book>

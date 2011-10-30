@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE books SYSTEM "attr_default_declaration.dtd">
+<books>
+    <book added_at="2011/07/15" added_in="archives" added_by="Someone" xmlns="http://ns.khi.be/library"/>
+    <book added_at="2011/07/15" added_in="library"/>
+</books>

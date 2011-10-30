@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE advertisements SYSTEM "advertisements.dtd">
+<advertisements>
+	<studio>
+		<address>Rue Saint-Paul 52 4000 Liège</address>
+		<rooms>1</rooms>
+		<bathrooms>1</bathrooms>
+		<rent charges="included">250</rent>
+	</studio>
+	<apartment>
+		<address>Rue de la Cathédrale 13 4000 Liège</address>
+		<rooms>2</rooms>
+		<bathrooms>1</bathrooms>
+		<rent charges="not_included">500</rent>
+	</apartment>
+	<house>
+		<address>Rhode-Saint-Genèse</address>
+		<rooms>4</rooms>
+		<bathrooms>2</bathrooms>
+		<sale>750000</sale>
+		<garden area="300"/>
+	</house>
+</advertisements>

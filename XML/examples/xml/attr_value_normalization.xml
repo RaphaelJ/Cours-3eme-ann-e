@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root att1="    this
+is   a
+
+test   " att2="&#x9;this&#xA;is   a
+
+test   "/>

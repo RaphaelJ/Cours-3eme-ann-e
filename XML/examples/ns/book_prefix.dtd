@@ -1,0 +1,11 @@
+<!ELEMENT book:isbn (#PCDATA)>
+<!ELEMENT book:title (#PCDATA)>
+<!ELEMENT book:firstname (#PCDATA)>
+<!ELEMENT book:lastname (#PCDATA)>
+<!ELEMENT book:publisher (#PCDATA)>
+<!ELEMENT book:edition (#PCDATA)>
+<!ELEMENT book:author (book:firstname, book:lastname)>
+<!ELEMENT book:book (book:isbn, book:title, book:author+, book:publisher, book:edition)>
+<!ATTLIST book:book
+	added_at CDATA #REQUIRED
+	xmlns:book CDATA #FIXED "http://cours.khi.be/ns/book">

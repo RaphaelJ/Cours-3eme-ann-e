@@ -1,0 +1,3 @@
+<!ELEMENT text (p*)>
+<!ELEMENT p (#PCDATA)>
+<!ENTITY copyright SYSTEM "http://khi.be/entities/copyright.xml">

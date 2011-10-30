@@ -1,0 +1,30 @@
+<!ENTITY % book.prefix "book">
+<!ENTITY % book.colon ":">
+
+<!ENTITY % book.qname "%book.prefix;%book.colon;book">
+<!ENTITY % isbn.qname "%book.prefix;%book.colon;isbn">
+<!ENTITY % title.qname "%book.prefix;%book.colon;title">
+<!ENTITY % firstname.qname "%book.prefix;%book.colon;firstname">
+<!ENTITY % lastname.qname "%book.prefix;%book.colon;lastname">
+<!ENTITY % publisher.qname "%book.prefix;%book.colon;publisher">
+<!ENTITY % edition.qname "%book.prefix;%book.colon;edition">
+<!ENTITY % author.qname "%book.prefix;%book.colon;author">
+
+<!ENTITY % author.content "%firstname.qname;, %lastname.qname;">
+<!ENTITY % book.content "%isbn.qname;, %title.qname;, %author.qname;+, %publisher.qname;, %edition.qname;">
+
+<!ELEMENT %title.qname; (#PCDATA)>
+<!ELEMENT %isbn.qname; (#PCDATA)>
+<!ELEMENT %firstname.qname; (#PCDATA)>
+<!ELEMENT %lastname.qname; (#PCDATA)>
+<!ELEMENT %publisher.qname; (#PCDATA)>
+<!ELEMENT %edition.qname; (#PCDATA)>
+<!ELEMENT %author.qname; (%author.content;)>
+<!ELEMENT %book.qname; (%book.content;)>
+
+<!ENTITY % added_at.qname "%book.prefix;%book.colon;added_at">
+
+<!ATTLIST %book.qname; %added_at.qname; CDATA #REQUIRED>
+
+<!ENTITY % xmlns "xmlns:%book.prefix;">
+<!ATTLIST %book.qname; %xmlns; CDATA #FIXED "http://cours.khi.be/ns/book">

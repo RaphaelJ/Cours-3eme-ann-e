@@ -1,0 +1,3 @@
+<!ELEMENT text (p*)>
+<!ELEMENT p (#PCDATA)>
+<!ENTITY copyright "Copyright &#x00a9; 2011 HEPL. All Rights Reserved.">
