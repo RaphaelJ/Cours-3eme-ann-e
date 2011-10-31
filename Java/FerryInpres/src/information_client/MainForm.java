@@ -2,6 +2,7 @@ package information_client;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Calendar;
@@ -33,18 +34,18 @@ public class MainForm extends javax.swing.JFrame {
     public static final byte SUCCESS = (byte) 'S';
     public static final byte FAIL = (byte) 'F';
     
-    private InputStream _socket_in;
-    private OutputStream _socket_out;
-    
+    private Socket _sock;
+    private InputStream _sock_in;
+    private OutputStream _sock_out;
 
     /** Creates new form MainForm */
     public MainForm() throws IOException {
         initComponents();
         
         // Se connecte au serveur
-        Socket sock = new Socket("127.0.0.1", 39005);
-        this._socket_in = sock.getInputStream();
-        this._socket_out = sock.getOutputStream();
+        this._sock = new Socket("127.0.0.1", 39005);
+        this._sock_in = this._sock.getInputStream();
+        this._sock_out = this._sock.getOutputStream();
         
         // Désactive les contrôles par défaut
         this.monnaiesList.setEnabled(false);
@@ -302,7 +303,6 @@ private void envoieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
             "demande_infos", null, "demande_infos.dtd"
         );
         Document doc = domImpl.createDocument(null, "demande_infos", type);
-
         Element root = doc.getDocumentElement();
 
         // Informations sur le ferry et l'utilisateur
@@ -357,16 +357,20 @@ private void envoieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
             throws TransformerConfigurationException, TransformerException,
                    IOException
     {
+        ObjectOutputStream obj_out = new ObjectOutputStream(this._sock_out);
+        obj_out.
+        
+        
         TransformerFactory transFactory = TransformerFactory.newInstance();
         Transformer transform = transFactory.newTransformer();
         transform.setOutputProperty(OutputKeys.METHOD, "xml");
         transform.setOutputProperty(OutputKeys.INDENT,"yes");                
         Source input = new DOMSource(doc);
-        Result output = new StreamResult(this._socket_out);
+        Result output = new StreamResult(this._sock_out);
         transform.transform(input, output);
-        this._socket_out.flush();
+        this._sock_out.flush();
         
-        byte reponse = (byte) this._socket_in.read();
+        byte reponse = (byte) this._sock_in.read();
         if (reponse == SUCCESS) {
             this.erreurLabel.setText("Demande réussie");
         } else {

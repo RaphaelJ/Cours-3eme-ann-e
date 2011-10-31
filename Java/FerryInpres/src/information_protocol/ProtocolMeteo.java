@@ -8,7 +8,7 @@ package information_protocol;
  *
  * @author rapha
  */
-public abstract class Protocol {
+public abstract class ProtocolMeteo {
     
     
     
