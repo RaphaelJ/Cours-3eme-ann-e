@@ -11,23 +11,23 @@ import java.io.Serializable;
  * @author rapha
  */
 public class MeteoQueryProtocol implements Serializable {
-    private int[] _jours;
+    private Integer[] _jours;
 
-    public MeteoQueryProtocol(int[] jours) {
+    public MeteoQueryProtocol(Integer[] jours) {
         this._jours = jours;
     }
 
     /**
      * @return the _jours
      */
-    public int[] getJours() {
+    public Integer[] getJours() {
         return _jours;
     }
 
     /**
      * @param jours the _jours to set
      */
-    public void setJours(int[] jours) {
+    public void setJours(Integer[] jours) {
         this._jours = jours;
     }
     

@@ -33,6 +33,8 @@ import org.w3c.dom.Element;
 
 
 public class MainForm extends javax.swing.JFrame {
+    public static final int PORT = 39005;
+    
     public static final byte SUCCESS = (byte) 'S';
     public static final byte FAIL = (byte) 'F';
     
@@ -45,7 +47,7 @@ public class MainForm extends javax.swing.JFrame {
         initComponents();
         
         // Se connecte au serveur
-        this._sock = new Socket("127.0.0.1", 39005);
+        this._sock = new Socket("127.0.0.1", PORT);
         this._sock_in = this._sock.getInputStream();
         this._sock_out = this._sock.getOutputStream();
         

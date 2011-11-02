@@ -4,11 +4,10 @@
  */
 package information_server;
 
+import information_server.MeteoResponseProtocol.Temps;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.*;
 import java.util.*;
@@ -24,11 +23,16 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author rapha
  */
 public class MainServer {
+    public static final int PORT = 39005;
+    public static final int METEO_PORT = 39006;
+        
     public static void main(String args[])
             throws IOException, ParserConfigurationException, SAXException,
                    ClassNotFoundException
     {
-        ServerSocket server_sock = new ServerSocket(39005);
+        ServerSocket server_sock = new ServerSocket(PORT);
+//        Socket meteo_sock = new Socket("127.0.0.1", 39006);
+//        Socket meteo_sock = new Socket("127.0.0.1", 39006);
         
         for (;;) {
             System.out.println("En attente d'un nouveau client");
@@ -40,12 +44,12 @@ public class MainServer {
                 sock.getOutputStream()
             );
             
-            SaxParsingHandler handler = ParseDemande(in);
-            DemandeMeteo(out, handler.meteo_jours.toArray(null));
+            SaxParsingHandler handler = parseDemande(in);
+            demandeMeteo((Integer[]) handler.meteo_jours.toArray());
         }
     }
         
-    private static SaxParsingHandler ParseDemande(ObjectInputStream obj_in)
+    private static SaxParsingHandler parseDemande(ObjectInputStream obj_in)
             throws ParserConfigurationException, SAXException, IOException,
                    ClassNotFoundException
     {
@@ -69,11 +73,30 @@ public class MainServer {
         return handler;
     }
 
-    private static void DemandeMeteo(ObjectOutputStream obj_out, int[] meteo_jours) 
+    private static TreeMap<Integer, Temps> demandeMeteo(Integer[] meteo_jours)
+            throws IOException, ClassNotFoundException 
     {
+        
+        Socket meteo_sock = new Socket("127.0.0.1", 39006);
+        ObjectInputStream meteo_in = new ObjectInputStream(
+            meteo_sock.getInputStream()
+        );
+        ObjectOutputStream meteo_out = new ObjectOutputStream( 
+            meteo_sock.getOutputStream()
+        );
+
         MeteoQueryProtocol query = new MeteoQueryProtocol(meteo_jours);
-        ObjectInputStream obj_in = new ObjectInputStream(in);
-        out.wr
+        
+        obj_out.writeObject(query);
+        obj_out.flush();
+        
+        MeteoResponseProtocol response
+                = (MeteoResponseProtocol) obj_in.readObject();
+        
+        for (Integer i : meteo_jours) {
+            System.out.println(i + " " + response.getResultats().get(i));
+        }
+        return response.getResultats();
     }
 }
 class SaxParsingHandler extends DefaultHandler {
