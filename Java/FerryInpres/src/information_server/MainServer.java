@@ -4,10 +4,10 @@
  */
 package information_server;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.*;
@@ -18,11 +18,12 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 
+
 /**
  *
  * @author rapha
  */
-public class Main {
+public class MainServer {
     public static void main(String args[])
             throws IOException, ParserConfigurationException, SAXException,
                    ClassNotFoundException
@@ -32,20 +33,24 @@ public class Main {
         for (;;) {
             System.out.println("En attente d'un nouveau client");
             Socket sock = server_sock.accept();
-            InputStream in = sock.getInputStream();
+            ObjectInputStream in = new ObjectInputStream(
+                sock.getInputStream()
+            );
+            ObjectOutputStream out = new ObjectOutputStream(
+                sock.getOutputStream()
+            );
             
-            ParseDemande(in);
+            SaxParsingHandler handler = ParseDemande(in);
+            DemandeMeteo(out, handler.meteo_jours.toArray(null));
         }
     }
         
-    public static void ParseDemande(InputStream in)
+    private static SaxParsingHandler ParseDemande(ObjectInputStream obj_in)
             throws ParserConfigurationException, SAXException, IOException,
                    ClassNotFoundException
     {
         System.out.println("Réception de la requête");
         
-        // Réceptionne la chaine
-        ObjectInputStream obj_in = new ObjectInputStream(in);
         String buffer = (String) obj_in.readObject();
         
         // Parse le XML recu
@@ -58,23 +63,19 @@ public class Main {
         parser.setErrorHandler(handler);
         
         System.out.print("Parsing de la requête");
-        
-        System.out.println(buffer);
 
         parser.parse(new InputSource(new StringReader(buffer)));
         
-        System.out.println(handler.ferry);
-        System.out.println(handler.voyageur);
-        
-        System.out.println("Alcools: " + handler.alcools);
-        System.out.println("Tabacs: " + handler.tabacs);
-        System.out.println("Parfums: " + handler.parfums);
-        
-        System.out.println("Jours: " + handler.meteo_jours.size());
-        System.out.println("Monnaies: " + handler.monnaies.size());
+        return handler;
+    }
+
+    private static void DemandeMeteo(ObjectOutputStream obj_out, int[] meteo_jours) 
+    {
+        MeteoQueryProtocol query = new MeteoQueryProtocol(meteo_jours);
+        ObjectInputStream obj_in = new ObjectInputStream(in);
+        out.wr
     }
 }
-
 class SaxParsingHandler extends DefaultHandler {
     private StringBuilder _str_acc = new StringBuilder();
 
@@ -82,7 +83,7 @@ class SaxParsingHandler extends DefaultHandler {
     public String voyageur;
 
     public LinkedList<String> monnaies = new LinkedList<String>();
-    public LinkedList<String> meteo_jours = new LinkedList<String>();
+    public LinkedList<Integer> meteo_jours = new LinkedList<Integer>();
     public boolean alcools = false;
     public boolean parfums = false;
     public boolean tabacs = false;
@@ -112,7 +113,7 @@ class SaxParsingHandler extends DefaultHandler {
         if ("monnaie".equals(qName))
             this.monnaies.add(this._str_acc.toString());
         else if ("jour".equals(qName))
-            this.meteo_jours.add(this._str_acc.toString());
+            this.meteo_jours.add(Integer.parseInt(this._str_acc.toString()));
 
     }
 
