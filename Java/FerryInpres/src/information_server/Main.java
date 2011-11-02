@@ -4,9 +4,12 @@
  */
 package information_server;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.OutputStream;
+import java.io.StringReader;
 import java.net.*;
 import java.util.*;
 
@@ -20,27 +23,31 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author rapha
  */
 public class Main {
-    public static void main(String args[]) throws IOException
+    public static void main(String args[])
+            throws IOException, ParserConfigurationException, SAXException,
+                   ClassNotFoundException
     {
         ServerSocket server_sock = new ServerSocket(39005);
         
         for (;;) {
+            System.out.println("En attente d'un nouveau client");
             Socket sock = server_sock.accept();
-            System.out.println("Accept");
             InputStream in = sock.getInputStream();
-            OutputStream outoutputStream = sock.getOutputStream();
             
-            try {
-                ParseDemande(in);
-            } catch (Exception e) {
-                
-            }
+            ParseDemande(in);
         }
     }
         
     public static void ParseDemande(InputStream in)
-            throws ParserConfigurationException, SAXException, IOException
+            throws ParserConfigurationException, SAXException, IOException,
+                   ClassNotFoundException
     {
+        System.out.println("Réception de la requête");
+        
+        // Réceptionne la chaine
+        ObjectInputStream obj_in = new ObjectInputStream(in);
+        String buffer = (String) obj_in.readObject();
+        
         // Parse le XML recu
         SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setValidating(true);
@@ -50,9 +57,14 @@ public class Main {
         parser.setContentHandler(handler);
         parser.setErrorHandler(handler);
         
-        System.out.println("Parsing ...");
+        System.out.print("Parsing de la requête");
+        
+        System.out.println(buffer);
 
-        parser.parse(new InputSource(in));
+        parser.parse(new InputSource(new StringReader(buffer)));
+        
+        System.out.println(handler.ferry);
+        System.out.println(handler.voyageur);
         
         System.out.println("Alcools: " + handler.alcools);
         System.out.println("Tabacs: " + handler.tabacs);
@@ -64,7 +76,7 @@ public class Main {
 }
 
 class SaxParsingHandler extends DefaultHandler {
-    private StringBuilder _str_acc;
+    private StringBuilder _str_acc = new StringBuilder();
 
     public String ferry;
     public String voyageur;
@@ -79,14 +91,14 @@ class SaxParsingHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String qName,
             Attributes atts) throws SAXException
     {
-        if ("infos".equals(localName)) {
+        if ("infos".equals(qName)) {
             this.ferry = atts.getValue("ferry");
             this.voyageur = atts.getValue("voyageur");
-        } else if ("alcools".equals(localName)) {
+        } else if ("alcools".equals(qName)) {
             this.alcools = true;
-        } else if ("parfums".equals(localName)) {
+        } else if ("parfums".equals(qName)) {
             this.parfums = true;
-        } else if ("tabacs".equals(localName)) {
+        } else if ("tabacs".equals(qName)) {
             this.tabacs = true;
         }
 
@@ -97,9 +109,9 @@ class SaxParsingHandler extends DefaultHandler {
     public void endElement(String uri, String localName, String qName)
             throws SAXException
     {
-        if ("monnaie".equals(localName))
+        if ("monnaie".equals(qName))
             this.monnaies.add(this._str_acc.toString());
-        else if ("jour".equals(localName))
+        else if ("jour".equals(qName))
             this.meteo_jours.add(this._str_acc.toString());
 
     }

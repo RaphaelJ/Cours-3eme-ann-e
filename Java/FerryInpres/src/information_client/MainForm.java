@@ -1,9 +1,11 @@
 package information_client;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.net.Socket;
 import java.util.Calendar;
 import java.util.logging.Level;
@@ -327,7 +329,7 @@ private void envoieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         Element meteo = doc.createElement("meteo");
         if (this.meteoCheck.isSelected()) {
             for (Object nom_obj : this.meteoJoursList.getSelectedValues()) {
-                Element jour = doc.createElement("monnaie");
+                Element jour = doc.createElement("jour");
                 String nom = (String) nom_obj;
                 jour.appendChild(doc.createTextNode(nom));
                 meteo.appendChild(jour);
@@ -357,17 +359,20 @@ private void envoieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
             throws TransformerConfigurationException, TransformerException,
                    IOException
     {
-        ObjectOutputStream obj_out = new ObjectOutputStream(this._sock_out);
-        obj_out.
+        StringWriter out = new StringWriter();
         
-        
+        // Ecrit le document dans un stream en mémoire
         TransformerFactory transFactory = TransformerFactory.newInstance();
         Transformer transform = transFactory.newTransformer();
         transform.setOutputProperty(OutputKeys.METHOD, "xml");
         transform.setOutputProperty(OutputKeys.INDENT,"yes");                
         Source input = new DOMSource(doc);
-        Result output = new StreamResult(this._sock_out);
+        Result output = new StreamResult(out);
         transform.transform(input, output);
+        
+        // Envoie le vecteur de bytes
+        ObjectOutputStream obj_out = new ObjectOutputStream(this._sock_out);
+        obj_out.writeObject(out.toString());
         this._sock_out.flush();
         
         byte reponse = (byte) this._sock_in.read();
