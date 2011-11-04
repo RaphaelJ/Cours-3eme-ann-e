@@ -10,8 +10,12 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class MeteoServer {
-    public static final int PORT = 39007;
+/**
+ *
+ * @author rapha
+ */
+public class MonnaiesServer {
+    public static final int PORT = 39006;
     
     public static void main(String args[])
             throws IOException, ClassNotFoundException
@@ -29,26 +33,22 @@ public class MeteoServer {
                 sock.getInputStream()
             );
             
-            MeteoQueryProtocol query = (MeteoQueryProtocol) obj_in.readObject();
+            MonnaiesQueryProtocol query = (MonnaiesQueryProtocol) obj_in.readObject();
             
-            MeteoResponseProtocol response = new MeteoResponseProtocol();
-            MeteoResponseProtocol.Temps[] temps = {
-                MeteoResponseProtocol.Temps.PLUIES, 
-                MeteoResponseProtocol.Temps.AVERSES,
-                MeteoResponseProtocol.Temps.ONDEES,
-                MeteoResponseProtocol.Temps.COUVERT,
-                MeteoResponseProtocol.Temps.SOLEIL,
-                MeteoResponseProtocol.Temps.CHAUD,
-                MeteoResponseProtocol.Temps.CANICULE
-            };
+            MonnaiesResponseProtocol response = new MonnaiesResponseProtocol();
             
-            // Sélectionne une prévision météo aléatoire pour chaque 
-            // demande.
-            for (int jour : query.getJours()) {
-                response.getResultats().put(
-                    jour,
-                    temps[(int) Math.floor(Math.random() * 7.0)]
-                );
+            // Donne la valeur d'échange de chaque monnaie demandée
+            for (String monnaie : query.getMonnaies()) {
+                double change;
+                
+                if ("Livre sterling".equals(monnaie)) 
+                    change = 0.86;
+                else if ("Dollar américain".equals(monnaie))
+                    change = 1.37;
+                else if ("Yen japonais".equals(monnaie))
+                    change = 107.12;
+                    
+                response.getMonnaies().put(monnaie, change);
             }
             
             obj_out.writeObject(response);

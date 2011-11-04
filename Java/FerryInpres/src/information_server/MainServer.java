@@ -24,7 +24,10 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class MainServer {
     public static final int PORT = 39005;
-    public static final int METEO_PORT = 39006;
+    public static final int MONNAIES_PORT = 39006;
+    public static final String MONNAIES_SERVER = "127.0.0.1";
+    public static final int METEO_PORT = 39007;
+    public static final String METEO_SERVER = "127.0.0.1";
         
     public static void main(String args[])
             throws IOException, ParserConfigurationException, SAXException,
@@ -45,7 +48,13 @@ public class MainServer {
             );
             
             SaxParsingHandler handler = parseDemande(in);
-            demandeMeteo((Integer[]) handler.meteo_jours.toArray());
+            TreeMap<String, Double> monnaies = demandeMonnaies(
+                handler.monnaies.toArray(new String[0])
+            );
+            TreeMap<Integer, Temps> temps = demandeMeteo(
+                handler.meteo_jours.toArray(new Integer[0])
+            );
+            
         }
     }
         
@@ -66,37 +75,73 @@ public class MainServer {
         parser.setContentHandler(handler);
         parser.setErrorHandler(handler);
         
-        System.out.print("Parsing de la requête");
+        System.out.println("Parsing de la requête");
 
         parser.parse(new InputSource(new StringReader(buffer)));
         
         return handler;
     }
+    
+    private static TreeMap<String, Double> demandeMonnaies(String[] monnaies)
+            throws IOException, ClassNotFoundException 
+    {        
+        if (monnaies.length > 0) {
+            System.out.println("Demande au serveur des monnaies");
+            
+            Socket monnaies_sock = new Socket(MONNAIES_SERVER, MONNAIES_PORT);
+            ObjectInputStream monnaies_in = new ObjectInputStream(
+                monnaies_sock.getInputStream()
+            );
+            ObjectOutputStream monnaies_out = new ObjectOutputStream( 
+                monnaies_sock.getOutputStream()
+            );
+
+            MonnaiesQueryProtocol query = new MonnaiesQueryProtocol(monnaies);
+
+            monnaies_out.writeObject(query);
+            monnaies_out.flush();
+
+            MonnaiesResponseProtocol response
+                    = (MonnaiesResponseProtocol) monnaies_in.readObject();
+
+            for (String i : monnaies) {
+                System.out.println(i + " " + response.getMonnaies().get(i));
+            }
+            return response.getMonnaies();
+        } else {
+            return new TreeMap<String, Double>();
+        }
+    }
 
     private static TreeMap<Integer, Temps> demandeMeteo(Integer[] meteo_jours)
             throws IOException, ClassNotFoundException 
-    {
-        
-        Socket meteo_sock = new Socket("127.0.0.1", 39006);
-        ObjectInputStream meteo_in = new ObjectInputStream(
-            meteo_sock.getInputStream()
-        );
-        ObjectOutputStream meteo_out = new ObjectOutputStream( 
-            meteo_sock.getOutputStream()
-        );
+    {        
+        if (meteo_jours.length > 0) {
+            System.out.println("Demande au serveur météo");
+            
+            Socket meteo_sock = new Socket(METEO_SERVER, METEO_PORT);
+            ObjectInputStream meteo_in = new ObjectInputStream(
+                meteo_sock.getInputStream()
+            );
+            ObjectOutputStream meteo_out = new ObjectOutputStream( 
+                meteo_sock.getOutputStream()
+            );
 
-        MeteoQueryProtocol query = new MeteoQueryProtocol(meteo_jours);
-        
-        obj_out.writeObject(query);
-        obj_out.flush();
-        
-        MeteoResponseProtocol response
-                = (MeteoResponseProtocol) obj_in.readObject();
-        
-        for (Integer i : meteo_jours) {
-            System.out.println(i + " " + response.getResultats().get(i));
+            MeteoQueryProtocol query = new MeteoQueryProtocol(meteo_jours);
+
+            meteo_out.writeObject(query);
+            meteo_out.flush();
+
+            MeteoResponseProtocol response
+                    = (MeteoResponseProtocol) meteo_in.readObject();
+
+            for (Integer i : meteo_jours) {
+                System.out.println(i + " " + response.getResultats().get(i));
+            }
+            return response.getResultats();
+        } else {
+            return new TreeMap<Integer, Temps>();
         }
-        return response.getResultats();
     }
 }
 class SaxParsingHandler extends DefaultHandler {
