@@ -39,7 +39,7 @@ public class MonnaiesServer {
             
             // Donne la valeur d'échange de chaque monnaie demandée
             for (String monnaie : query.getMonnaies()) {
-                double change;
+                double change = 0;
                 
                 if ("Livre sterling".equals(monnaie)) 
                     change = 0.86;
@@ -53,6 +53,7 @@ public class MonnaiesServer {
             
             obj_out.writeObject(response);
             obj_out.flush();
+            sock.close();
         }
     }
 }

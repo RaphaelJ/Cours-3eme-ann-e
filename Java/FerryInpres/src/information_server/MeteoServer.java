@@ -53,6 +53,7 @@ public class MeteoServer {
             
             obj_out.writeObject(response);
             obj_out.flush();
+            sock.close();
         }
     }
 }
