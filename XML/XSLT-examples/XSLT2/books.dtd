@@ -1,0 +1,10 @@
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT firstname (#PCDATA)>
+<!ELEMENT lastname (#PCDATA)>
+<!ELEMENT publisher (#PCDATA)>
+<!ELEMENT edition (#PCDATA)>
+<!ELEMENT pages (#PCDATA)>
+<!ELEMENT author (firstname, lastname)>
+<!ELEMENT book (title, author+, publisher?, edition?, pages?)>
+<!ATTLIST book isbn CDATA #REQUIRED>
+<!ELEMENT books (book*)>

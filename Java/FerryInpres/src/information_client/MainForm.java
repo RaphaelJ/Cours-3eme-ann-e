@@ -1,7 +1,9 @@
 package information_client;
 
+import information_server.Config;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
@@ -32,24 +34,9 @@ import org.w3c.dom.Element;
 
 
 public class MainForm extends javax.swing.JFrame {
-    public static final String SERVER = "127.0.0.1";
-    public static final int PORT = 39005;
-    
-    public static final byte SUCCESS = (byte) 'S';
-    public static final byte FAIL = (byte) 'F';
-    
-    private Socket _sock;
-    private InputStream _sock_in;
-    private OutputStream _sock_out;
-
     /** Creates new form MainForm */
     public MainForm() throws IOException {
         initComponents();
-        
-        // Se connecte au serveur
-        this._sock = new Socket(SERVER, PORT);
-        this._sock_in = this._sock.getInputStream();
-        this._sock_out = this._sock.getOutputStream();
         
         // Désactive les contrôles par défaut
         this.monnaiesList.setEnabled(false);
@@ -104,6 +91,8 @@ public class MainForm extends javax.swing.JFrame {
         tabacsCheck = new javax.swing.JCheckBox();
         envoieButton = new javax.swing.JButton();
         erreurLabel = new javax.swing.JLabel();
+        informationsText = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -166,6 +155,8 @@ public class MainForm extends javax.swing.JFrame {
 
         erreurLabel.setForeground(new java.awt.Color(255, 0, 0));
 
+        jLabel4.setText("Informations: ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -182,7 +173,7 @@ public class MainForm extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(voyageurText, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE))
+                                .addComponent(voyageurText, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
@@ -192,8 +183,8 @@ public class MainForm extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                                     .addComponent(jLabel3))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)))
                             .addComponent(taxesCheck)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(70, 70, 70)
@@ -204,8 +195,13 @@ public class MainForm extends javax.swing.JFrame {
                         .addComponent(tabacsCheck))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(envoieButton)
+                        .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(informationsText, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(envoieButton)
+                        .addGap(18, 18, 18)
                         .addComponent(erreurLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -238,11 +234,15 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(alcoolsCheck)
                     .addComponent(parfumsCheck)
                     .addComponent(tabacsCheck))
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(informationsText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(erreurLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(envoieButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(erreurLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(envoieButton))
+                .addContainerGap())
         );
 
         pack();
@@ -278,21 +278,23 @@ private void envoieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
             "Veillez à renseigner les champs Ferry et Nom voyageur"
         );
     } else {
-            try {
-                this.erreurLabel.setText("");
-                
-                Document doc = this.genDocument();
-                this.sendDocument(doc);
-            } catch (TransformerConfigurationException ex) {
-                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParserConfigurationException ex) {
-                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (TransformerException ex) {
-                Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        
+        try {
+            this.erreurLabel.setText("");
+
+            Document doc = this.genDocument();
+            this.sendDocument(doc);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 }//GEN-LAST:event_envoieButtonActionPerformed
 
@@ -327,7 +329,7 @@ private void envoieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         }
         root.appendChild(monnaies);
 
-        // Ajoute les cours des monnaies
+        // Ajoute les jours demandés
         Element meteo = doc.createElement("meteo");
         if (this.meteoCheck.isSelected()) {
             for (Object nom_obj : this.meteoJoursList.getSelectedValues()) {
@@ -340,27 +342,32 @@ private void envoieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         root.appendChild(meteo);
 
         // Ajoute les produits tax free
-        Element tax_free = doc.createElement("tax_free");
+        Element freetax = doc.createElement("freetax");
         if (this.taxesCheck.isSelected()) {
             if (this.alcoolsCheck.isSelected()) {
-                tax_free.appendChild(doc.createElement("alcools"));
+                freetax.appendChild(doc.createElement("alcools"));
             }
             if (this.parfumsCheck.isSelected()) {
-                tax_free.appendChild(doc.createElement("parfums"));
+                freetax.appendChild(doc.createElement("parfums"));
             }
             if (this.tabacsCheck.isSelected()) {
-                tax_free.appendChild(doc.createElement("tabacs"));
+                freetax.appendChild(doc.createElement("tabacs"));
             }
         }
-        root.appendChild(tax_free);
+        root.appendChild(freetax);
 
         return doc;
     }
 
     private void sendDocument(Document doc)
             throws TransformerConfigurationException, TransformerException,
-                   IOException
+                   IOException, ClassNotFoundException
     {
+        // Se connecte au serveur
+        Socket sock = new Socket(Config.MAIN_SERVEUR, Config.MAIN_PORT);
+        InputStream sock_in = sock.getInputStream();
+        OutputStream sock_out = sock.getOutputStream();
+        
         StringWriter out = new StringWriter();
         
         // Ecrit le document dans un stream en mémoire
@@ -373,14 +380,18 @@ private void envoieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         transform.transform(input, output);
         
         // Envoie le vecteur de bytes
-        ObjectOutputStream obj_out = new ObjectOutputStream(this._sock_out);
+        ObjectOutputStream obj_out = new ObjectOutputStream(sock_out);
         obj_out.writeObject(out.toString());
-        this._sock_out.flush();
+        sock_out.flush();
         
-        byte reponse = (byte) this._sock_in.read();
-        if (reponse == SUCCESS) {
+        try {
+            String filename = (String) (
+                new ObjectInputStream(sock_in)
+            ).readObject();
+            this.informationsText.setText(filename);
             this.erreurLabel.setText("Demande réussie");
-        } else {
+        } catch (Exception e) {
+            System.err.println(e);
             this.erreurLabel.setText("Erreur lors du traitement de la demande");
         }
     }
@@ -430,9 +441,11 @@ public static void main(String args[]) {
     private javax.swing.JButton envoieButton;
     private javax.swing.JLabel erreurLabel;
     private javax.swing.JTextField ferryText;
+    private javax.swing.JTextField informationsText;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JCheckBox meteoCheck;

@@ -1,0 +1,1 @@
+src/information_server/infos.xsl

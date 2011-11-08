@@ -10,13 +10,11 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class MeteoServer {
-    public static final int PORT = 39007;
-    
+public class MeteoServer {    
     public static void main(String args[])
             throws IOException, ClassNotFoundException
     {
-        ServerSocket server_sock = new ServerSocket(PORT);
+        ServerSocket server_sock = new ServerSocket(Config.METEO_PORT);
         
         for (;;) {
             System.out.println("En attente d'un nouveau client");

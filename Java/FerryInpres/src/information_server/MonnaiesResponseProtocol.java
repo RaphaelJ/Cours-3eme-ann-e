@@ -4,14 +4,15 @@
  */
 package information_server;
 
+import java.io.Serializable;
 import java.util.TreeMap;
 
 /**
  *
  * @author rapha
  */
-public class MonnaiesResponseProtocol {
-    private TreeMap<String, Double> _monnaies;
+public class MonnaiesResponseProtocol implements Serializable {
+    private TreeMap<String, Double> _monnaies = new TreeMap<String, Double>();
     
     /**
      * @return the _monnaies
@@ -21,7 +22,7 @@ public class MonnaiesResponseProtocol {
     }
 
     /**
-     * @param monnaies the _monnaies to set
+ * @param monnaies the _monnaies to set
      */
     public void setMonnaies(TreeMap<String, Double> monnaies) {
         this._monnaies = monnaies;

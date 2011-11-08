@@ -15,12 +15,10 @@ import java.net.Socket;
  * @author rapha
  */
 public class MonnaiesServer {
-    public static final int PORT = 39006;
-    
     public static void main(String args[])
             throws IOException, ClassNotFoundException
     {
-        ServerSocket server_sock = new ServerSocket(PORT);
+        ServerSocket server_sock = new ServerSocket(Config.MONNAIES_PORT);
         
         for (;;) {
             System.out.println("En attente d'un nouveau client");
@@ -33,13 +31,14 @@ public class MonnaiesServer {
                 sock.getInputStream()
             );
             
-            MonnaiesQueryProtocol query = (MonnaiesQueryProtocol) obj_in.readObject();
+            MonnaiesQueryProtocol query
+                    = (MonnaiesQueryProtocol) obj_in.readObject();
             
             MonnaiesResponseProtocol response = new MonnaiesResponseProtocol();
             
             // Donne la valeur d'échange de chaque monnaie demandée
             for (String monnaie : query.getMonnaies()) {
-                double change = 0;
+                double change;
                 
                 if ("Livre sterling".equals(monnaie)) 
                     change = 0.86;
@@ -47,6 +46,8 @@ public class MonnaiesServer {
                     change = 1.37;
                 else if ("Yen japonais".equals(monnaie))
                     change = 107.12;
+                else 
+                    change = 0;
                     
                 response.getMonnaies().put(monnaie, change);
             }

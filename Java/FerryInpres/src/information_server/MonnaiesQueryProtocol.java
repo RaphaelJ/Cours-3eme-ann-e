@@ -4,11 +4,13 @@
  */
 package information_server;
 
+import java.io.Serializable;
+
 /**
  *
  * @author rapha
  */
-public class MonnaiesQueryProtocol {
+public class MonnaiesQueryProtocol implements Serializable {
     private String[] _monnaies;
 
     public MonnaiesQueryProtocol(String[] monnaies) {
