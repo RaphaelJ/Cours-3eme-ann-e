@@ -67,7 +67,7 @@ menu repeter actions =
         putStrLn $ show (length actions + 1) ++ ". Retour"
 
         putStrLn "Votre choix: "
-        choix <- read `fmap` getLine
+        choix <- readLn
         if choix > length actions -- Lance l'action ou quitte
            then return []
            else do cur <- snd (actions !! (choix-1))
@@ -100,9 +100,9 @@ gestionFiltres filtres = do
         Artiste `fmap` getLine
     filtrePrix = do
         putStrLn "Prix minimal: "
-        prixMin <- read `fmap` getLine
+        prixMin <- readLn
         putStrLn "Prix maximal: "
-        prixMax <- read `fmap` getLine
+        prixMax <- readLn
         return $ Prix prixMin prixMax
     filtreASIN = do
         putStrLn "Code ASIN: "
@@ -164,32 +164,27 @@ inserer id_docs (Connexion conn origine) = do
     forM_ id_docs $ \id_doc -> do
         Just (_, _, JSObject contenu) <- getDoc couchDb id_doc
         let assoc_contenu = fromJSObject contenu
-        liftIO $ case toString $ fromJust $ lookup "category" assoc_contenu of
-            "music" -> insererMusique assoc_contenu
-            "book" -> insererLivre assoc_contenu
-            "movie" -> insererFilm assoc_contenu
-        liftIO $ commit conn
-        return ()
+        liftIO $ do
+            case stringValue "category" assoc_contenu of
+                "music" -> insererMusique assoc_contenu
+                "book" -> insererLivre assoc_contenu
+                "movie" -> insererFilm assoc_contenu
+            commit conn
     liftIO $ putStrLn $ show n ++ " média(s) inséré(s)."
   where
     insererMusique doc = do
-        let amazon_asin = toString $ fromJust $ lookup "asin" doc
+        let amazon_asin = stringValue "asin" doc
         putStrLn $ "Insertion musique: " ++ amazon_asin
         produit_ean <- insererProduit doc
         
         when (isJust produit_ean) $ do
             insererArtistes $ fromJust $ lookup "artist" doc
-            let label = case fmap toString $ lookup "label" doc of
-                    Just e  -> e
-                    Nothing -> "Unknown"
+            let label = stringOrDefault "label" doc "Unknown"
             insererEditeur label
-            let support = ""
-            let disques = case fmap (floor . fromJRational) $ lookup "discs" doc of
-                    Just e  -> e
-                    Nothing -> 1
-            let publication = case fmap toString $ lookup "release_date" doc of
-                    Just e  -> e
-                    Nothing -> "Unknown"
+            let support = stringOrDefault "support" doc "Unknown"
+            let disques = intOrDefault "discs" doc 1
+            let publication = stringOrDefault "release_date" doc "Unknown"
+
             req <- prepare conn "INSERT INTO site_musique VALUES (?, ?, ?, ?, ?)"
             execute req [ SqlInteger $ fromJust $ produit_ean, SqlString label
                         , SqlString support, SqlInteger disques
@@ -197,7 +192,7 @@ inserer id_docs (Connexion conn origine) = do
             return ()
 
     insererLivre doc = do
-        let amazon_asin = toString $ fromJust $ lookup "asin" doc
+        let amazon_asin = stringValue "asin" doc
         putStrLn $ "Insertion livre: " ++ amazon_asin
         produit_ean <- insererProduit doc
 
@@ -205,21 +200,13 @@ inserer id_docs (Connexion conn origine) = do
             case lookup "authors" doc of
                 Just e  -> insererArtistes e
                 Nothing -> return ()
-            let editeur = case fmap toString $ lookup "publisher" doc of
-                    Just e  -> e
-                    Nothing -> "Unknown"
+            let editeur = stringOrDefault "publisher" doc "Unknown"
             insererEditeur editeur
-            let Just isbn = fmap toString $ lookup "asin" doc
-            let Just reliure = fmap toString $ lookup "format" doc
-            let pages = case fmap (floor . fromJRational) $ lookup "pages" doc of
-                                Just e  -> e
-                                Nothing -> -1
-            let publication = case fmap toString $ lookup "date" doc of
-                                Just e  -> e
-                                Nothing -> ""
-            let edition = case fmap toString $ lookup "edition" doc of
-                                Just e  -> e
-                                Nothing -> ""
+            let isbn = stringValue "asin" doc
+            let reliure = stringValue "format" doc
+            let pages = intOrDefault "pages" doc (-1)
+            let publication = stringOrDefault "date" doc ""
+            let edition = stringOrDefault "edition" doc ""
             req <- prepare conn "INSERT INTO site_livre VALUES (?, ?, ?, ?, ?, ?, ?)"
             execute req [ SqlInteger $ fromJust $ produit_ean, SqlString isbn
                         , SqlString editeur, SqlString reliure
@@ -228,7 +215,7 @@ inserer id_docs (Connexion conn origine) = do
             return ()
             
     insererFilm doc = do
-        let amazon_asin = toString $ fromJust $ lookup "asin" doc
+        let amazon_asin = stringValue "asin" doc
         putStrLn $ "Insertion film: "++ amazon_asin
 
         produit_ean <- insererProduit doc
@@ -240,20 +227,13 @@ inserer id_docs (Connexion conn origine) = do
             case lookup "directors" doc of
                  Just ds  -> insererArtistes ds
                  Nothing  -> return ()
-            let Just studio = fmap toString $ lookup "studio" doc
+            let studio = stringValue "studio" doc
             insererEditeur studio
-            let support = case lookup "format" doc of
-                            Just s  -> toString s
-                            Nothing -> ""
-            let disques = case lookup "discs" doc of
-                            Just s  -> floor $ fromJRational s
-                            Nothing -> 1
-            let note = case lookup "rating" doc of
-                            Just s  -> toString s
-                            Nothing -> ""
-            let duree = case lookup "runtime" doc of
-                            Just s  -> toString s
-                            Nothing -> ""
+            let support = stringOrDefault "format" doc "Unknown"
+            let disques = intOrDefault "discs" doc 1
+            let note = stringOrDefault "rating" doc "Unknown"
+                
+            let duree = stringOrDefault "runtime" doc "Unknown"
             req <- prepare conn "INSERT INTO site_film VALUES (?, ?, ?, ?, ?, ?)"
             execute req [ SqlInteger $ fromJust $ produit_ean, SqlString studio
                         , SqlString support, SqlInteger disques
@@ -283,7 +263,7 @@ inserer id_docs (Connexion conn origine) = do
     -- Insère un produit dans la base et retourne l'ean.
     -- Retourne Nothing si le produit existe déjà
     insererProduit doc = do
-        let Just amazon_asin = fmap toString $ lookup "asin" doc
+        let amazon_asin = stringValue "asin" doc
         let produit_ean = ean amazon_asin
         putStrLn $ "    Insertion produit: " ++ amazon_asin
         req <- prepare conn "SELECT ean FROM site_produit WHERE ean = ?;"
@@ -294,20 +274,20 @@ inserer id_docs (Connexion conn origine) = do
                putStrLn "    Produit existant"
                return Nothing -- Produit existant
            else do
-               let titre = case lookup "title" doc of
-                                Just l  -> toString l
-                                Nothing -> ""
+               let titre = stringOrDefault "title" doc "Unknown"
                let description = ""
-               let langue = case lookup "language" doc of
-                                Just l  -> toString l
-                                Nothing -> case lookup "languages" doc of
-                                                Just (JSArray ls) -> toString $ head ls
-                                                Nothing -> ""
+               let langue =
+                    case lookup "language" doc of
+                       Just l  -> toString l
+                       Nothing -> case lookup "languages" doc of
+                                      Just (JSArray ls) -> toString $ head ls
+                                      Nothing -> ""
                
-               let Just prix = fmap fromJRational $ lookup "price" doc
+               let prix = rationalOrDefault "price" doc 0
                let devise = "USD"
 
-               req_insert <- prepare conn "INSERT INTO site_produit VALUES (?, ?, ?, ?, ?, 0, ?, ?, ?, 0);"
+               req_insert <- prepare conn "INSERT INTO site_produit VALUES \
+                                          \(?, ?, ?, ?, ?, 0, ?, ?, ?, 0);"
                execute req_insert [SqlInteger produit_ean , SqlString titre
                            , SqlString description, SqlString langue
                            , SqlDouble $ fromRational $ prix, SqlString devise
@@ -325,6 +305,15 @@ inserer id_docs (Connexion conn origine) = do
             checksum = (10 - ((3*sumPairs + sumImpairs) `mod` 10)) `mod` 10
         in code + checksum
 
+    stringValue key doc = toString $ fromJust $ lookup key doc
+    valueOrDefault key doc def = fromMaybe def (lookup key doc)
+    stringOrDefault key doc def =
+        toString $ valueOrDefault key doc (JSString $ toJSString def)
+    rationalOrDefault key doc def =
+        fromJRational $ valueOrDefault key doc (JSRational True def)
+    intOrDefault key doc def =
+        floor $ rationalOrDefault key doc (fromIntegral def)
+    
     toString (JSString s) = toAscii $ fromJSString s
     fromJRational (JSRational _ r) = r
     toAscii = filter isAscii

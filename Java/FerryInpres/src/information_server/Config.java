@@ -10,7 +10,7 @@ package information_server;
  */
 public /*static final*/ class Config {
     public static final int MAIN_PORT = 39005;
-    public static final String MAIN_SERVEUR = "127.0.0.1";
+    public static final String MAIN_SERVEUR = "10.0.2.2";
     public static final int MONNAIES_PORT = 39006;
     public static final String MONNAIES_SERVEUR = "127.0.0.1";
     public static final int METEO_PORT = 39007;

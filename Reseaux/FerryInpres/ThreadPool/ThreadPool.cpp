@@ -2,7 +2,6 @@
 
 void *_executor(void *v_arg);
 
-
 // Lance les différents threads de la pool
 ThreadPool::ThreadPool(const int n_threads) : _threads(n_threads)
 {

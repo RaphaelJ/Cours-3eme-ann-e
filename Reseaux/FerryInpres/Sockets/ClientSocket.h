@@ -58,7 +58,6 @@ public:
     
     inline void send_string(char *data)
     {
-        
         char c;
         do {
             c = *data;

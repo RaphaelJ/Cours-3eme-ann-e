@@ -1,0 +1,1 @@
+/opt/glassfish3/bin/asadmin deploy --user admin --host 127.0.0.1 --port 4848 --passwordfile ../pass.properties dist/applicB.ear
