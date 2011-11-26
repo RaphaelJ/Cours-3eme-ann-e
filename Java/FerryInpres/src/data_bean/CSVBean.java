@@ -91,7 +91,7 @@ public class CSVBean {
         }
     }
     
-    private static LinkedList<String[]> loadCSV(File path)
+    public static LinkedList<String[]> loadCSV(File path)
             throws FileNotFoundException, IOException
     {
         BufferedReader f = new BufferedReader(

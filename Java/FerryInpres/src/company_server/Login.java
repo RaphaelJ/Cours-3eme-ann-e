@@ -9,26 +9,26 @@ package company_server;
  * @author rapha
  */
 public class Login implements Protocol {
-    private String _nom;
+    private String _name;
     private String _password;
 
-    public Login(String _nom, String _password) {
-        this._nom = _nom;
+    public Login(String _name, String _password) {
+        this._name = _name;
         this._password = _password;
     }
 
     /**
      * @return the _nom
      */
-    public String getNom() {
-        return _nom;
+    public String getName() {
+        return _name;
     }
 
     /**
      * @param nom the _nom to set
      */
-    public void setNom(String nom) {
-        this._nom = nom;
+    public void setName(String name) {
+        this._name = name;
     }
 
     /**
