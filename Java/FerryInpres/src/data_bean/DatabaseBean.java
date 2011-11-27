@@ -109,7 +109,7 @@ public class DatabaseBean implements Serializable {
     public Reservation getReservation(int id) throws SQLException
     {
         PreparedStatement instruc = this.getConn().prepareStatement(
-            "SELECT * FROM reservation WHERE id = %"
+            "SELECT * FROM reservation WHERE id = ?"
         );
         
         instruc.setInt(1, id);
@@ -127,7 +127,7 @@ public class DatabaseBean implements Serializable {
     
     public void validateCheckin(int id) throws SQLException {
         PreparedStatement instruc = this.getConn().prepareStatement(
-            "UPDATE reservation SET checkin = 1 WHERE id = %"
+            "UPDATE reservation SET checkin = 1 WHERE id = ?"
         );
         instruc.setInt(1, id);
         instruc.executeUpdate();

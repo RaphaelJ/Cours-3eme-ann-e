@@ -77,7 +77,10 @@ class ServerThread extends Thread {
                     out.flush();
                 }
             }
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            System.err.println("Fermeture de la connexion: ");
+            e.printStackTrace();
+        }
         
         try {
             this._sock.close();
@@ -89,15 +92,12 @@ class ServerThread extends Thread {
     {
         for (;;) {
             Protocol query = (Protocol) in.readObject();
-            System.out.print("O");
             if (query instanceof VerifBooking) {
                 // Validation du checkin
                 VerifBooking vb = (VerifBooking) query;
-                
                 Reservation r = this._data.getReservation(
                     vb.getCode_reservation()
                 );
-                System.out.print("OK");
                 
                 if (r != null && !r.isCheckin()) {
                     this._data.validateCheckin(r.getId());
@@ -141,8 +141,7 @@ class ServerThread extends Thread {
                     // prévue.
                     out.writeObject(new Fail());
                     out.flush();
-                }
-                
+                }   
             }
         }
     }
@@ -151,8 +150,9 @@ class ServerThread extends Thread {
             throws FileNotFoundException, IOException
     {
         for (String[] l : CSVBean.loadCSV(new File("agents.csv"))) {
-            if (name == l[0] && password == l[1])
+            if (name.equals(l[0]) && password.equals(l[1])) {
                 return true;
+            }
         }
         return false;
     }

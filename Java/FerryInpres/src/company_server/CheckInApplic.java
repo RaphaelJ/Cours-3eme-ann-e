@@ -26,26 +26,35 @@ public class CheckInApplic {
         ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
         
-        System.out.println("Login: ");
-        System.out.println("1. Valider une réservation");
+        System.out.println("Nom d'utilisateur: ");
+        String user = readLine();
+        System.out.println("Mot de passe: ");
+        String pass = readLine();
         
+        out.writeObject(new Login(user, pass));
+        out.flush();
         
-        int choix;
-        do {
-            System.out.println("1. Valider une réservation");
-            System.out.println("2. Acheter une traversée");
-            System.out.println("3. Quitter");
-            
-            System.out.println("Votre choix: ");
-            choix = readInt();
-            
-            if (choix == 1)
-                verifBooking(in, out);
-            else if (choix == 2)
-                buyTicket(in, out);
-        } while (choix != 3);
-        
-        sock.close();
+        Protocol response = (Protocol) in.readObject();
+        if (response instanceof Ack) {
+            int choix;
+            do {
+                System.out.println("1. Valider une réservation");
+                System.out.println("2. Acheter une traversée");
+                System.out.println("3. Quitter");
+
+                System.out.println("Votre choix: ");
+                choix = readInt();
+
+                if (choix == 1)
+                    verifBooking(in, out);
+                else if (choix == 2)
+                    buyTicket(in, out);
+            } while (choix != 3);
+
+            sock.close();
+        } else {
+            System.out.println("Identifiants invalides");
+        }
     }
     
     // Lit un entier depuis l'entrée standard
@@ -55,6 +64,27 @@ public class CheckInApplic {
             new InputStreamReader(System.in)
         );
         return Integer.parseInt(inStream.readLine()); 
+    }
+    
+    // Lit une lige depuis l'entrée standard
+    public static String readLine() throws IOException
+    {
+        BufferedReader inStream = new BufferedReader (
+            new InputStreamReader(System.in)
+        );
+        return inStream.readLine();
+    }
+    
+    // Lit une chaine de caractères terminant avec \0 depuis un stream
+    public static String readString(InputStream in) throws IOException
+    {
+        byte c;
+        StringBuilder buffer = new StringBuilder();
+        while ((c = (byte) in.read()) != '\0') {
+            buffer.append((char) c);
+        }
+    
+        return buffer.toString();
     }
     
     private static void verifBooking(ObjectInputStream in,
