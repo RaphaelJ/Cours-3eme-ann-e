@@ -124,6 +124,9 @@ public class CheckInApplic {
         if (response instanceof AckBuyTicket) {
             AckBuyTicket abt = (AckBuyTicket) response;
             System.out.println("Votre checkin a été validé");
+            System.out.println("Départ: " + abt.getDate_depart());
+            System.out.println("Ferry: " + abt.getNom_ferry());
+            System.out.println("Numero de client: " + abt.getNum_client());
         } else if (response instanceof Fail) {
             System.out.println(
                "Il n'y a pas de possibilité de départ"
