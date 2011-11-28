@@ -162,6 +162,7 @@ public class DatabaseBean implements Serializable {
             "FROM traversee AS t " +
             "INNER JOIN navire AS n ON n.id = t.navire " +
             "WHERE t.date_depart > CURRENT_DATE " +
+            "AND EXTRACT(DAY FROM t.date_depart) = EXTRACT(DAY FROM CURRENT_DATE) " +
             "ORDER BY t.date_depart ASC " +
             "LIMIT 1;"
         );
@@ -194,7 +195,8 @@ public class DatabaseBean implements Serializable {
         instruc = this.getConn().prepareStatement(
             "SELECT last_insert_id()"
         );  
-        ResultSet rs = instruc.executeQuery();  
+        ResultSet rs = instruc.executeQuery();
+        rs.next();
         int voyageur_id = rs.getInt("last_insert_id()");    
         
         instruc = this.getConn().prepareStatement(
@@ -220,7 +222,6 @@ public class DatabaseBean implements Serializable {
         instruc.setInt(3, voyageur_id);
         instruc.execute();
     }
-    
 
     /**
      * @return the _voyageurs

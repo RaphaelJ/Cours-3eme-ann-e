@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -99,7 +98,6 @@ public class CheckInApplic {
         out.flush();
         
         Protocol response = (Protocol) in.readObject();
-        
         if (response instanceof Ack) {
             System.out.println("Votre checkin a été validé");
         } else if (response instanceof Fail) {
@@ -110,8 +108,26 @@ public class CheckInApplic {
     }
     
     private static void buyTicket(ObjectInputStream in,
-            ObjectOutputStream out)
+            ObjectOutputStream out) throws IOException, ClassNotFoundException
     {
+        System.out.println("Nom du conducteur: ");
+        String conducteur = readLine();
+        System.out.println("Numero d'immatriculation: ");
+        String immatriculation = readLine();
+        System.out.println("Nombre de passagers: ");
+        int passagers = readInt();
         
+        out.writeObject(new BuyTicket(conducteur, immatriculation, passagers));
+        out.flush();
+        
+        Protocol response = (Protocol) in.readObject();
+        if (response instanceof AckBuyTicket) {
+            AckBuyTicket abt = (AckBuyTicket) response;
+            System.out.println("Votre checkin a été validé");
+        } else if (response instanceof Fail) {
+            System.out.println(
+               "Il n'y a pas de possibilité de départ"
+            );
+        }
     }
 }

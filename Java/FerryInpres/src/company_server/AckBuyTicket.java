@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  *
  * @author rapha
  */
-public class AckBuyTicket {
+public class AckBuyTicket implements Protocol {
     private String _nom_ferry;
     private Timestamp _date_depart;
     private int _num_client;
