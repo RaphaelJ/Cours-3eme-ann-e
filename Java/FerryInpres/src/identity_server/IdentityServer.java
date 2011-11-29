@@ -12,7 +12,9 @@ import java.net.Socket;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -41,6 +43,10 @@ public class IdentityServer {
             throws IOException, ClassNotFoundException, InstantiationException,
             IllegalAccessException, SQLException
     {
+        Security.addProvider(
+            new org.bouncycastle.jce.provider.BouncyCastleProvider()
+        );
+        
         ServerSocket server_sock = new ServerSocket(Config.IDENTITY_PORT);
         
         Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -59,6 +65,7 @@ public class IdentityServer {
     }
     private Connection _conn;
 }
+
 class ServerThread implements Runnable {
     private Socket _sock;
     private Connection _con;
@@ -102,8 +109,10 @@ class ServerThread implements Runnable {
     public SecretKey keyExchange(ObjectInputStream in, ObjectOutputStream out)
             throws IOException, NoSuchAlgorithmException,
             NoSuchPaddingException, InvalidKeyException,
-            ClassNotFoundException
+            ClassNotFoundException, NoSuchProviderException,
+            IllegalBlockSizeException, BadPaddingException
     {
+        
         // Recoit la clé publique
         KeyExchangeClient query = (KeyExchangeClient) in.readObject();
             
@@ -113,9 +122,14 @@ class ServerThread implements Runnable {
         SecretKey sessionKey = gen.generateKey();
             
         // Envoie le clé de session
-        Cipher rsaCryptor = Cipher.getInstance("RSA/ECB/PKCS#1");
+        //Cipher rsaCryptor = Cipher.getInstance("RSA/ECB/PKCS#1");
+        Cipher rsaCryptor = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         rsaCryptor.init(Cipher.ENCRYPT_MODE, query.getPublicKey());
-        out.writeObject(sessionKey.getEncoded());
+        out.writeObject(
+            new KeyExchangeServer(
+                rsaCryptor.doFinal(sessionKey.getEncoded())
+            )
+        );
         out.flush();
         
         return sessionKey;
@@ -128,29 +142,38 @@ class ServerThread implements Runnable {
     {
         // Génère et envoie le sel
         int serverSalt = (new Random()).nextInt();
+        
+        byte[] d = Utils.cryptObject(new LoginServer(serverSalt), cryptor);
         out.writeObject(
-            Utils.cryptObject(new LoginServer(serverSalt), cryptor)
+            d
         );
         out.flush();
         
         // Attends les informations d'authentification
-        LoginClient response = (LoginClient) in.readObject();
+        LoginClient response = (LoginClient) Utils.decryptObject(
+            (byte[]) in.readObject(), decryptor
+        );
         
         // Extrait le mot de passe de la base de données
         PreparedStatement instruc = this._con.prepareStatement(
             "SELECT mot_de_passe " +
-            "FROM agents " +
+            "FROM agent " +
             "WHERE nom = ?"
         );
         instruc.setString(1, response.getName());
         ResultSet rs = instruc.executeQuery();
-        rs.next();
-        String password = rs.getString("mot_de_passe");
-        byte[] hashedPassword = Utils.hashPassword(
-            password, response.getClient_salt(), serverSalt
-        );
+        byte[] hashedPassword;
+        if (rs.next()) {
+            String password = rs.getString("mot_de_passe");
+            hashedPassword = Utils.hashPassword(
+                password, response.getClient_salt(), serverSalt
+            );
+        } else {
+            hashedPassword = null;
+        }
         
-        if (Arrays.equals(hashedPassword, response.getPassword_hashed())) {
+        if (hashedPassword != null
+            && Arrays.equals(hashedPassword, response.getPassword_hashed())) {
             // Mot de passe valide
             out.writeObject(Utils.cryptObject(new Ack(), cryptor));
             out.flush();
@@ -175,9 +198,9 @@ class ServerThread implements Runnable {
 
             // Vérifie si la personne est valide
             PreparedStatement instruc = this._con.prepareStatement(
-                "SELECT COUNT(*) AS existe" +
-                "FROM voyageurs " +
-                "WHERE id_national = ? AND nom = ? AND prenom = ? AND "
+                "SELECT COUNT(*) AS existe " +
+                "FROM voyageur " +
+                "WHERE id_national = ? AND nom = ? AND prenom = ?"
             );
             instruc.setInt(1, query.getClientNationalId());
             instruc.setString(2, query.getClientName());

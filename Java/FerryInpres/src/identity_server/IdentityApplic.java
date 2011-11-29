@@ -19,6 +19,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.util.Random;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -40,6 +41,10 @@ public class IdentityApplic {
             NoSuchAlgorithmException, NoSuchPaddingException,
             IllegalBlockSizeException, BadPaddingException, InvalidKeyException
     {
+        Security.addProvider(
+            new org.bouncycastle.jce.provider.BouncyCastleProvider()
+        );
+        
         Socket sock = new Socket(Config.IDENTITY_SERVER, Config.IDENTITY_PORT);
         ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
@@ -94,7 +99,8 @@ public class IdentityApplic {
         KeyExchangeServer response = (KeyExchangeServer) in.readObject();
         
         // Décrypte la clé de session avec la clé privée
-        Cipher decryptor = Cipher.getInstance("RSA/ECB/PKCS#1");
+        //Cipher decryptor = Cipher.getInstance("RSA/ECB/PKCS#1");
+        Cipher decryptor = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         decryptor.init(Cipher.DECRYPT_MODE, privateKey);
         byte[] sessionKeyEncoded =
                 decryptor.doFinal(response.getCryptedSessionKey());
@@ -112,6 +118,7 @@ public class IdentityApplic {
         LoginServer saltQuery = (LoginServer) Utils.decryptObject(
                 (byte[]) in.readObject(), decryptor
         );
+        System.out.println("Salt: "+ saltQuery.getHashSalt());
         
         System.out.println("Nom d'utilisateur: ");
         String user = readLine();

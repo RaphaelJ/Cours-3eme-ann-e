@@ -26,7 +26,7 @@ public class Utils {
             throws IOException, IllegalBlockSizeException, BadPaddingException
     {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutput out = new ObjectOutputStream(new ByteArrayOutputStream());   
+        ObjectOutput out = new ObjectOutputStream(bos);   
         
         out.writeObject(o);
         byte[] bytes = bos.toByteArray(); 
