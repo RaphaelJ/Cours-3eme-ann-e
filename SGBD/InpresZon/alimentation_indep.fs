@@ -56,14 +56,14 @@ let extractListing media =
 
     pagesContents |> Seq.map articlesLinks |> Seq.concat |> Set.ofSeq
 
-// Extrait les informations d'une fiche HTML d'un média
+// Extrait les informations d'une fiche HTML sur un média
 let extractInformation url =
     let titleExpr =
         "<strong class=\"titre dispeblock\">\\s*([\\w\\s\\p{P}]+)\\s*</strong>"
     let imageExpr =
         "<a href=\"(.+)\" class=\"activeimg\">"
     let priceExpr =
-        "<span class=\"price\">(\\d,\\d+)\\s*€</span>"
+        "<span class=\"price\">(\\d+,\\d+)\\s*€</span>"
     let infoExpr =
         "<tr>\\s*<th scope=\"row\" align=\"left\"><span>([\\w\\s\\p{P}]+)\
 </span></th>\\s*<td><span>\\s*(<A HREF=\"(.+)\">)?([\\w\\s\\p{P}]+)(</A>)?\
