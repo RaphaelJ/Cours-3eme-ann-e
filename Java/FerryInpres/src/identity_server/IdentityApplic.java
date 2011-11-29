@@ -29,6 +29,7 @@ import javax.crypto.spec.SecretKeySpec;
 
     
     // Lit un entier depuis l'entrée standard
+    
 /**
  *
  * @author rapha
@@ -71,18 +72,6 @@ public class IdentityApplic {
         return inStream.readLine();
     }
     
-    // Lit une chaine de caractères terminant avec \0 depuis un stream
-    public static String readString(InputStream in) throws IOException
-    {
-        byte c;
-        StringBuilder buffer = new StringBuilder();
-        while ((c = (byte) in.read()) != '\0') {
-            buffer.append((char) c);
-        }
-    
-        return buffer.toString();
-    }
-    
     public static SecretKey keyExchange(ObjectInputStream in,
             ObjectOutputStream out)
             throws IllegalBlockSizeException, BadPaddingException,
@@ -119,7 +108,7 @@ public class IdentityApplic {
             IllegalBlockSizeException, BadPaddingException,
             NoSuchAlgorithmException
     {
-        // Reçoi et décrypte le sel de hashage du serveur
+        // Reçoit et décrypte le sel de hashage du serveur
         LoginServer saltQuery = (LoginServer) Utils.decryptObject(
                 (byte[]) in.readObject(), decryptor
         );
@@ -128,9 +117,10 @@ public class IdentityApplic {
         String user = readLine();
         System.out.println("Mot de passe: ");
         String pass = readLine();
-        
+
+        // Envoie les informations d'authentification avec le
+        // mot de passe hashé
         int clientSalt = (new Random()).nextInt();
-        
         out.writeObject(
             Utils.cryptObject(
                 new LoginClient(
@@ -141,87 +131,49 @@ public class IdentityApplic {
             )
         );
         out.flush();
-    }
         
-        
-        
-        
-        System.out.println("Nom d'utilisateur: ");
-        String user = readLine();
-        System.out.println("Mot de passe: ");
-        String pass = readLine();
-        
-        out.writeObject(new LoginServer(user, pass));
-        out.flush();
-        
-        Protocol response = (Protocol) in.readObject();
-        if (response instanceof Ack) {
-            int choix;
-            do {
-                System.out.println("1. Valider une réservation");
-                System.out.println("2. Acheter une traversée");
-                System.out.println("3. Quitter");
-
-                System.out.println("Votre choix: ");
-                choix = readInt();
-
-                if (choix == 1)
-                    verifBooking(in, out);
-                else if (choix == 2)
-                    buyTicket(in, out);
-            } while (choix != 3);
-
-            sock.close();
-        } else {
-            System.out.println("Identifiants invalides");
+        // Reçoit la réponse
+        Protocol loginResponse = (Protocol) Utils.decryptObject(
+            (byte[]) in.readObject(), decryptor
+        );
+        if (loginResponse instanceof Ack) {
+            System.out.println("Connexion réussie");
+            verifId(in, out, cryptor, decryptor);
+        } else if (loginResponse instanceof Fail) {
+            System.out.println("Mauvais identifiants");
         }
     }
-    
-    private static void verifBooking(ObjectInputStream in,
-            ObjectOutputStream out) throws IOException, ClassNotFoundException
+
+    private static void verifId(ObjectInputStream in, ObjectOutputStream out,
+            Cipher cryptor, Cipher decryptor)
+            throws IOException, IllegalBlockSizeException, BadPaddingException,
+            ClassNotFoundException
     {
-        System.out.println("Entrez votre code de réservation: ");
-        int reservation = readInt();
-        System.out.println("Entrez le nombre de passagers: ");
-        int n_passagers = readInt();
-                
-        out.writeObject(new VerifBooking(reservation, n_passagers));
-        out.flush();
-        
-        Protocol response = (Protocol) in.readObject();
-        if (response instanceof Ack) {
-            System.out.println("Votre checkin a été validé");
-        } else if (response instanceof Fail) {
-            System.out.println(
-               "Mauvais code de réservation ou réservation déjà validée"
+        for (;;) {
+            System.out.println("Nom du client: ");
+            String clientName = readLine();
+            System.out.println("Prénom du client: ");
+            String clientSurname = readLine();
+            System.out.println("Numéro national du client: ");
+            int clientNationalID = readInt();
+            
+            out.writeObject(
+                Utils.cryptObject(
+                    new VerifId(clientName, clientSurname, clientNationalID),
+                    cryptor
+                )
             );
-        }
-    }
-    
-    private static void buyTicket(ObjectInputStream in,
-            ObjectOutputStream out) throws IOException, ClassNotFoundException
-    {
-        System.out.println("Nom du conducteur: ");
-        String conducteur = readLine();
-        System.out.println("Numero d'immatriculation: ");
-        String immatriculation = readLine();
-        System.out.println("Nombre de passagers: ");
-        int passagers = readInt();
-        
-        out.writeObject(new BuyTicket(conducteur, immatriculation, passagers));
-        out.flush();
-        
-        Protocol response = (Protocol) in.readObject();
-        if (response instanceof AckBuyTicket) {
-            AckBuyTicket abt = (AckBuyTicket) response;
-            System.out.println("Votre checkin a été validé");
-            System.out.println("Départ: " + abt.getDate_depart());
-            System.out.println("Ferry: " + abt.getNom_ferry());
-            System.out.println("Numero de client: " + abt.getNum_client());
-        } else if (response instanceof Fail) {
-            System.out.println(
-               "Il n'y a pas de possibilité de départ"
+            out.flush();
+            
+            Protocol response = (Protocol) Utils.decryptObject(
+                (byte[]) in.readObject(), decryptor
             );
+            
+            if (response instanceof Ack) {
+                System.out.println("Identité valide");
+            } else if (response instanceof Fail) {
+                System.out.println("Identité non valide");
+            }
         }
     }
 }
