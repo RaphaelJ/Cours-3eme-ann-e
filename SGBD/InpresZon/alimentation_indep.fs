@@ -59,32 +59,55 @@ let extractListing media =
 // Extrait les informations d'une fiche HTML sur un média
 let extractInformation url =
     let titleExpr =
-        "<strong class=\"titre dispeblock\">\\s*([\\w\\s\\p{P}]+)\\s*</strong>"
+        "<strong class=\"titre dispeblock\">\\s*([\\p{L}\\s\\p{P}\\d\+-]+)\
+[<>&;\"/=\\p{L}\\s\\p{P}\\d\+-]*</strong>"
     let imageExpr =
-        "<a href=\"(.+)\" class=\"activeimg\">"
+        "<img src=\"(.+)\" alt=\".+\" id=\"artzoomimg\"\\s?/>"
     let priceExpr =
-        "<span class=\"price\">(\\d+,\\d+)\\s*€</span>"
+        "<span class=\"price[\\p{L}\\s\\p{P}]*\">(\\d+(,\\d+)?)\
+\\s*&nbsp;\\s*&euro;\\s*</span>"
+    let scoreExpr = "Note des internautes:\\s*\
+<img src=\"http://www4-fr\.fnac-static\.com/img/decos/etoiles/stars\\d+.png\" \
+alt=\"Note moyenne des internautes :(\\d+(,\\d+)?)/5\"/>"
     let infoExpr =
-        "<tr>\\s*<th scope=\"row\" align=\"left\"><span>([\\w\\s\\p{P}]+)\
-</span></th>\\s*<td><span>\\s*(<A HREF=\"(.+)\">)?([\\w\\s\\p{P}]+)(</A>)?\
-\\s*</span></td>\\s*</tr>"
+        "<tr>\\s*<th scope=\"row\"( align=\"left\")?><span>\
+([\\p{L}\\s\\p{P}\\d\\+-]+)</span></th>\\s*<td><span>\\s*(<A HREF=\"(.+)\">)?\
+([\\p{L}\\s\\p{P}\\d\\+-]+)(</A>)?\\s*(</span></td>)?\\s*</tr>"
 
     let content = downloadString url
 
     let title = Regex.Match(content, titleExpr).Groups.[1].Value.Trim()
+
     let imageUrl = Regex.Match(content, imageExpr).Groups.[1].Value.Trim()
     let image = imageUrl
-    printfn "'%s'" (Regex.Match(content, priceExpr).Groups.[1].Value)
-    let price = Double.Parse(Regex.Match(content, priceExpr).Groups.[1].Value)
-    let info = [ for m in Regex.Matches(content, infoExpr) ->
-                 (m.Groups.[1].Value.Trim(), m.Groups.[4].Value.Trim()) ]
 
-    (title, image, price, Map.ofList info)
+    let price = Double.Parse(Regex.Match(content, priceExpr).Groups.[1].Value)
+
+    let scoreMatch = Regex.Match(content, scoreExpr)
+    let score = if scoreMatch.Success
+                then Some (Double.Parse(scoreMatch.Groups.[1].Value))
+                else None
+
+    let info = [ for m in Regex.Matches(content, infoExpr) ->
+                 (m.Groups.[2].Value.Trim(), m.Groups.[5].Value.Trim()) ]
+
+    (title, image, price, score, Map.ofList info)
+
+let displayArticle url (title, img, price, score, is) =
+    printfn "\nTitre: %s (%s) Prix: %.2f€ Score: %O" title url price score
+    printfn "Image: %s" img
+    for KeyValue(k, v) in is do
+        printfn "%s:\n\t %s" k v
+    printfn ""
+
 
 do let articles = extractListing books
                   |> Set.union (extractListing musics)
                   |> Set.union (extractListing movies)
-   for l in articles do
-        let (t, i, p, _) = extractInformation l
-        printfn "T: %s\nI: %s\nP: %f" t i p
-   printfn "%d articles" (articles |> Set.count)
+
+   printfn "%d articles à extraire" (articles |> Set.count)
+
+   for url in articles do
+        displayArticle url (extractInformation url)
+            
+   printfn "%d articles extraits" (articles |> Set.count)
