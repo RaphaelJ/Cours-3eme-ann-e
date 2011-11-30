@@ -1,6 +1,7 @@
 open System
 open System.Net
 open System.Text.RegularExpressions
+open System.Xml.Linq
 
 type MediaSource =
     { Listing: Printf.StringFormat<int -> string>;
@@ -56,7 +57,7 @@ let extractListing media =
 
     pagesContents |> Seq.map articlesLinks |> Seq.concat |> Set.ofSeq
 
-// Extrait les informations d'une fiche HTML sur un média
+/// Extrait les informations d'une fiche HTML sur un média
 let extractInformation url =
     let titleExpr =
         "<strong class=\"titre dispeblock\">\\s*([\\p{L}\\s\\p{P}\\d\+-]+)\
@@ -88,11 +89,12 @@ alt=\"Note moyenne des internautes :(\\d+(,\\d+)?)/5\"/>"
                 then Some (Double.Parse(scoreMatch.Groups.[1].Value))
                 else None
 
-    let info = [ for m in Regex.Matches(content, infoExpr) ->
-                 (m.Groups.[2].Value.Trim(), m.Groups.[5].Value.Trim()) ]
+    let info = seq { for m in Regex.Matches(content, infoExpr) ->
+                     (m.Groups.[2].Value.Trim(), m.Groups.[5].Value.Trim()) }
 
-    (title, image, price, score, Map.ofList info)
+    (title, image, price, score, Map.ofSeq info)
 
+/// Affiche les informations extraites sur un article
 let displayArticle url (title, img, price, score, is) =
     printfn "\nTitre: %s (%s) Prix: %.2f€ Score: %O" title url price score
     printfn "Image: %s" img
@@ -100,6 +102,27 @@ let displayArticle url (title, img, price, score, is) =
         printfn "%s:\n\t %s" k v
     printfn ""
 
+/// Exporte les informations du média sous forme de document XML
+let createXml mediaType (title, img, price, score, is) =
+    let xname n = XName.Get(n)
+    let xdoc el = new XDocument(Array.map id (Array.ofSeq el))
+    let xelem s el = new XElement(xname s, box el) |> box
+    let xatt a b = new XAttribute(xname a, b) |> box
+
+    let scoreElem = match score with
+                    | Some(s) -> [ xelem "score" s ]
+                    | None    -> []
+
+    xdoc
+        [ xelem "article" (
+            [ xelem "titre" title
+              xelem "img" img
+              xelem "price" price
+            ] @ scoreElem @
+            [ xelem "infos"
+                [ for KeyValue(k, v) in is -> xelem "info" [ xatt "cle" k;  ] ]
+            ])
+        ]
 
 do let articles = extractListing books
                   |> Set.union (extractListing musics)
@@ -109,5 +132,6 @@ do let articles = extractListing books
 
    for url in articles do
         displayArticle url (extractInformation url)
+        (createXml "livre" (extractInformation url)).Save("test.xml")
             
    printfn "%d articles extraits" (articles |> Set.count)

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<article>
+  <titre>Le trône de fer</titre>
+  <img>http://multimedia.fnac.com/multimedia/FR/images_produits/FR/Fnac.com/Grandes110/7/7/1/9782290022177.gif</img>
+  <price>16,06</price>
+  <score>5</score>
+  <infos>
+    <info cle="Auteur" />
+    <info cle="Collection" />
+    <info cle="Date de parution" />
+    <info cle="EAN" />
+    <info cle="Editeur" />
+    <info cle="ISBN" />
+    <info cle="Illustration" />
+  </infos>
+</article>
