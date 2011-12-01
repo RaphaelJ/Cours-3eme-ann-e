@@ -91,8 +91,11 @@ alt=\"Note moyenne des internautes :(\\d+(,\\d+)?)/5\"/>"
     let imgType = Regex.Match(content, imageExpr).Groups.[2].Value.Trim()
     let img = downloadData imgUrl
 
-    let priceStr = Regex.Match(content, priceExpr).Groups.[1].Value
-    let price = Double.Parse(priceStr.Replace(" ", ""))
+    printfn "%s" url
+    let priceMatch = Regex.Match(content, priceExpr)
+    let price = if priceMatch.Success
+                then Double.Parse(priceMatch.Groups.[1].Value.Replace(" ", ""))
+                else 1.0
 
     let scoreMatch = Regex.Match(content, scoreExpr)
     let score = if scoreMatch.Success
