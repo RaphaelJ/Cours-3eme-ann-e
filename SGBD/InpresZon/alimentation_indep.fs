@@ -1,7 +1,10 @@
 open System
+open System.IO
 open System.Net
 open System.Text.RegularExpressions
 open System.Xml.Linq
+
+let EXPORT_DIR = "articles_xml"
 
 type MediaSource =
     { Listing: Printf.StringFormat<int -> string>;
@@ -14,7 +17,7 @@ let books = {
     ; PageExpr="http://livre.fnac.com/l898/Meilleures-ventes-Livre\\?SID=.{36}\
 &UID=.{37}&Origin=FnacAff&OrderInSession=0&TTL=\\d+&sl=-1.0&PageIndex=(\\d+)\
 &ItemPerPage=15"
-    ; ArticleExpr="http://livre.fnac.com/a\d+/" }
+    ; ArticleExpr="http://livre.fnac.com/(a\d+)/" }
 
 let musics = {
       Listing="http://musique.fnac.com/l827/Meilleures-ventes-musique?sl=-1.0\
@@ -22,7 +25,7 @@ let musics = {
     ; PageExpr="http://musique.fnac.com/l827/Meilleures-ventes-musique\\?SID\
 =.{36}&UID=.{37}&Origin=FnacAff&OrderInSession=0&TTL=\\d+&sl=-1.0&PageIndex=\
 (\\d+)&ItemPerPage=15"
-    ; ArticleExpr="http://musique.fnac.com/a\d+/" }
+    ; ArticleExpr="http://musique.fnac.com/(a\d+)/" }
 
 let movies = {
       Listing="http://video.fnac.com/l6484/Meilleures-ventes-DVD-et-Blu-Ray\
@@ -30,12 +33,16 @@ let movies = {
     ; PageExpr="http://video.fnac.com/l6484/Meilleures-ventes-DVD-et-Blu-Ray\
 \\?SID=.{36}&UID=.{37}&Origin=FnacAff&OrderInSession=0&TTL=\\d+&sl=-1.0\
 &PageIndex=(\\d+)&ItemPerPage=15"
-    ;  ArticleExpr="http://video.fnac.com/a\d+/" }
+    ;  ArticleExpr="http://video.fnac.com/(a\d+)/" }
 
-/// Télécharge le contenu d'une URL
+/// Télécharge le contenu d'une URL sous forme de chaine de caractères
 let downloadString (url: String) = (new WebClient()).DownloadString(url)
 
-/// Extrait les liens vers les pages des articles les plus populaires
+// Télécharge le contenu d'une url sous forme de bytes encodés en base64
+let downloadData (url: String) =
+    Convert.ToBase64String((new WebClient()).DownloadData(url))
+
+/// Extrait les identifiants et les liens des articles les plus populaires
 let extractListing media =
     let downloadListing iPage = sprintf media.Listing iPage |> downloadString
 
@@ -50,10 +57,11 @@ let extractListing media =
         seq { for p in seq {2..nPages} -> downloadListing p }
         |> Seq.append (Seq.singleton firstPage)
 
-    // Récupère les liens vers les articles du listing
+    // Récupère les identifiants et les liens des articles du listing
     let articlesMatches content = Regex.Matches(content, media.ArticleExpr)
     let articlesLinks content =
-        seq { for a in articlesMatches content -> a.Value }
+        seq { for a in articlesMatches content ->
+                (a.Groups.[1].Value, a.Value) }
 
     pagesContents |> Seq.map articlesLinks |> Seq.concat |> Set.ofSeq
 
@@ -63,9 +71,9 @@ let extractInformation url =
         "<strong class=\"titre dispeblock\">\\s*([\\p{L}\\s\\p{P}\\d\+-]+)\
 [<>&;\"/=\\p{L}\\s\\p{P}\\d\+-]*</strong>"
     let imageExpr =
-        "<img src=\"(.+)\" alt=\".+\" id=\"artzoomimg\"\\s?/>"
+        "<img src=\"(.+\.(.+))\" alt=\".+\" id=\"artzoomimg\"\\s?/>"
     let priceExpr =
-        "<span class=\"price[\\p{L}\\s\\p{P}]*\">(\\d+(,\\d+)?)\
+        "<span class=\"price[\\p{L}\\s\\p{P}]*\">([\\s\\d]+(,\\d+)?)\
 \\s*&nbsp;\\s*&euro;\\s*</span>"
     let scoreExpr = "Note des internautes:\\s*\
 <img src=\"http://www4-fr\.fnac-static\.com/img/decos/etoiles/stars\\d+.png\" \
@@ -79,10 +87,12 @@ alt=\"Note moyenne des internautes :(\\d+(,\\d+)?)/5\"/>"
 
     let title = Regex.Match(content, titleExpr).Groups.[1].Value.Trim()
 
-    let imageUrl = Regex.Match(content, imageExpr).Groups.[1].Value.Trim()
-    let image = imageUrl
+    let imgUrl = Regex.Match(content, imageExpr).Groups.[1].Value.Trim()
+    let imgType = Regex.Match(content, imageExpr).Groups.[2].Value.Trim()
+    let img = downloadData imgUrl
 
-    let price = Double.Parse(Regex.Match(content, priceExpr).Groups.[1].Value)
+    let priceStr = Regex.Match(content, priceExpr).Groups.[1].Value
+    let price = Double.Parse(priceStr.Replace(" ", ""))
 
     let scoreMatch = Regex.Match(content, scoreExpr)
     let score = if scoreMatch.Success
@@ -92,20 +102,19 @@ alt=\"Note moyenne des internautes :(\\d+(,\\d+)?)/5\"/>"
     let info = seq { for m in Regex.Matches(content, infoExpr) ->
                      (m.Groups.[2].Value.Trim(), m.Groups.[5].Value.Trim()) }
 
-    (title, image, price, score, Map.ofSeq info)
+    (title, img, imgType, price, score, Map.ofSeq info)
 
 /// Affiche les informations extraites sur un article
-let displayArticle url (title, img, price, score, is) =
+let displayArticle url (title, img, imgType, price, score, is) =
     printfn "\nTitre: %s (%s) Prix: %.2f€ Score: %O" title url price score
-    printfn "Image: %s" img
     for KeyValue(k, v) in is do
         printfn "%s:\n\t %s" k v
     printfn ""
 
 /// Exporte les informations du média sous forme de document XML
-let createXml mediaType (title, img, price, score, is) =
+let createXml mediaType code (title, img, imgType, price, score, is) =
     let xname n = XName.Get(n)
-    let xdoc el = new XDocument(Array.map id (Array.ofSeq el))
+    let xdoc el = new XDocument(Array.ofSeq el)
     let xelem s el = new XElement(xname s, box el) |> box
     let xatt a b = new XAttribute(xname a, b) |> box
 
@@ -115,12 +124,18 @@ let createXml mediaType (title, img, price, score, is) =
 
     xdoc
         [ xelem "article" (
-            [ xelem "titre" title
-              xelem "img" img
+            [ xelem "code" code
+              xelem "type" mediaType
+              xelem "titre" title
+              xelem "img"
+                [ xatt "type" imgType
+                  box img
+                ]
               xelem "price" price
             ] @ scoreElem @
             [ xelem "infos"
-                [ for KeyValue(k, v) in is -> xelem "info" [ xatt "cle" k;  ] ]
+                [ for KeyValue(k, v) in is ->
+                    xelem "info" [ xatt "cle" k; box v ] ]
             ])
         ]
 
@@ -130,8 +145,10 @@ do let articles = extractListing books
 
    printfn "%d articles à extraire" (articles |> Set.count)
 
-   for url in articles do
-        displayArticle url (extractInformation url)
-        (createXml "livre" (extractInformation url)).Save("test.xml")
+   for code, url in articles do
+        let fileName = Path.Combine(EXPORT_DIR, sprintf "%s.xml" code)
+        let info = extractInformation url
+        displayArticle url info
+        (createXml "livre" code info).Save(fileName)
             
    printfn "%d articles extraits" (articles |> Set.count)
