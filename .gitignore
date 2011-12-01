@@ -2,4 +2,3 @@
 *.pyc
 *.o
 *kate-swp
-articles_xml/*.xml
