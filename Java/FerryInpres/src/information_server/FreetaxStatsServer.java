@@ -4,13 +4,35 @@
  */
 package information_server;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.security.Security;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.LinkedList;
+
 /**
  *
  * @author rapha
  */
 public class FreetaxStatsServer {
     public static void main(String args[])
+            throws IOException, ClassNotFoundException, SQLException
     {
+        Security.addProvider(
+            new org.bouncycastle.jce.provider.BouncyCastleProvider()
+        );
+        
+        Class.forName("com.mysql.jdbc.Driver").newInstance();
+        String url = "jdbc:mysql://"+Config.MYSQL_HOST+"/freetax";
+        Connection con = DriverManager.getConnection(url, "ferryinpres", "pass");
+        
         ServerSocket server_sock = new ServerSocket(Config.FREETAXSTATS_PORT);
         
         for (;;) {
@@ -24,71 +46,43 @@ public class FreetaxStatsServer {
                 sock.getInputStream()
             );
             
-            FreetaxQueryProtocol query
-                    = (FreetaxQueryProtocol) obj_in.readObject();
+            // Vérifie les identifiants de connexion
+            FreetaxStatsLogin login = (FreetaxStatsLogin) obj_in.readObject();
+            login.getLogin();
             
-            // Ajoute des produits pour chaque catégorie demandée
-            LinkedList<FreetaxProduit> produits
-                    = new LinkedList<FreetaxProduit>();
-            
-            // Ajoute des alcools
-            if (query.isAlcools()) {
-                produits.addFirst(
-                    new FreetaxProduit(
-                        FreetaxProduit.Categories.ALCOOLS,
-                        "Vin rouge", "75 cl", "43€"
-                    )
-                );
-                produits.addFirst(
-                    new FreetaxProduit(
-                        FreetaxProduit.Categories.ALCOOLS,
-                        "Martini", "20 cl", "17€"
-                    )
-                );
-                produits.addFirst(
-                    new FreetaxProduit(
-                        FreetaxProduit.Categories.ALCOOLS,
-                        "Lait alcoolisé", "1 litre", "1€"
-                    )
-                );
-            }
-            
-            if (query.isParfums()) {
-                produits.addFirst(
-                    new FreetaxProduit(
-                        FreetaxProduit.Categories.PARFUMS,
-                        "Parfum toilettes", "10 litres", "3€"
-                    )
-                );
-                produits.addFirst(
-                    new FreetaxProduit(
-                        FreetaxProduit.Categories.PARFUMS,
-                        "D&G", "10 cl", "100€"
-                    )
-                );
-            }
-            
-            if (query.isTabacs()) {
-                produits.addFirst(
-                    new FreetaxProduit(
-                        FreetaxProduit.Categories.TABACS,
-                        "Marlboro", "10 paquets", "30€"
-                    )
-                );
-                produits.addFirst(
-                    new FreetaxProduit(
-                        FreetaxProduit.Categories.TABACS,
-                        "Camel", "5 paquets", "17€"
-                    )
-                );
-            }
-            
-            FreetaxResponseProtocol response = new FreetaxResponseProtocol(
-                produits.toArray(new FreetaxProduit[0])
+            // Extrait le mot de passe de la base de données
+            PreparedStatement instruc = con.prepareStatement(
+                "SELECT COUNT(*) as existe " +
+                "FROM utilisateurs " +
+                "WHERE login = ? AND hashMotDePasse = ?"
             );
+            instruc.setString(1, login.getLogin());
+            instruc.setString(2, login.getHashedPassword());
+            ResultSet rs = instruc.executeQuery();
+            rs.next();
+            if (rs.getInt("existe") != 0) {
+                // Identifiants valides
+                obj_out.writeObject(new FreetaxStatsAck());
+                obj_out.flush();
+                
+                for (;;) {
+                    FreetaxStatsProtocol query 
+                            = (FreetaxStatsLogin) obj_in.readObject();
+                            
+                    if (query instanceof FreetaxStatsDesc) {
+                        
+                    } else if (query instanceof FreetaxStats1D) {
+                        
+                    } else if (query instanceof FreetaxStats1DComp) {
+                        
+                    } else if (query instanceof )
+                }
+            } else {
+                // Identifiants non valides
+                obj_out.writeObject(new FreetaxStatsFail());
+                obj_out.flush();
+            }
             
-            obj_out.writeObject(response);
-            obj_out.flush();
             sock.close();
         }
     }
