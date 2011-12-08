@@ -11,5 +11,5 @@ package company_server;
 public /*static final*/ class Config {
     public static final int COMPANY_PORT = 39009;
     public static final String COMPANY_SERVER = "127.0.0.1";
-    public static final String MYSQL_HOST = "192.168.10.74";
+    public static final String MYSQL_HOST = "127.0.0.1";
 }

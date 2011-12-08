@@ -11,6 +11,7 @@
 package information_client;
 
 import information_server.FreetaxStatsDesc;
+import information_server.FreetaxStatsDescReponse;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -177,7 +178,7 @@ private void categorieTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 }//GEN-LAST:event_categorieTextActionPerformed
 
 private void graph1DButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graph1DButtonActionPerformed
-    FreetaxStats1D 
+
 }//GEN-LAST:event_graph1DButtonActionPerformed
 
 private void graph1DHistButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graph1DHistButtonActionPerformed
@@ -206,6 +207,11 @@ private void donneesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 
         this._out.writeObject(desc);
         this._out.flush();
+        
+        FreetaxStatsDescReponse reponse
+                = (FreetaxStatsDescReponse) this._in.readObject();
+        
+        
     } catch (Exception ex) {
         ex.printStackTrace();
     }
