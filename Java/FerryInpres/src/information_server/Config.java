@@ -22,5 +22,5 @@ public /*static final*/ class Config {
     
     public static final String TOMCAT
             = "/home/rapha/Desktop/Cours/Java/tomcat/xml";
-    public static final String MYSQL_HOST = "127.0.0.1";
+    public static final String MYSQL_HOST = "192.168.10.141";
 }
