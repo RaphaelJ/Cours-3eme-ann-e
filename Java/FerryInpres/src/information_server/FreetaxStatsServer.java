@@ -16,9 +16,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.jdbc.JDBCPieDataset;
+import org.jfree.data.jdbc.JDBCXYDataset;
 import org.jfree.data.statistics.Statistics;
 
 /**
@@ -201,12 +202,22 @@ public class FreetaxStatsServer {
                 "  AND mois = "+ freetaxStats1D.getMois();
         }
         
-        JDBCPieDataset ds = new JDBCPieDataset(con);
-        ds.executeQuery(instruc);
-        
-        obj_out.writeObject(ChartFactory.createPieChart(
-           "Vente de produit par jour", ds, true, true, true
-        ));
+        if (freetaxStats1D.getType() == FreetaxStats1D.SECTORIEL) {
+            JDBCPieDataset ds = new JDBCPieDataset(con);
+            ds.executeQuery(instruc);
+            
+            obj_out.writeObject(ChartFactory.createPieChart(
+                "Vente de produits par jour", ds, true, true, true
+            ));
+        } else {
+            JDBCXYDataset ds = new JDBCXYDataset(con);
+            ds.executeQuery(instruc);
+            
+            obj_out.writeObject(ChartFactory.createHistogram(
+                "Vente de produits par jour", "Jour", "Ventes", ds,
+                PlotOrientation.VERTICAL, true, true, true
+            ));
+        }
         obj_out.flush();
     }
 }

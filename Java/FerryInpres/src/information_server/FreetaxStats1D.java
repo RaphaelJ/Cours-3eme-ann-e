@@ -9,6 +9,8 @@ package information_server;
  * @author rapha
  */
 public class FreetaxStats1D implements FreetaxStatsProtocol {
+    public static final int SECTORIEL = 1;
+    public static final int HISTOGRAMME = 2;
 
     private String _categorie;
     private Integer _mois;
