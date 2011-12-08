@@ -115,11 +115,10 @@ class Produit(models.Model):
     
     ean = models.BigIntegerField(primary_key=True)
     titre = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, blank=True, default="")
     langue = models.CharField(max_length=25, choices=LANGUES, blank=True)
     
     prix = models.DecimalField(max_digits=10, decimal_places=2)
-    devise = models.CharField(max_length=3, choices=DEVISES)
     
     stock = models.IntegerField(default=0)
     devise = models.CharField(max_length=3, choices=DEVISES)
@@ -255,7 +254,7 @@ if settings.SITE:
     class Commande(models.Model):
         utilisateur = models.ForeignKey(Utilisateur, editable=False)
 
-        adresse_livraison = models.ForeignKey(Adresse)
+        adresse_livraison = models.ForeignKey(Adresse, null=True)
 
         date_commande = models.DateTimeField(auto_now_add=True, editable=False)
 

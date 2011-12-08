@@ -68,8 +68,10 @@ class ProfilForm(forms.Form):
         self.cleaned_data["mot_de_passe"] = mdp_hash
         return mdp_hash
 
-class CaddieProduitForm(forms.ModelForm):
+class CaddieProduitForm(forms.Form):
     """ Formulaire permettant la modification de la quantité d'un article """
+    
+    quantite = forms.IntegerField(label=_(u"Quantité"))
 
     def clean_quantite(self):
         """ Vérifie que la quantité introduite est positive et non nulle """
@@ -80,9 +82,6 @@ class CaddieProduitForm(forms.ModelForm):
             )
         
         return quantite
-    
-    class Meta:
-        model = CaddieProduit
 
 class Adresse(forms.ModelForm):
     """

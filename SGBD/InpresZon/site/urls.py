@@ -7,6 +7,7 @@ import views
 urlpatterns = patterns('',
     # Catalogue
     url(r'^$', views.catalogue, name="catalogue"),
+    url(r'^page/(\d+)/$', views.catalogue, name="catalogue-page"),
     url(r'^produit/(\d+)/$', views.produit, name="produit"),
 
     # Utilisateur
@@ -25,6 +26,7 @@ urlpatterns = patterns('',
 
     # Caddie
     url(r'^caddie/$', views.caddie, name="caddie"),
+    url(r'^caddie/(\d+)/$', views.caddie, name="caddie-page"),
     url(r'^caddie/ajout/(\d+)/$', views.caddie_ajout, name="caddie-ajout"),
     url(r'^caddie/supprimer/(\d+)/$',
         views.caddie_supprimer, name="caddie-supprimer"
@@ -35,6 +37,7 @@ urlpatterns = patterns('',
 
     # Commande
     url(r'^commande/$', views.commande, name="commande"),
+    url(r'^commandes/$', views.commandes, name="commandes"),
 
     # Fichiers statiques
     (r'^static/(?P<path>.*)$', 'django.views.static.serve',

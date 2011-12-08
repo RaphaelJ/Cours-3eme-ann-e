@@ -7,7 +7,7 @@
 
 {% block contenu %}
     {% if caddie_produits|length > 0 %}
-        <table>
+        <table width="95%">
             <thead>
                 <tr>
                     <th>{% trans "Produit" %}</th>
@@ -19,23 +19,23 @@
                 </tr>
             </thead>
             <tbody>
-            {% for cp in caddie_produits %}
+            {% for p in caddie_produits %}
                 <tr>
-                    <td><a href="{% url produit cp.produit.ean %}">
-                        {{ cp.produit.titre|escape }}
+                    <td><a href="{% url produit p.ean %}">
+                        {{ p.titre|escape }}
                     </a></td>
                     <td>
-                        {{ cp.quantite }}
-                        {% if not cp.en_stock %}
+                        {{ p.quantite }}
+                        {% if not p.en_stock %}
                             (non disponible en stock)
                         {% endif %}
                     </td>
-                    <td>{{ cp.produit.prix }} {{ cp.produit.devise }}</td>
-                    <td>{{ cp.prix_total }} {{ cp.produit.devise }}</td>
-                    <td><a href="{% url caddie-modifier cp.produit.ean %}">
+                    <td>{{ p.prix }} {{ p.devise }}</td>
+                    <td>{{ p.prix_total }} {{ p.devise }}</td>
+                    <td><a href="{% url caddie-modifier p.ean %}">
                         {% trans "Modifier la quantité" %}
                     </a></td>
-                    <td><a href="{% url caddie-supprimer cp.produit.ean %}">
+                    <td><a href="{% url caddie-supprimer p.ean %}">
                         {% trans "Supprimer" %}
                     </a></td>
                 </tr>
@@ -43,14 +43,33 @@
             </tbody>
         </table>
 
+        <ul>
+            {% if page_precedente %}
+                <li><a href="{% url caddie-page page_precedente %}">
+                    {% trans "Page précédente" %}
+                </a></li>
+            {% endif %}
+
+            {% if page_suivante %}
+                <li><a href="{% url caddie-page page_suivante %}">
+                    {% trans "Page suivante" %}
+                </a></li>
+            {% endif %}
+        </ul>
+
         <p>
             <strong>{% trans "Prix total:" %}</strong>
-            <ul>
-            {% for devise, total_devise in total.items %}
-                <li>{{ total_devise }} {{ devise }}</li>
-            {% endfor %}
-            </ul>
+            {% comment %} 
+                <ul>
+                {% for devise, total_devise in total.items %}
+                    <li>{{ total_devise }} {{ devise }}</li>
+                {% endfor %}
+                </ul>
+            {% endcomment %} 
+            {{ total }} €
+        </p>
 
+        <p>
             {% if en_stock %}
                 <a href="{% url commande %}">{% trans "Passer commande" %}</a>
             {% else %}

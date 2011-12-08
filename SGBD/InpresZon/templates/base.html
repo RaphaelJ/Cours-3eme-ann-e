@@ -21,6 +21,7 @@
 
                 {% if user.is_authenticated %}
                     <li><a href="{% url caddie %}">{% trans "Caddie" %}</a></li>
+                    <li><a href="{% url commandes %}">{% trans "Suivi des commandes" %}</a></li>
                     <li><a href="{% url profil %}">{% trans "Profil" %}</a></li>
                     <li><a href="{% url deconnexion %}">
                         {% blocktrans with login=user.username %}

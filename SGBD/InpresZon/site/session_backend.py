@@ -20,22 +20,16 @@ class SessionStore(DBStore):
         try:
             s = GestionSessions.Chercher(self.session_key)
             d = self.decode(force_unicode(s.donnees))
-            print ("Raw data:", s.donnees)
-            print ("Data:", d)
             return d
         except:
-            print ("Creation")
             self.create()
             return {}
 
     def exists(self, session_key):
         try:
             GestionSessions.Chercher(session_key)
-            print ("Existe")
             return True
         except Exception as e:
-            print e
-            print ("N'existe pas")
             return False
 
     def save(self, must_create=False):
@@ -55,10 +49,8 @@ class SessionStore(DBStore):
         try:
             if must_create or not self.exists(s.cle):
                 GestionSessions.Ajouter(s.cle, s.donnees, s.expiration)
-                print ("Must Save:", s.cle, s.donnees)
             else:
                 GestionSessions.Modifier(s.cle, s.donnees, s.expiration)
-                print ("DoneMust Save:", s.cle, s.donnees)
         except:
             if must_create:
                 raise CreateError

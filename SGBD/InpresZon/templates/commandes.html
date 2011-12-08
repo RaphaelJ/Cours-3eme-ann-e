@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block titre %}{% block titre-page %}
+    {% trans "Commandes effectuées" %}
+{% endblock %}{% endblock %}
+
+{% block contenu %}
+    <table width="95%">
+        <thead>
+            <tr>
+                <th>{% trans "Date commande" %}</th>
+                <th>{% trans "Adresse de livraison" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for c in commandes %}
+            <tr>
+                <td>
+                    {{ c.date_commande }}
+                </td>
+                <td>
+                    Non renseignée
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -15,8 +15,11 @@
         </a>
     </p>
 
-    <h2>{% trans "Description" %}</h2>
-    {{ produit.description|escape }}
+    {% if produit.description %}
+        <h2>{% trans "Description" %}</h2>
+        {{ produit.description|escape }}
+    {% endif %}
+
     <ul>
         {% if produit.type_produit == "LIVRE" %}
             <li>

@@ -117,7 +117,7 @@ idsFiltres filtres = do
         queryViewKeys couchDb couchDesign vue options
 
     -- Retourne les ids communs uniques en effectuant une intersections
-	-- entre tous les filtres (ids stockés dans des arbres binaires). 
+    -- entre tous les filtres (ids stockés dans des arbres binaires). 
     liftIO $ putStrLn "Intersection des IDs"
     return $ S.toList $ foldl1 S.intersection $ map S.fromList ids
     
@@ -287,7 +287,7 @@ inserer id_docs (Connexion conn origine) = do
                let devise = "USD"
 
                req_insert <- prepare conn "INSERT INTO site_produit VALUES \
-                                          \(?, ?, ?, ?, ?, 0, ?, ?, ?, 0);"
+                                          \(?, ?, ?, ?, ?, 15, ?, ?, ?, 0);"
                execute req_insert [SqlInteger produit_ean , SqlString titre
                            , SqlString description, SqlString langue
                            , SqlDouble $ fromRational $ prix, SqlString devise
