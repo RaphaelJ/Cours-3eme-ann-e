@@ -17,10 +17,10 @@ public /*static final*/ class Config {
     public static final String METEO_SERVEUR = "127.0.0.1";
     public static final int FREETAX_PORT = 39008;
     public static final String FREETAX_SERVEUR = "127.0.0.1";
-    public static final int FREETAXSTATS_PORT = 39010;
+    public static final int FREETAXSTATS_PORT = 39011;
     public static final String FREETAXSTATS_SERVEUR = "127.0.0.1";
     
     public static final String TOMCAT
             = "/home/rapha/Desktop/Cours/Java/tomcat/xml";
-    public static final String MYSQL_HOST = "127.0.0.1";
+    public static final String MYSQL_HOST = "192.168.10.141";
 }

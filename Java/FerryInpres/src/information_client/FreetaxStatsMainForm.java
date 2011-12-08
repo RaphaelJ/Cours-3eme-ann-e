@@ -12,11 +12,8 @@ package information_client;
 
 import information_server.FreetaxStatsDesc;
 import information_server.FreetaxStatsDescReponse;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -113,7 +110,7 @@ public class FreetaxStatsMainForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -123,9 +120,11 @@ public class FreetaxStatsMainForm extends javax.swing.JFrame {
                             .addComponent(typeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(categorieText, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(numeroText))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(numeroText, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE))
+                            .addComponent(jLabel3)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(donneesButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -146,12 +145,13 @@ public class FreetaxStatsMainForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(numeroText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(categorieText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(categorieText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(numeroText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(donneesButton)
@@ -196,12 +196,12 @@ private void donneesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         } else if (this.typeComboBox.getSelectedItem() == "Mois") {
             desc = new FreetaxStatsDesc(
                 this.categorieText.getText(),
-                Integer.getInteger(this.numeroText.getText()), null
+                Integer.parseInt(this.numeroText.getText()), null
             );
         } else {
             desc = new FreetaxStatsDesc(
                 this.categorieText.getText(), null,
-                Integer.getInteger(this.numeroText.getText())
+                Integer.parseInt(this.numeroText.getText())
             );
         }
 
@@ -211,7 +211,7 @@ private void donneesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         FreetaxStatsDescReponse reponse
                 = (FreetaxStatsDescReponse) this._in.readObject();
         
-        
+        new information_client.FreetaxStatsDesc(this, true, reponse).setVisible(true);
     } catch (Exception ex) {
         ex.printStackTrace();
     }

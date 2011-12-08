@@ -16,6 +16,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
+import org.jfree.chart.ChartFactory;
+import org.jfree.data.jdbc.JDBCPieDataset;
 import org.jfree.data.statistics.Statistics;
 
 /**
@@ -36,6 +39,7 @@ public class FreetaxStatsServer {
         for (;;) {
             System.out.println("En attente d'un nouveau client");
             Socket sock = server_sock.accept();
+            
             System.out.println("Nouveau client");
             ObjectOutputStream obj_out = new ObjectOutputStream(
                 sock.getOutputStream()
@@ -47,6 +51,8 @@ public class FreetaxStatsServer {
             // Vérifie les identifiants de connexion
             FreetaxStatsLogin login = (FreetaxStatsLogin) obj_in.readObject();
             login.getLogin();
+            
+            System.out.println("Pass: "+ login.getHashedPassword());
             
             // Extrait le mot de passe de la base de données
             PreparedStatement instruc = con.prepareStatement(
@@ -66,8 +72,8 @@ public class FreetaxStatsServer {
                 
                 for (;;) {
                     FreetaxStatsProtocol query 
-                            = (FreetaxStatsLogin) obj_in.readObject();
-                            
+                            = (FreetaxStatsProtocol) obj_in.readObject();
+                    
                     if (query instanceof FreetaxStatsDesc) {
                          statsDesc(
                              con, obj_out, obj_in, (FreetaxStatsDesc) query
@@ -93,6 +99,14 @@ public class FreetaxStatsServer {
             sock.close();
         }
     }
+    
+    private static int moisPrec()
+    {
+        // Sélectionne le mois précédent si aucun mois n'est renseigné
+        Calendar cal = new GregorianCalendar();
+        // cal.add(Calendar.MONTH, -1);
+        return cal.get(Calendar.MONTH);
+    }
 
     private static void statsDesc(Connection con, ObjectOutputStream obj_out,
             ObjectInputStream obj_in, FreetaxStatsDesc freetaxStatsDesc)
@@ -104,12 +118,10 @@ public class FreetaxStatsServer {
         if (freetaxStatsDesc.getSemaine() != null) {
             // Recherche par semaine
             instruc = con.prepareStatement(
-                "SELECT DAYOFWEEK(v.date) AS jour, COUNT(*) AS count " +
-                "FROM ventes AS v " +
-                "INNER JOIN produits as p ON p.id = v.produit " +
-                "WHERE p.categorie = ? " +
-                "  AND EXTRACT(WEEK FROM v.date) = ? " +
-                "GROUP BY EXTRACT(DAY FROM v.date);"
+                "SELECT jour_semaine AS jour, count " +
+                "FROM stats_desc " +
+                "WHERE categorie = ? " +
+                "  AND semaine = ?"
             );
             instruc.setInt(2, freetaxStatsDesc.getSemaine().intValue());
             nbJours = 7;
@@ -117,19 +129,14 @@ public class FreetaxStatsServer {
             // Recherche par mois
             if (freetaxStatsDesc.getMois() == null) {
                 // Sélectionne le mois précédent si aucun mois n'est renseigné
-                Calendar cal = new GregorianCalendar();
-                cal.add(Calendar.MONTH, -1);
-                freetaxStatsDesc.setMois(cal.get(Calendar.MONTH));
+                freetaxStatsDesc.setMois(moisPrec());
             }
             
             instruc = con.prepareStatement(
-                "SELECT DAYOFMONTH(v.date) AS jour, COUNT(*) AS count " +
-                "FROM ventes AS v " +
-                "INNER JOIN produits as p ON p.id = v.produit " +
-                "WHERE p.categorie = ? " +
-                "  AND EXTRACT(MONTH FROM v.date) = ? " +
-                "GROUP BY EXTRACT(DAY FROM v.date) " +
-                "ORDER BY "
+                "SELECT jour_mois AS jour, count " +
+                "FROM stats_desc " +
+                "WHERE categorie = ? " +
+                "  AND mois = ?"
             );
             instruc.setInt(2, freetaxStatsDesc.getMois().intValue());
             
@@ -142,7 +149,7 @@ public class FreetaxStatsServer {
         
         int[] ventes = new int[nbJours];
         while (rs.next()) {
-            ventes[rs.getInt("jour")] = rs.getInt("count");
+            ventes[rs.getInt("jour")-1] = rs.getInt("count");
         }
         
         Number[] ventesInteger = new Integer[nbJours];
@@ -163,6 +170,42 @@ public class FreetaxStatsServer {
         
         obj_out.writeObject(new FreetaxStatsDescReponse(
             ventes, moyenne, mode.intValue(), ecartType
+        ));
+        obj_out.flush();
+    }
+    
+    private static void stats1D(Connection con, ObjectOutputStream obj_out,
+            ObjectInputStream obj_in, FreetaxStats1D freetaxStats1D)
+            throws SQLException, IOException
+    {        
+        String instruc;
+        
+        if (freetaxStats1D.getSemaine() != null) {
+            // Recherche par semaine
+            instruc = 
+                "SELECT jour_semaine AS jour, count " +
+                "FROM stats_desc " +
+                "WHERE categorie = '"+ freetaxStats1D.getCategorie() +"' " +
+                "  AND semaine = " + freetaxStats1D.getSemaine();
+        } else {
+            // Recherche par mois
+            if (freetaxStats1D.getMois() == null) {
+                // Sélectionne le mois précédent si aucun mois n'est renseigné
+                freetaxStats1D.setMois(moisPrec());
+            }
+            
+            instruc = 
+                "SELECT jour_mois AS jour, count " +
+                "FROM stats_desc " +
+                "WHERE categorie = '" + freetaxStats1D.getCategorie() + "'" +
+                "  AND mois = "+ freetaxStats1D.getMois();
+        }
+        
+        JDBCPieDataset ds = new JDBCPieDataset(con);
+        ds.executeQuery(instruc);
+        
+        obj_out.writeObject(ChartFactory.createPieChart(
+           "Vente de produit par jour", ds, true, true, true
         ));
         obj_out.flush();
     }

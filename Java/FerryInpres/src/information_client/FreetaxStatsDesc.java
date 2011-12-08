@@ -10,6 +10,9 @@
  */
 package information_client;
 
+import information_server.FreetaxStatsDescReponse;
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author rapha
@@ -17,9 +20,21 @@ package information_client;
 public class FreetaxStatsDesc extends javax.swing.JDialog {
 
     /** Creates new form FreetaxStatsDesc */
-    public FreetaxStatsDesc(java.awt.Frame parent, boolean modal) {
+    public FreetaxStatsDesc(java.awt.Frame parent, boolean modal,
+            FreetaxStatsDescReponse data) {
         super(parent, modal);
         initComponents();
+        
+        DefaultListModel model = (DefaultListModel) this.dataList.getModel();
+        
+        int jour;
+        for (jour = 1; jour <= data.getVentes().length; jour++) {
+            model.addElement("Jour #" + jour + ": " + data.getVentes()[jour-1] );
+        }
+        
+        this.moyenneLabel.setText(String.valueOf(data.getMoyenne()));
+        this.ecartTypeLabel.setText(String.valueOf(data.getEcartType()));
+        this.modeLabel.setText(String.valueOf(data.getMode()));
     }
 
     /** This method is called from within the constructor to
@@ -33,14 +48,32 @@ public class FreetaxStatsDesc extends javax.swing.JDialog {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        dataList = new javax.swing.JList();
+        jLabel2 = new javax.swing.JLabel();
+        moyenneLabel = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        ecartTypeLabel = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        modeLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Données:");
 
-        jList1.setModel(DefaultListModel);
-        jScrollPane1.setViewportView(jList1);
+        dataList.setModel(new DefaultListModel());
+        jScrollPane1.setViewportView(dataList);
+
+        jLabel2.setText("Moyenne:");
+
+        moyenneLabel.setText("jLabel3");
+
+        jLabel4.setText("Ecart-type:");
+
+        ecartTypeLabel.setText("jLabel5");
+
+        jLabel6.setText("Mode:");
+
+        modeLabel.setText("jLabel7");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -50,7 +83,17 @@ public class FreetaxStatsDesc extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel6))
+                        .addGap(38, 38, 38)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(modeLabel)
+                            .addComponent(ecartTypeLabel)
+                            .addComponent(moyenneLabel))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -59,59 +102,34 @@ public class FreetaxStatsDesc extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(200, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(moyenneLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(ecartTypeLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(modeLabel))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FreetaxStatsDesc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FreetaxStatsDesc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FreetaxStatsDesc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FreetaxStatsDesc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                FreetaxStatsDesc dialog = new FreetaxStatsDesc(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList dataList;
+    private javax.swing.JLabel ecartTypeLabel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JList jList1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel modeLabel;
+    private javax.swing.JLabel moyenneLabel;
     // End of variables declaration//GEN-END:variables
 }

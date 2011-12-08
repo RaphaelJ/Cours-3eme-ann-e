@@ -4,6 +4,8 @@
  */
 package information_server;
 
+import information_client.FreetaxStatsMainForm;
+
 /**
  *
  * @author rapha
