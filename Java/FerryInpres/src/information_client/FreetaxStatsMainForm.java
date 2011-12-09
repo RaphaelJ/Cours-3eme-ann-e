@@ -10,10 +10,17 @@
  */
 package information_client;
 
+import information_server.FreetaxStatsAck;
 import information_server.FreetaxStatsDesc;
 import information_server.FreetaxStatsDescReponse;
+import information_server.FreetaxStatsGraph;
+import information_server.FreetaxStatsTestComp;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.jfree.chart.JFreeChart;
 
 /**
  *
@@ -44,13 +51,26 @@ public class FreetaxStatsMainForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         categorieText = new javax.swing.JTextField();
         donneesButton = new javax.swing.JButton();
-        graph1DButton = new javax.swing.JButton();
-        graph1DCompButton = new javax.swing.JButton();
         graph1DHistButton = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        graph1DCompButton = new javax.swing.JButton();
+        chronoCorre2DButton = new javax.swing.JButton();
+        testHypotheseButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         numeroText = new javax.swing.JTextField();
+        graph1DSectButton = new javax.swing.JButton();
+        graph1DChronButton = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        nationalite1Text = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        nationalite2Text = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        categorieCompText = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        marqueText = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        seuilText = new javax.swing.JTextField();
+        resultatLabel = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,31 +98,80 @@ public class FreetaxStatsMainForm extends javax.swing.JFrame {
             }
         });
 
-        graph1DButton.setText("Graphique 1D");
-        graph1DButton.setToolTipText("");
-        graph1DButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                graph1DButtonActionPerformed(evt);
-            }
-        });
-
-        graph1DCompButton.setText("Graphique 1D Comp.");
-        graph1DCompButton.setToolTipText("");
-
         graph1DHistButton.setText("Graphique 1D Hist.");
-        graph1DHistButton.setActionCommand("");
+        graph1DHistButton.setToolTipText("");
         graph1DHistButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 graph1DHistButtonActionPerformed(evt);
             }
         });
 
-        jButton1.setText("Graphique 2D corrélé");
+        graph1DCompButton.setText("Graphique 1D Hist. Comp.");
+        graph1DCompButton.setToolTipText("");
+        graph1DCompButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                graph1DCompButtonActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Test d'hypothèse de comparaison des moyennes");
-        jButton2.setToolTipText("");
+        chronoCorre2DButton.setText("Graphique 2D corrélé");
+        chronoCorre2DButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chronoCorre2DButtonActionPerformed(evt);
+            }
+        });
 
-        jLabel3.setText("Numero:");
+        testHypotheseButton.setText("Test d'hypothèse de comparaison des moyennes");
+        testHypotheseButton.setToolTipText("");
+        testHypotheseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                testHypotheseButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Numero de la semaine ou du mois:");
+
+        graph1DSectButton.setText("Graphique 1D Sect.");
+        graph1DSectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                graph1DSectButtonActionPerformed(evt);
+            }
+        });
+
+        graph1DChronButton.setText("Graphique 1D Chronologique");
+        graph1DChronButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                graph1DChronButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Nationalite 1:");
+
+        nationalite1Text.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nationalite1TextActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Nationalite 2:");
+
+        jLabel6.setText("Categorie :");
+
+        categorieCompText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                categorieCompTextActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Marque:");
+
+        jLabel8.setText("Seuil:");
+
+        seuilText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                seuilTextActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -111,32 +180,57 @@ public class FreetaxStatsMainForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(resultatLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(graph1DCompButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(graph1DChronButton))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel2))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(typeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(categorieText, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel3)
+                                .addComponent(numeroText, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(donneesButton)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(graph1DSectButton)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(graph1DHistButton)))
+                    .addComponent(chronoCorre2DButton)
+                    .addComponent(testHypotheseButton)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(typeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(categorieText, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
+                            .addComponent(categorieCompText)
+                            .addComponent(nationalite1Text, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(marqueText)
+                            .addComponent(nationalite2Text, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(numeroText, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE))
-                            .addComponent(jLabel3)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(donneesButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(graph1DButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(graph1DCompButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(graph1DHistButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
-                    .addComponent(jButton2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel8))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(35, 35, 35)
+                                .addComponent(seuilText, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -155,20 +249,72 @@ public class FreetaxStatsMainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(donneesButton)
-                    .addComponent(graph1DButton)
-                    .addComponent(graph1DCompButton))
+                    .addComponent(graph1DSectButton)
+                    .addComponent(graph1DHistButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(graph1DHistButton)
-                    .addComponent(jButton1))
+                    .addComponent(graph1DCompButton)
+                    .addComponent(graph1DChronButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addComponent(chronoCorre2DButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(nationalite1Text, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(nationalite2Text, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(categorieCompText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(marqueText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(seuilText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(resultatLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(testHypotheseButton)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+private void afficherGraphique(int type)
+{
+    try {
+        FreetaxStatsGraph query;
+        if ("".equals(this.numeroText.getText())) {
+            // Mois choisi automatiquement
+            query = new FreetaxStatsGraph(
+                this.categorieText.getText(), null, null, type
+            );
+        } else if (this.typeComboBox.getSelectedItem() == "Mois") {
+            query = new FreetaxStatsGraph(
+                this.categorieText.getText(),
+                Integer.parseInt(this.numeroText.getText()), null, type
+            );
+        } else {
+            query = new FreetaxStatsGraph(
+                this.categorieText.getText(), null,
+                Integer.parseInt(this.numeroText.getText()), type
+            );
+        }
+
+        this._out.writeObject(query);
+        this._out.flush();
+        
+        JFreeChart chart = (JFreeChart) this._in.readObject();
+        
+        new FreetaxStatsShowGraph(this, true, chart).setVisible(true);
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+}
+    
 private void typeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeComboBoxActionPerformed
 // TODO add your handling code here:
 }//GEN-LAST:event_typeComboBoxActionPerformed
@@ -177,12 +323,8 @@ private void categorieTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 // TODO add your handling code here:
 }//GEN-LAST:event_categorieTextActionPerformed
 
-private void graph1DButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graph1DButtonActionPerformed
-
-}//GEN-LAST:event_graph1DButtonActionPerformed
-
 private void graph1DHistButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graph1DHistButtonActionPerformed
-// TODO add your handling code here:
+    this.afficherGraphique(FreetaxStatsGraph.HISTOGRAMME);
 }//GEN-LAST:event_graph1DHistButtonActionPerformed
 
 private void donneesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_donneesButtonActionPerformed
@@ -217,18 +359,85 @@ private void donneesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     }
 }//GEN-LAST:event_donneesButtonActionPerformed
 
+private void graph1DSectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graph1DSectButtonActionPerformed
+    this.afficherGraphique(FreetaxStatsGraph.SECTORIEL);
+}//GEN-LAST:event_graph1DSectButtonActionPerformed
+
+private void graph1DCompButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graph1DCompButtonActionPerformed
+    this.afficherGraphique(FreetaxStatsGraph.HISTOGRAMME_COMPARE);
+}//GEN-LAST:event_graph1DCompButtonActionPerformed
+
+private void chronoCorre2DButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chronoCorre2DButtonActionPerformed
+    this.afficherGraphique(FreetaxStatsGraph.CHRONOLOGIE_2D);
+}//GEN-LAST:event_chronoCorre2DButtonActionPerformed
+
+private void graph1DChronButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_graph1DChronButtonActionPerformed
+    this.afficherGraphique(FreetaxStatsGraph.CHRONOLOGIE);
+}//GEN-LAST:event_graph1DChronButtonActionPerformed
+
+private void nationalite1TextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nationalite1TextActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event_nationalite1TextActionPerformed
+
+private void categorieCompTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categorieCompTextActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event_categorieCompTextActionPerformed
+
+private void seuilTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seuilTextActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event_seuilTextActionPerformed
+
+private void testHypotheseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testHypotheseButtonActionPerformed
+    try {
+        this._out.writeObject(
+            new FreetaxStatsTestComp(
+                this.nationalite1Text.getText(), this.nationalite2Text.getText(),
+                this.categorieCompText.getText(), this.marqueText.getText(),
+                Float.parseFloat(this.seuilText.getText())
+        ));
+        this._out.flush();
+
+        if (this._in.readObject() instanceof FreetaxStatsAck) {
+            this.resultatLabel.setText(
+                "La différence des valeurs des moyennes des ventes " +
+                "hebdomadaires par nationalité ne dépasse pas le seuil."
+            );
+        } else {
+            this.resultatLabel.setText(
+                "La différence des valeurs des moyennes des ventes " +
+                "hebdomadaires par nationalité DEPASSE le seuil."
+            );
+        }
+    } catch (Exception ex) {
+        Logger.getLogger(FreetaxStatsMainForm.class.getName()).log(Level.SEVERE, null, ex);
+    }
+}//GEN-LAST:event_testHypotheseButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField categorieCompText;
     private javax.swing.JTextField categorieText;
+    private javax.swing.JButton chronoCorre2DButton;
     private javax.swing.JButton donneesButton;
-    private javax.swing.JButton graph1DButton;
+    private javax.swing.JButton graph1DChronButton;
     private javax.swing.JButton graph1DCompButton;
     private javax.swing.JButton graph1DHistButton;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton graph1DSectButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextField marqueText;
+    private javax.swing.JTextField nationalite1Text;
+    private javax.swing.JTextField nationalite2Text;
     private javax.swing.JTextField numeroText;
+    private javax.swing.JLabel resultatLabel;
+    private javax.swing.JTextField seuilText;
+    private javax.swing.JButton testHypotheseButton;
     private javax.swing.JComboBox typeComboBox;
     // End of variables declaration//GEN-END:variables
 }

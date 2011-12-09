@@ -8,16 +8,19 @@ package information_server;
  *
  * @author rapha
  */
-public class FreetaxStats1D implements FreetaxStatsProtocol {
+public class FreetaxStatsGraph implements FreetaxStatsProtocol {
     public static final int SECTORIEL = 1;
     public static final int HISTOGRAMME = 2;
-
+    public static final int HISTOGRAMME_COMPARE = 3;
+    public static final int CHRONOLOGIE = 4;
+    public static final int CHRONOLOGIE_2D = 5;
+    
     private String _categorie;
     private Integer _mois;
     private Integer _semaine;
     private int _type;
 
-    public FreetaxStats1D(String _categorie, Integer _mois, Integer _semaine,
+    public FreetaxStatsGraph(String _categorie, Integer _mois, Integer _semaine,
             int _type) {
         this._categorie = _categorie;
         this._mois = _mois;

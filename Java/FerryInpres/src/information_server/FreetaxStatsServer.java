@@ -17,7 +17,9 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.jdbc.JDBCCategoryDataset;
 import org.jfree.data.jdbc.JDBCPieDataset;
 import org.jfree.data.jdbc.JDBCXYDataset;
 import org.jfree.data.statistics.Statistics;
@@ -76,19 +78,17 @@ public class FreetaxStatsServer {
                             = (FreetaxStatsProtocol) obj_in.readObject();
                     
                     if (query instanceof FreetaxStatsDesc) {
-                         statsDesc(
-                             con, obj_out, obj_in, (FreetaxStatsDesc) query
-                         );
-                    } else if (query instanceof FreetaxStats1D) {
-                        
-                    } else if (query instanceof FreetaxStats1DComp) {
-                        
-                    } else if (query instanceof FreetaxStats1DChron) {
-                        
-                    } else if (query instanceof FreetaxStats2DCorr) {
-                        
+                        statsDesc(
+                            con, obj_out, obj_in, (FreetaxStatsDesc) query
+                        );
+                    } else if (query instanceof FreetaxStatsGraph) {
+                        sendGraph(
+                            con, obj_out, obj_in, (FreetaxStatsGraph) query
+                        );
                     } else if (query instanceof FreetaxStatsTestComp) {
-                        
+                        sendTestComp(
+                            con, obj_out, obj_in, (FreetaxStatsTestComp) query
+                        );
                     }
                 }
             } else {
@@ -175,49 +175,213 @@ public class FreetaxStatsServer {
         obj_out.flush();
     }
     
-    private static void stats1D(Connection con, ObjectOutputStream obj_out,
-            ObjectInputStream obj_in, FreetaxStats1D freetaxStats1D)
+    private static void sendGraph(Connection con, ObjectOutputStream obj_out,
+            ObjectInputStream obj_in, FreetaxStatsGraph query)
             throws SQLException, IOException
-    {        
-        String instruc;
+    {
+        JFreeChart graph;
+    
+        if (query.getType() == FreetaxStatsGraph.SECTORIEL
+            || query.getType() == FreetaxStatsGraph.HISTOGRAMME) {
+            graph = graph1D(con, query);
+        } else if (query.getType() == FreetaxStatsGraph.HISTOGRAMME_COMPARE) {
+            graph = graphHistogrammeCompare(con, query);
+        } else if (query.getType() == FreetaxStatsGraph.CHRONOLOGIE) {
+            graph = graphChronologie(con, query);
+        } else if (query.getType() == FreetaxStatsGraph.CHRONOLOGIE_2D) {
+            graph = graphChronologie2D(con, query);
+        } else {
+            graph = null;
+        }
         
-        if (freetaxStats1D.getSemaine() != null) {
+        obj_out.writeObject(graph);
+        obj_out.flush();
+    }
+        
+    private static JFreeChart graph1D(Connection con, FreetaxStatsGraph query)
+            throws SQLException
+    {
+        String instruc;
+
+        if (query.getSemaine() != null) {
             // Recherche par semaine
             instruc = 
                 "SELECT jour_semaine AS jour, count " +
                 "FROM stats_desc " +
-                "WHERE categorie = '"+ freetaxStats1D.getCategorie() +"' " +
-                "  AND semaine = " + freetaxStats1D.getSemaine();
+                "WHERE categorie = '"+ query.getCategorie() +"' " +
+                "  AND semaine = " + query.getSemaine();
         } else {
             // Recherche par mois
-            if (freetaxStats1D.getMois() == null) {
+            if (query.getMois() == null) {
                 // Sélectionne le mois précédent si aucun mois n'est renseigné
-                freetaxStats1D.setMois(moisPrec());
+                query.setMois(moisPrec());
             }
-            
+
             instruc = 
                 "SELECT jour_mois AS jour, count " +
                 "FROM stats_desc " +
-                "WHERE categorie = '" + freetaxStats1D.getCategorie() + "'" +
-                "  AND mois = "+ freetaxStats1D.getMois();
+                "WHERE categorie = '" + query.getCategorie() + "'" +
+                "  AND mois = "+ query.getMois();
         }
-        
-        if (freetaxStats1D.getType() == FreetaxStats1D.SECTORIEL) {
+
+        if (query.getType() == FreetaxStatsGraph.SECTORIEL) {
             JDBCPieDataset ds = new JDBCPieDataset(con);
             ds.executeQuery(instruc);
-            
-            obj_out.writeObject(ChartFactory.createPieChart(
+
+            return ChartFactory.createPieChart(
                 "Vente de produits par jour", ds, true, true, true
-            ));
+            );
         } else {
-            JDBCXYDataset ds = new JDBCXYDataset(con);
+            JDBCCategoryDataset ds = new JDBCCategoryDataset(con);
             ds.executeQuery(instruc);
-            
-            obj_out.writeObject(ChartFactory.createHistogram(
+
+            return ChartFactory.createBarChart(
                 "Vente de produits par jour", "Jour", "Ventes", ds,
                 PlotOrientation.VERTICAL, true, true, true
-            ));
+            );
         }
+    }
+
+    private static JFreeChart graphHistogrammeCompare(Connection con,
+            FreetaxStatsGraph query) throws SQLException
+    {
+        String instruc;
+
+        if (query.getSemaine() != null) {
+            // Recherche par semaine
+            instruc = 
+                "SELECT marque, SUM(count) AS quantite " +
+                "FROM stats_ventes_marque " +
+                "WHERE categorie = '"+ query.getCategorie() +"' " +
+                "  AND semaine = " + query.getSemaine() + " " +
+                "GROUP BY marque";
+        } else {
+            // Recherche par mois
+            if (query.getMois() == null) {
+                // Sélectionne le mois précédent si aucun mois n'est renseigné
+                query.setMois(moisPrec());
+            }
+
+            instruc = 
+                "SELECT marque, SUM(count) AS quantite " +
+                "FROM stats_ventes_marque " +
+                "WHERE categorie = '"+ query.getCategorie() +"' " +
+                "  AND mois = " + query.getMois() + " " +
+                "GROUP BY marque";
+        }
+        
+        JDBCCategoryDataset ds = new JDBCCategoryDataset(con);
+        ds.executeQuery(instruc);
+
+        return ChartFactory.createBarChart(
+            "Vente de produits par marque", "Marque", "Ventes", ds,
+            PlotOrientation.VERTICAL, true, true, true
+        );
+    }
+
+    private static JFreeChart graphChronologie(Connection con,
+            FreetaxStatsGraph query) throws SQLException
+    {
+        String instruc;
+
+        if (query.getSemaine() != null) {
+            // Recherche par semaine
+            instruc = 
+                "SELECT date, count AS quantite " +
+                "FROM stats_desc " +
+                "WHERE categorie = '"+ query.getCategorie() +"' " +
+                "  AND semaine = " + query.getSemaine();
+        } else {
+            // Recherche par mois
+            if (query.getMois() == null) {
+                // Sélectionne le mois précédent si aucun mois n'est renseigné
+                query.setMois(moisPrec());
+            }
+
+            instruc = 
+                "SELECT date, count AS quantite " +
+                "FROM stats_desc " +
+                "WHERE categorie = '" + query.getCategorie() + "'" +
+                "  AND mois = "+ query.getMois();
+        }
+
+        JDBCXYDataset ds = new JDBCXYDataset(con);
+        ds.executeQuery(instruc);
+
+        return ChartFactory.createTimeSeriesChart(
+            "Vente de produits par jour", "Jour", "Ventes", ds,
+            true, true, true
+        );
+    }
+
+    private static JFreeChart graphChronologie2D(Connection con,
+            FreetaxStatsGraph query) throws SQLException 
+    {
+        String instruc;
+
+        if (query.getSemaine() != null) {
+            // Recherche par semaine
+            instruc = 
+                "SELECT age, SUM(count) AS quantite " +
+                "FROM stats_ventes_age " +
+                "WHERE categorie = '"+ query.getCategorie() +"' " +
+                "  AND semaine = " + query.getSemaine() + " " +
+                "GROUP BY age";
+        } else {
+            // Recherche par mois
+            if (query.getMois() == null) {
+                // Sélectionne le mois précédent si aucun mois n'est renseigné
+                query.setMois(moisPrec());
+            }
+
+            instruc = 
+                "SELECT age, SUM(count) AS quantite " +
+                "FROM stats_ventes_age " +
+                "WHERE categorie = '" + query.getCategorie() + "'" +
+                "  AND mois = "+ query.getMois() + " " +
+                "GROUP BY age";
+        }
+
+        JDBCXYDataset ds = new JDBCXYDataset(con);
+        ds.executeQuery(instruc);
+
+        return ChartFactory.createXYLineChart(
+            "Vente de produits par age", "Age", "Ventes", ds,
+            PlotOrientation.VERTICAL, true, true, true
+        );
+    }
+
+    private static void sendTestComp(Connection con, ObjectOutputStream obj_out,
+            ObjectInputStream obj_in, FreetaxStatsTestComp query)
+            throws SQLException, IOException
+    {
+        PreparedStatement instruc;
+        
+        instruc = con.prepareStatement(
+            "SELECT AVG(quantite_semaine) AS moyenne " +
+            "FROM stats_ventes_nationalite " +
+            "WHERE categorie = ? AND nationalite IN (?, ?)" +
+            "  AND marque = ?" +
+            "GROUP BY nationalite"
+        );
+        
+        instruc.setString(1, query.getCategorie());
+        instruc.setString(2, query.getNationalite1());
+        instruc.setString(3, query.getNationalite2());
+        instruc.setString(4, query.getMarque());
+        
+        ResultSet rs = instruc.executeQuery();
+        
+        rs.next();
+        float moyenne1 = rs.getFloat("moyenne");
+        rs.next();
+        float moyenne2 = rs.getFloat("moyenne");
+        
+        if (Math.abs(moyenne1 - moyenne2) <= query.getSeuil())
+            obj_out.writeObject(new FreetaxStatsAck());
+        else 
+            obj_out.writeObject(new FreetaxStatsFail());
+        
         obj_out.flush();
     }
 }

@@ -17,10 +17,10 @@ import org.jfree.chart.JFreeChart;
  *
  * @author rapha
  */
-public class FreetaxStatsShowDiagram extends javax.swing.JDialog {
+public class FreetaxStatsShowGraph extends javax.swing.JDialog {
 
     /** Creates new form FreetaxStatsShowDiagram */
-    public FreetaxStatsShowDiagram(java.awt.Frame parent, boolean modal,
+    public FreetaxStatsShowGraph(java.awt.Frame parent, boolean modal,
             JFreeChart chart) {
         super(parent, modal);
         initComponents();
