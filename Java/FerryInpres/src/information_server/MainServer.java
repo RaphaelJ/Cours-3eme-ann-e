@@ -4,7 +4,6 @@
  */
 package information_server;
 
-import information_client.MainForm;
 import information_server.MeteoResponseProtocol.Temps;
 import java.io.File;
 import java.io.FileWriter;

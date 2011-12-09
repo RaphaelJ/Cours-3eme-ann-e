@@ -1,13 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * FreetaxStatsDesc.java
- *
- * Created on 8 déc. 2011, 16:20:54
- */
 package information_client;
 
 import information_server.FreetaxStatsDescReponse;
