@@ -1,0 +1,14 @@
+% Type de document
+\documentclass[a4paper,11pt]{report}
+ 
+% Chargement des extensions
+\usepackage[latin1]{inputenc}
+ 
+% Début du document
+\begin{document}
+ 
+    % Corps du document
+    Ceci est le corps du document
+ 
+% Fin du document
+\end{document}
