@@ -1,1 +1,20 @@
-\contentsline {chapter}{\numberline {1}introduction}{2}
+\contentsline {section}{\numberline {1}Introduction}{3}
+\contentsline {paragraph}{}{3}
+\contentsline {paragraph}{}{3}
+\contentsline {paragraph}{}{3}
+\contentsline {paragraph}{}{3}
+\contentsline {paragraph}{}{3}
+\contentsline {section}{\numberline {2}Definition}{4}
+\contentsline {paragraph}{}{4}
+\contentsline {paragraph}{}{4}
+\contentsline {paragraph}{}{4}
+\contentsline {section}{\numberline {3}Comparing Operational Databases and Data Warehouse}{5}
+\contentsline {paragraph}{}{5}
+\contentsline {paragraph}{Conception}{5}
+\contentsline {paragraph}{Performance}{5}
+\contentsline {paragraph}{Security}{5}
+\contentsline {paragraph}{Storage requirement}{5}
+\contentsline {paragraph}{Real time}{5}
+\contentsline {section}{\numberline {4}Conclusion}{6}
+\contentsline {paragraph}{}{6}
+\contentsline {paragraph}{}{6}

@@ -1,21 +1,127 @@
-\documentclass[a4paper,11pt]{report}
-
+\documentclass[a4paper,12pt]{article}
 \usepackage[latin1]{inputenc}
- 
-\title{Datawarehouse}
+
+\pagestyle{headings}
+
+\title{Data Warehouse}
 \author{Raphael Javaux}
-\date{Decembre 2011}
+\date{December 2011}
 
 \begin{document}
 
 \maketitle
+
+\begin{abstract}
+   This article introduces data warehousing and shows the differences with
+traditional database management. Data warehousing and data mining are the
+techniques of extraction of correlations and facts in corporations data and
+take part in the business intelligence process.
+\end{abstract}
+
 \newpage
 
 \tableofcontents
 \newpage
 
-\chapter{introduction}
+\section{Introduction}
+    \paragraph{}
+    As of today, more and more information can be stored and modern computing
+power enable complicated statistics variables to be calculated and analysed.
 
-hello
+    \paragraph{}
+    Today's corporations maintain huge data about their activities. This
+large bank of information is a real forgotten treasure for most companies.
+
+    \paragraph{}
+    Most of time, all the knowledge a firm needs for marketing and economical
+strategy can be found in its operations history.
+
+    \paragraph{}
+    \textit{How to make this product more attractive ? What is the best
+period to launch an advertisement campaign for a given product ?} These are
+examples of questions for which the data warehouse field is able to respond.
+
+    \paragraph{}
+    The purpose of this paper is to introduce the reader to data warehouse.
+There is no prerequisite, excepts basics in databases management.
+
+\newpage
+
+\section{Definition}
+    \paragraph{}
+    Since their early days, computers were build to manage and analyse large
+amounts data.
+
+    By automatising information handling, these machines were quickly proved
+required for any knowledge driven company.
+
+    \paragraph{}
+    By years, firms have accumulated and kept digital materials for about
+everything in touch with their business, even when data were no longer
+required for every day operations.
+
+    Quickly, computer scientists have seen the benefits of these ``old''
+information for affair decisions and have been looking for new techniques for
+storage, centralization and extraction of facts, with success. First data
+warehouses were born.
+
+    \paragraph{}
+    Because of information scattering and the really different requirements of
+facts extraction (which is called \textit{data mining}), databases in use for
+statistics are not the same as \textit{operational databases} (databases in
+use in business parts of the company). These databases are called \textit{data
+warehouse} and are only used for data mining.
+
+\newpage
+
+\section{Comparing Operational Databases and Data Warehouse}
+    \paragraph{}
+    Data warehouses don't meet the same needs as operational databases.
+
+    \paragraph{Conception}
+    Both systems are not accessed the same way. Data warehouses users will
+\textbf{ask for statistics about data} (using dimensions and
+grains\footnote{\textbf{Dimensions} are the different facts available in a data
+warehouse, for example \textit{sales} or \textit{users registrations}.
+\textbf{Grains} are the levels of detail of a given dimension, for example
+\textit{sales per week} or \textit{sales per day}}) while operational databases
+users will \textbf{ask for data} (using relations between records).
+
+    Thus, DBMS software in use for operational databases are not the same as
+systems in use in data warehouse. Though Oracle have some extensions for
+data-mining, MySQL doesn't. Software designed for data warehouse exist in
+both proprietary and free software worlds. 
+
+    \paragraph{Performance}
+    Data warehouses don't have to give the same performance level. For example,
+an operational database must be able to answer to hundreds of concurrent
+requests while a data warehouse will only receive a few queries per day.
+
+    \paragraph{Security}
+    Whereas in a operational database, security is the top priority, this is
+not so important in a data warehouse. A lot of critical operations related
+to operational databases, like financial transactions, don't exist in a data
+warehouse.
+
+    \paragraph{Storage requirement}
+    Because data warehouses need to store a large history of operations, they
+expect more devices for storage.
+
+    \paragraph{Real time}
+    Data warehouses don't need to be immediately updated with new data. Most of
+the time, a data warehouse is synchronised with an operational database a few
+times per week.
+
+\newpage
+
+\section{Conclusion}
+    \paragraph{}
+    Whereas data warehouse systems store structured data, just like traditional
+relational database systems, they are really different by design.
+
+    \paragraph{}
+    The way of working with decisional data is really different from the way of
+working with operational data. Both approach require divergent infrastructures,
+software and skills.
 
 \end{document}
