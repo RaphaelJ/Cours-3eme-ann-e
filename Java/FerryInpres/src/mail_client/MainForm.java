@@ -1,10 +1,26 @@
 package mail_client;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.Security;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -26,11 +42,23 @@ public class MainForm extends javax.swing.JFrame {
     private final Store _pop3Store;
     private ArrayList<Message> _msgs;
     
+    private Cipher _cryptor;
+    private Cipher _decryptor;
+    
     /** Creates new form MainForm */
     public MainForm(String serveurPop, String serveurSMTP,
             String utilisateur, String motDePasse, String email)
-            throws NoSuchProviderException, MessagingException
+            throws NoSuchProviderException, MessagingException,
+            KeyStoreException, NoSuchAlgorithmException, IOException,
+            CertificateException, UnrecoverableKeyException,
+            NoSuchPaddingException, InvalidKeyException
     {
+        Security.addProvider(
+            new org.bouncycastle.jce.provider.BouncyCastleProvider()
+        );
+        
+        loadSymetricKey();
+        
         this._email = email;
        
         Properties property = System.getProperties();
@@ -114,8 +142,9 @@ public class MainForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 private void nouveauMessageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nouveauMessageButtonActionPerformed
-    (new NouveauMessage(this, true, this._session, this._email))
-            .setVisible(true);
+    new NouveauMessage(
+        this, true, this._session, this._email, this._cryptor, this._decryptor
+    ).setVisible(true);
 }//GEN-LAST:event_nouveauMessageButtonActionPerformed
 
 private void messageSelected(ListSelectionEvent lse)
@@ -123,7 +152,7 @@ private void messageSelected(ListSelectionEvent lse)
     try {
         new LireMessage(
             this, true, this._session, this._email,
-            this._msgs.get(lse.getFirstIndex())
+            this._msgs.get(lse.getFirstIndex()), this._cryptor, this._decryptor
         ).setVisible(true);
     } catch (MessagingException ex) {
         Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -190,13 +219,12 @@ private void listerMessages() throws MessagingException
             public void run() {
                 try {
                     new MainForm(
-                        "pop.gmail.com", "relay.skynet.be",
-                        "raphaeljavaux@gmail.com", "XXXXXXXX",
+                        //inxs.aileinfo
+                        "u2.wildness.loc", "u2.wildness.loc",
+                        "javauxr", "XXXXXXXX",
                         "raphaeljavaux@gmail.com"
                     ).setVisible(true);
-                } catch (NoSuchProviderException ex) {
-                    Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (MessagingException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -208,4 +236,43 @@ private void listerMessages() throws MessagingException
     private javax.swing.JList messagesList;
     private javax.swing.JButton nouveauMessageButton;
     // End of variables declaration//GEN-END:variables
+
+    // Charge la clé depuis le key store. génère une clé si elle n'existe pas
+    private void loadSymetricKey()
+            throws KeyStoreException, NoSuchAlgorithmException, IOException,
+            CertificateException, UnrecoverableKeyException,
+            NoSuchPaddingException, InvalidKeyException
+    {
+        KeyStore ks = null;
+        ks = KeyStore.getInstance(KeyStore.getDefaultType());
+        SecretKey key;
+        try {          
+            // Tente de charger une clé existante
+            ks.load(new FileInputStream("keystore.jks"), "password".toCharArray());
+           
+            key = (SecretKey) ks.getKey("symetric key", "password".toCharArray());
+        } catch (FileNotFoundException ex) {
+            // Clé non existante
+            ks.load(null);
+            
+            // Génère une nouvelle clé symétrique
+            KeyGenerator gen = KeyGenerator.getInstance("DES");
+            gen.init(new SecureRandom());
+            key = gen.generateKey();
+            ks.setKeyEntry(
+                "symetric key", (Key) key,
+                "password".toCharArray(), null
+            );
+            
+            // Enregistre le kestore
+            FileOutputStream fos = new FileOutputStream("keystore.jks");
+            ks.store(fos, "password".toCharArray());
+            fos.close();
+        }
+        
+        this._cryptor = Cipher.getInstance("DES/ECB/PKCS5Padding");
+        this._cryptor.init(Cipher.ENCRYPT_MODE, key);
+        this._decryptor = Cipher.getInstance("DES/ECB/PKCS5Padding");
+        this._decryptor.init(Cipher.DECRYPT_MODE, key);
+    }
 }

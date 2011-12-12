@@ -1,11 +1,17 @@
 package mail_client;
 
 import java.awt.Frame;
+import java.io.ByteArrayInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -22,17 +28,24 @@ public class LireMessage extends javax.swing.JDialog {
     private final String _email;
     private final Message _msg;
     private final Frame _parent;
+    
+    private final Cipher _cryptor;
+    private final Cipher _decryptor;
 
     /** Creates new form LireMessage */
     public LireMessage(java.awt.Frame parent, boolean modal,
-            Session smtpSession, String email, Message msg)
-            throws MessagingException, IOException 
+            Session smtpSession, String email, Message msg, Cipher cryptor,
+            Cipher decryptor)
+            throws MessagingException, IOException, IllegalBlockSizeException, BadPaddingException, ClassNotFoundException 
     {
         super(parent, modal);
         this._parent = parent;
         this._smtpSession = smtpSession;
         this._email = email;
         this._msg = msg;
+        
+        this._cryptor = cryptor;
+        this._decryptor = decryptor;
         
         initComponents();
         
@@ -48,6 +61,24 @@ public class LireMessage extends javax.swing.JDialog {
             if (p.isMimeType("text/plain")) {
                 // Texte du message
                 this._msg.setText((String) p.getContent());
+                
+                if (msg.getSubject().startsWith("FRONTIER_WANTED")) {
+                    // Texte crypté
+                    String str_message = (String) p.getContent();
+                    
+                    // Décrypte le message
+                    this._decryptor.update(str_message.getBytes());
+                    byte[] bytes_message = this._decryptor.doFinal();
+                    ByteArrayInputStream bis = new ByteArrayInputStream(bytes_message);
+                    ObjectInput in = new ObjectInputStream(bis);   
+                    MessageCrypte obj_message = (MessageCrypte) in.readObject();
+                    
+                    // Vérifie le digest
+                    
+                            
+                } else {
+                    
+                }
             } else if (p.getDisposition() != null
                 && p.getDisposition().equalsIgnoreCase(Part.ATTACHMENT)) {
                 // Enregistre la pièce jointe
@@ -170,7 +201,7 @@ private void repondreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GE
         new NouveauMessage(
             this._parent, true, this._smtpSession, this._email,
             this._msg.getFrom()[0].toString(),
-            "RE: " + this._msg.getSubject()
+            "RE: " + this._msg.getSubject(), this._cryptor, this._decryptor
         ).setVisible(true);
     } catch (MessagingException ex) {
         Logger.getLogger(LireMessage.class.getName()).log(Level.SEVERE, null, ex);

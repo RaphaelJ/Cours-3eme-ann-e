@@ -1,9 +1,13 @@
 package mail_client;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.crypto.Cipher;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -23,26 +27,34 @@ import javax.swing.JFileChooser;
 public class NouveauMessage extends javax.swing.JDialog {
     private Session _smtpSession;
     private String _email;
+    
+    private final Cipher _cryptor;
+    private final Cipher _decryptor;
 
     /** Creates new form NouveauMessage */
     public NouveauMessage(java.awt.Frame parent, boolean modal, 
-            Session smtpSession, String email)
+            Session smtpSession, String email, Cipher cryptor, Cipher decryptor)
     {
-        this(parent, modal, smtpSession, email, "", "");
+        this(parent, modal, smtpSession, email, "", "", cryptor, decryptor);
     }
 
     NouveauMessage(java.awt.Frame parent, boolean modal, 
             Session smtpSession, String email, String destinataire,
-            String sujet)
+            String sujet, Cipher cryptor, Cipher decryptor)
     {
         super(parent, modal);
         this._smtpSession = smtpSession;
         this._email = email;
         
+        this._cryptor = cryptor;
+        this._decryptor = decryptor;
+        
         initComponents();
         
         this.destinataireText.setText(destinataire);
         this.sujetText.setText(sujet);
+        
+        this.cryptageLabel.setVisible(false);
     }
 
     /** This method is called from within the constructor to
@@ -71,6 +83,7 @@ public class NouveauMessage extends javax.swing.JDialog {
         jScrollPane3 = new javax.swing.JScrollPane();
         piecesJointesList = new javax.swing.JList();
         ajoutPieceButton = new javax.swing.JButton();
+        cryptageLabel = new javax.swing.JLabel();
 
         jList1.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -110,6 +123,16 @@ public class NouveauMessage extends javax.swing.JDialog {
         jLabel4.setText("Type message:");
 
         messageTypeCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "FRONTIER_INFO", "FRONTIER_INFO_ACK", "FRONTIER_WANTED", "FRONTIER_WANTED_ACK", "FRONTIER_WANTED_TOO_LATE" }));
+        messageTypeCombo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                messageTypeComboItemStateChanged(evt);
+            }
+        });
+        messageTypeCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                messageTypeComboActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Pièces jointes:");
 
@@ -122,6 +145,9 @@ public class NouveauMessage extends javax.swing.JDialog {
                 ajoutPieceButtonActionPerformed(evt);
             }
         });
+
+        cryptageLabel.setForeground(new java.awt.Color(102, 153, 0));
+        cryptageLabel.setText("Le contenu du message sera crypté et signé");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -149,7 +175,10 @@ public class NouveauMessage extends javax.swing.JDialog {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(sujetText, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
                                     .addComponent(destinataireText, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)))
-                            .addComponent(jLabel3))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 338, Short.MAX_VALUE)
+                                .addComponent(cryptageLabel)))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(erreurLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
@@ -177,7 +206,9 @@ public class NouveauMessage extends javax.swing.JDialog {
                     .addComponent(sujetText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(cryptageLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -209,6 +240,7 @@ private void envoyerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             Message.RecipientType.TO,
             new InternetAddress(this.destinataireText.getText())
         );
+        
         msg.setSubject(
             this.messageTypeCombo.getSelectedItem() + ": "
             + this.sujetText.getText()
@@ -216,9 +248,32 @@ private void envoyerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         
         Multipart parts = new MimeMultipart();
         
-        // Ajout de la partie texte du message
+        String message;
+        // Crypte le message si FRONTIER_WANTED
+        if (this.messageTypeCombo.getSelectedItem().equals("FRONTIER_WANTED")) {
+            // Crypte et hash la partie texte du message
+            MessageCrypte msg_crypte = new MessageCrypte(
+                this.messageText.getText(),
+                this.messageText.getText().hashCode()
+            );
+            
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutput out = new ObjectOutputStream(bos);   
+            out.writeObject(msg_crypte);
+            byte[] yourBytes = bos.toByteArray(); 
+            
+            this._cryptor.update(bos.toByteArray());
+            out.close();
+            bos.close();
+            
+            message = new String(this._cryptor.doFinal());
+        } else {
+            // Ajout de la partie texte du message
+            message = this.messageText.getText();
+        }
+
         MimeBodyPart body = new MimeBodyPart();
-        body.setText(this.messageText.getText());
+        body.setText(message);
         parts.addBodyPart(body);
         
         // Ajout des pièces jointes
@@ -235,7 +290,7 @@ private void envoyerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         Transport.send(msg);
         
         this.dispose();
-    } catch (MessagingException ex) {
+    } catch (Exception ex) {
         this.erreurLabel.setText(ex.getMessage());
         ex.printStackTrace();
     }
@@ -254,8 +309,21 @@ private void ajoutPieceButtonActionPerformed(java.awt.event.ActionEvent evt) {//
     }
 }//GEN-LAST:event_ajoutPieceButtonActionPerformed
 
+private void messageTypeComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_messageTypeComboActionPerformed
+    
+}//GEN-LAST:event_messageTypeComboActionPerformed
+
+private void messageTypeComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_messageTypeComboItemStateChanged
+    // Affiche le message affirmant que le contenu du message sera crypté
+    // et signé.
+    this.cryptageLabel.setEnabled(
+        this.messageTypeCombo.getSelectedItem().equals("FRONTIER_WANTED")
+    );
+}//GEN-LAST:event_messageTypeComboItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ajoutPieceButton;
+    private javax.swing.JLabel cryptageLabel;
     private javax.swing.JTextField destinataireText;
     private javax.swing.JButton envoyerButton;
     private javax.swing.JLabel erreurLabel;
