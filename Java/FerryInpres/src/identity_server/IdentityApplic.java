@@ -160,13 +160,17 @@ public class IdentityApplic {
             String clientName = readLine();
             System.out.println("Prénom du client: ");
             String clientSurname = readLine();
+            System.out.println("Nationalite (BE, FR, NL ...): ");
+            String nationalite = readLine();
             System.out.println("Numéro national du client: ");
             int clientNationalID = readInt();
             
             out.writeObject(
                 Utils.cryptObject(
-                    new VerifId(clientName, clientSurname, clientNationalID),
-                    cryptor
+                    new VerifId(
+                        clientName, clientSurname, nationalite,
+                        clientNationalID
+                    ), cryptor
                 )
             );
             out.flush();

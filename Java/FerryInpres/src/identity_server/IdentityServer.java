@@ -4,6 +4,7 @@
  */
 package identity_server;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,10 +12,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import java.security.InvalidKeyException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -30,6 +36,11 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
 
 
 /**
@@ -138,7 +149,9 @@ class ServerThread implements Runnable {
     private void login(ObjectInputStream in, ObjectOutputStream out,
             Cipher cryptor, Cipher decryptor) throws IOException,
             IllegalBlockSizeException, BadPaddingException,
-            ClassNotFoundException, SQLException, NoSuchAlgorithmException
+            ClassNotFoundException, SQLException, NoSuchAlgorithmException,
+            KeyStoreException, CertificateException, UnrecoverableKeyException,
+            KeyManagementException
     {
         // Génère et envoie le sel
         int serverSalt = (new Random()).nextInt();
@@ -189,30 +202,75 @@ class ServerThread implements Runnable {
     private void verifId(ObjectInputStream in, ObjectOutputStream out,
             Cipher cryptor, Cipher decryptor) throws IOException,
             ClassNotFoundException, IllegalBlockSizeException,
-            BadPaddingException, SQLException
+            BadPaddingException, SQLException, KeyStoreException,
+            NoSuchAlgorithmException, CertificateException,
+            UnrecoverableKeyException, KeyManagementException
     {
         for (;;) {
             VerifId query = (VerifId) Utils.decryptObject(
                 (byte[]) in.readObject(), decryptor
             );
-
-            // Vérifie si la personne est valide
-            PreparedStatement instruc = this._con.prepareStatement(
-                "SELECT COUNT(*) AS existe " +
-                "FROM voyageur " +
-                "WHERE id_national = ? AND nom = ? AND prenom = ?"
-            );
-            instruc.setInt(1, query.getClientNationalId());
-            instruc.setString(2, query.getClientName());
-            instruc.setString(3, query.getClientSurname());
-            ResultSet rs = instruc.executeQuery();
-            rs.next();
-
-            if (rs.getInt("existe") != 0) {
-                out.writeObject(Utils.cryptObject(new Ack(), cryptor));
+            
+            Protocol valide;
+            if ("BE".equals(query.getNationalite())) {
+                // Consulte le registre national
+                // Vérifie si la personne est valide
+                PreparedStatement instruc = this._con.prepareStatement(
+                    "SELECT COUNT(*) AS existe " +
+                    "FROM voyageur " +
+                    "WHERE id_national = ? AND nom = ? AND prenom = ?"
+                );
+                instruc.setInt(1, query.getClientNationalId());
+                instruc.setString(2, query.getClientName());
+                instruc.setString(3, query.getClientSurname());
+                ResultSet rs = instruc.executeQuery();
+                rs.next();
+                
+                if (rs.getInt("existe") != 0)
+                    valide = new Ack();
+                else
+                    valide = new Fail();
             } else {
-                out.writeObject(Utils.cryptObject(new Fail(), cryptor));
+                // Relaie la consultation auprès du serveur international
+                System.out.println("Consultation du registre international");
+                
+                KeyStore store = KeyStore.getInstance("JKS");
+                store.load(
+                    new FileInputStream("client_keystore.jks"),
+                    "password".toCharArray()
+                );
+
+                KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+                kmf.init(store, "password".toCharArray());
+
+                TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+                tmf.init(store);
+
+                SSLContext context = SSLContext.getInstance("SSLv3");
+                context.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+
+                SSLSocketFactory factory = context.getSocketFactory();
+                
+                SSLSocket sock = (SSLSocket) factory.createSocket(
+                    Config.INTERNATIONAL_SERVER, Config.INTERNATIONAL_PORT 
+                );
+                
+                ObjectInputStream ssl_in = new ObjectInputStream(
+                    sock.getInputStream()
+                );
+                ObjectOutputStream ssl_out = new ObjectOutputStream(
+                    sock.getOutputStream()
+                );
+                
+                ssl_out.writeObject(query);
+                ssl_out.close();
+                
+                valide = (Protocol) ssl_in.readObject();
+                
+                sock.close();
             }
+
+            out.writeObject(Utils.cryptObject(valide, cryptor));
             out.flush();
         }
     }

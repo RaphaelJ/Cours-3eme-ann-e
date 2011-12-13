@@ -11,12 +11,13 @@ package identity_server;
 public class VerifId implements Protocol {
     private String _clientName;
     private String _clientSurname;
+    private String _nationalite;
     private int _clientNationalId;
-    
-    public VerifId(String _clientName, String _clientSurname,
-            int _clientNationalId) {
+
+    public VerifId(String _clientName, String _clientSurname, String _nationalite, int _clientNationalId) {
         this._clientName = _clientName;
         this._clientSurname = _clientSurname;
+        this._nationalite = _nationalite;
         this._clientNationalId = _clientNationalId;
     }
 
@@ -46,6 +47,20 @@ public class VerifId implements Protocol {
      */
     public void setClientSurname(String clientSurname) {
         this._clientSurname = clientSurname;
+    }
+
+    /**
+     * @return the _nationalite
+     */
+    public String getNationalite() {
+        return _nationalite;
+    }
+
+    /**
+     * @param nationalite the _nationalite to set
+     */
+    public void setNationalite(String nationalite) {
+        this._nationalite = nationalite;
     }
 
     /**
