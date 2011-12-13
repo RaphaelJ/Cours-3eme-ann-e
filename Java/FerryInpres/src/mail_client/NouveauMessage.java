@@ -9,7 +9,6 @@ import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.crypto.Cipher;
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -260,13 +259,15 @@ private void envoyerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutput out = new ObjectOutputStream(bos);   
             out.writeObject(msg_crypte);
-            byte[] yourBytes = bos.toByteArray(); 
             
-            this._cryptor.update(bos.toByteArray());
+            byte[] bytes = bos.toByteArray();
+            System.out.println("Bytes: " + bytes.length);
+            byte[] crypted_bytes = this._cryptor.update(bytes);
             out.close();
             bos.close();
-            
-            message = new String(this._cryptor.doFinal());
+           
+            System.out.println("Crypted bytes: " + crypted_bytes.length);
+            message = new String(crypted_bytes);
         } else {
             // Ajout de la partie texte du message
             message = this.messageText.getText();
@@ -316,7 +317,8 @@ private void messageTypeComboActionPerformed(java.awt.event.ActionEvent evt) {//
 private void messageTypeComboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_messageTypeComboItemStateChanged
     // Affiche le message affirmant que le contenu du message sera crypté
     // et signé.
-    this.cryptageLabel.setEnabled(
+    
+    this.cryptageLabel.setVisible(
         this.messageTypeCombo.getSelectedItem().equals("FRONTIER_WANTED")
     );
 }//GEN-LAST:event_messageTypeComboItemStateChanged

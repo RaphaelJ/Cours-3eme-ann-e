@@ -60,7 +60,6 @@ public class LireMessage extends javax.swing.JDialog {
             
             if (p.isMimeType("text/plain")) {
                 // Texte du message
-                this._msg.setText((String) p.getContent());
                 
                 if (msg.getSubject().startsWith("FRONTIER_WANTED")) {
                     // Texte crypté
@@ -69,15 +68,21 @@ public class LireMessage extends javax.swing.JDialog {
                     // Décrypte le message
                     this._decryptor.update(str_message.getBytes());
                     byte[] bytes_message = this._decryptor.doFinal();
+                    System.out.println(bytes_message.length);
                     ByteArrayInputStream bis = new ByteArrayInputStream(bytes_message);
                     ObjectInput in = new ObjectInputStream(bis);   
                     MessageCrypte obj_message = (MessageCrypte) in.readObject();
                     
                     // Vérifie le digest
-                    
+                    if (obj_message.getHash() == obj_message.getMessage().hashCode()) {
+                        // Message complet
+                        this.messagearea.setText(obj_message.getMessage());
+                    } else {
+                        this.messagearea.setText("Message corrompu !");
+                    }
                             
                 } else {
-                    
+                     this.messagearea.setText((String) p.getContent());
                 }
             } else if (p.getDisposition() != null
                 && p.getDisposition().equalsIgnoreCase(Part.ATTACHMENT)) {
