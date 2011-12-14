@@ -47,11 +47,11 @@ public class InternationalServer {
         KeyStore store = KeyStore.getInstance("JKS");
         store.load(
             new FileInputStream("keystore.jks"),
-            "password".toCharArray()
+            "pwdpwd".toCharArray()
         );
         
         KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-        kmf.init(store, "password".toCharArray());
+        kmf.init(store, "pwdpwd".toCharArray());
         
         TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
         tmf.init(store);
@@ -70,11 +70,11 @@ public class InternationalServer {
             SSLSocket sock = (SSLSocket) server_sock.accept();
             System.out.println("Nouveau client");
             
-            ObjectInputStream in = new ObjectInputStream(
-                sock.getInputStream()
-            );
             ObjectOutputStream out = new ObjectOutputStream(
                 sock.getOutputStream()
+            );
+            ObjectInputStream in = new ObjectInputStream(
+                sock.getInputStream()
             );
             
             VerifId query = (VerifId) in.readObject();

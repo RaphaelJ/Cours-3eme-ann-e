@@ -2,6 +2,7 @@ package mail_client;
 
 import java.awt.Frame;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +19,7 @@ import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.swing.DefaultListModel;
+import sun.misc.BASE64Decoder;
 
 /**
  *
@@ -63,11 +65,14 @@ public class LireMessage extends javax.swing.JDialog {
                 
                 if (msg.getSubject().startsWith("FRONTIER_WANTED")) {
                     // Texte crypté
-                    String str_message = (String) p.getContent();
+                    
+                    // Décode le message en Base64
+                    System.out.println("Base64: " + (String) p.getContent());
+                    BASE64Decoder decoder = new BASE64Decoder();
+                    byte[] crypted_bytes = decoder.decodeBuffer((String) p.getContent());
                     
                     // Décrypte le message
-                    this._decryptor.update(str_message.getBytes());
-                    byte[] bytes_message = this._decryptor.doFinal();
+                    byte[] bytes_message = this._decryptor.doFinal(crypted_bytes);
                     System.out.println(bytes_message.length);
                     ByteArrayInputStream bis = new ByteArrayInputStream(bytes_message);
                     ObjectInput in = new ObjectInputStream(bis);   
@@ -89,7 +94,9 @@ public class LireMessage extends javax.swing.JDialog {
                 // Enregistre la pièce jointe
                 
                 InputStream is = p.getInputStream();
-                FileOutputStream fos = new FileOutputStream(p.getFileName());
+                FileOutputStream fos = new FileOutputStream(
+                    new File("pieces_jointes", p.getFileName())
+                );
                 
                 int c;
                 while ((c = is.read()) != -1)
@@ -150,6 +157,7 @@ public class LireMessage extends javax.swing.JDialog {
 
         jLabel4.setText("Pièces jointes:");
 
+        piecesJointesList.setModel(new DefaultListModel());
         jScrollPane2.setViewportView(piecesJointesList);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

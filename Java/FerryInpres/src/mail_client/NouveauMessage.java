@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.util.LinkedList;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -19,6 +20,8 @@ import javax.mail.internet.MimeMultipart;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 
+import sun.misc.BASE64Encoder;
+
 /**
  *
  * @author rapha
@@ -29,6 +32,8 @@ public class NouveauMessage extends javax.swing.JDialog {
     
     private final Cipher _cryptor;
     private final Cipher _decryptor;
+    
+    private LinkedList<String> _piecesJointes = new LinkedList<String>();
 
     /** Creates new form NouveauMessage */
     public NouveauMessage(java.awt.Frame parent, boolean modal, 
@@ -262,12 +267,16 @@ private void envoyerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             
             byte[] bytes = bos.toByteArray();
             System.out.println("Bytes: " + bytes.length);
-            byte[] crypted_bytes = this._cryptor.update(bytes);
+            byte[] crypted_bytes = this._cryptor.doFinal(bytes);
             out.close();
             bos.close();
            
             System.out.println("Crypted bytes: " + crypted_bytes.length);
-            message = new String(crypted_bytes);
+            
+            // Encode le message crypté en base64
+            BASE64Encoder encoder = new BASE64Encoder();
+            message = encoder.encode(crypted_bytes);
+            System.out.println("Base64: "+message);
         } else {
             // Ajout de la partie texte du message
             message = this.messageText.getText();
@@ -278,11 +287,12 @@ private void envoyerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
         parts.addBodyPart(body);
         
         // Ajout des pièces jointes
-        for (Object piece_obj : this.piecesJointesList.getSelectedValuesList()) {
+        for (String path : this._piecesJointes) {
+            System.out.println("Piece jointe: " + path);
             MimeBodyPart piece = new MimeBodyPart();
-            DataSource so = new FileDataSource((String) piece_obj);
+            DataSource so = new FileDataSource(path);
             piece.setDataHandler(new DataHandler(so));
-            piece.setFileName((String) piece_obj);
+            piece.setFileName(new File(path).getName());
             parts.addBodyPart(piece);
         }
         
@@ -305,7 +315,7 @@ private void ajoutPieceButtonActionPerformed(java.awt.event.ActionEvent evt) {//
         File file = fc.getSelectedFile();
         
         DefaultListModel model = (DefaultListModel) this.piecesJointesList.getModel();
-        
+        this._piecesJointes.add(file.getPath());
         model.addElement(file.getName());
     }
 }//GEN-LAST:event_ajoutPieceButtonActionPerformed

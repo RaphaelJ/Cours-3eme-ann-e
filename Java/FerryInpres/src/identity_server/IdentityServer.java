@@ -237,11 +237,11 @@ class ServerThread implements Runnable {
                 KeyStore store = KeyStore.getInstance("JKS");
                 store.load(
                     new FileInputStream("client_keystore.jks"),
-                    "password".toCharArray()
+                    "pwdpwd".toCharArray()
                 );
 
                 KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-                kmf.init(store, "password".toCharArray());
+                kmf.init(store, "pwdpwd".toCharArray());
 
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
                 tmf.init(store);
@@ -263,7 +263,7 @@ class ServerThread implements Runnable {
                 );
                 
                 ssl_out.writeObject(query);
-                ssl_out.close();
+                ssl_out.flush();
                 
                 valide = (Protocol) ssl_in.readObject();
                 

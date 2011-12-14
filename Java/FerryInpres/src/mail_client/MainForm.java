@@ -16,6 +16,8 @@ import java.security.Security;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,12 +44,15 @@ import javax.swing.event.ListSelectionListener;
 public class MainForm extends javax.swing.JFrame {
     private Session _session;
     private final String _email;
-    private final Store _pop3Store;
+    private Store _pop3Store = null;
     private ArrayList<Message> _msgs;
     
     private Cipher _cryptor;
     private Cipher _decryptor;
-    private final Folder _folder;
+    private Folder _folder = null;
+    private final String _serveurPop;
+    private final String _utilisateur;
+    private final String _motDePasse;
     
     /** Creates new form MainForm */
     public MainForm(String serveurPop, String serveurSMTP,
@@ -64,18 +69,18 @@ public class MainForm extends javax.swing.JFrame {
         loadSymetricKey();
         
         this._email = email;
+        this._serveurPop = serveurPop;
+        this._utilisateur = utilisateur;
+        this._motDePasse = motDePasse;
        
         Properties property = System.getProperties();
         property.put("mail.smtp.host", serveurSMTP);
         property.put("file.encoding", "iso-8859-1");
         this._session = Session.getDefaultInstance(property, null);
         
-        this._pop3Store = this._session.getStore("pop3");
-        this._pop3Store.connect(serveurPop, utilisateur, motDePasse);
-        this._folder = this._pop3Store.getFolder("INBOX");
-        this._folder.open(Folder.READ_ONLY);
-        
         initComponents();
+        
+        this.listerMessages();
         
         // Ecoute les sélections faites sur la liste des messages pour
         // ouvrir la fenêtre de lecture
@@ -86,8 +91,6 @@ public class MainForm extends javax.swing.JFrame {
                 messageSelected(lse);
             }
         });
-        
-        this.listerMessages();
     }
 
     /** This method is called from within the constructor to
@@ -140,7 +143,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 846, Short.MAX_VALUE)
                     .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(nouveauMessageButton)
@@ -196,10 +199,26 @@ private void messageSelected(ListSelectionEvent lse)
 {
 }
 
-private void listerMessages() throws MessagingException
+private void listerMessages()
+        throws MessagingException
 {
-
+    if (this._pop3Store != null) {
+        // FIXME: relance la connexion pour recevoir les nouveaux messages
+        this._folder.close(true);
+        this._pop3Store.close();
+    }
+    
+    this._pop3Store = this._session.getStore("pop3");
+    this._pop3Store.connect(this._serveurPop, this._utilisateur, this._motDePasse);
+    this._folder = this._pop3Store.getFolder("INBOX");
+    this._folder.open(Folder.READ_ONLY);
+    
     Message[] msgs = this._folder.getMessages();
+    // Inverse la liste des messages
+    LinkedList<Message> msgs_reverse = new LinkedList<Message>();
+    for (Message msg : msgs) {
+        msgs_reverse.addFirst(msg);
+    }
     
     if (this._folder.getNewMessageCount() > 0) {
        this.setTitle(
@@ -212,9 +231,11 @@ private void listerMessages() throws MessagingException
     this._msgs = new ArrayList<Message>();
     DefaultListModel model = (DefaultListModel) this.messagesList.getModel();
     model.clear();
-    for (Message m : msgs) {
+    for (Message m : msgs_reverse) {
         this._msgs.add(m);
-        model.addElement(m.getSubject() + " de " + m.getFrom()[0]);
+        model.addElement(
+            m.getSentDate() + ": " + m.getSubject() + " de " + m.getFrom()[0]
+        );
     }
 }
 /**
