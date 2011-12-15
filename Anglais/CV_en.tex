@@ -1,0 +1,105 @@
+\documentclass[10pt,a4paper]{moderncv}
+
+\definecolor{blue_clair}{rgb}{0.1294,0.3216,0.38431}
+
+% moderncv themes
+\moderncvtheme[grey]{classic}                 % optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts, instead of sans serif fonts)
+%\moderncvtheme[green]{casual}                % idem
+
+% character encoding
+\usepackage[utf8]{inputenc}                   % replace by the encoding you are using
+
+% adjust the page margins
+\usepackage[scale=0.9]{geometry}
+%\setlength{\hintscolumnwidth}{3cm}			 % if you want to change the width of the column with the dates
+%\AtBeginDocument{\setlength{\maketitlenamewidth}{6cm}}  % only for the classic theme, if you want to change the width of your name placeholder (to leave more space for your address details
+\AtBeginDocument{\recomputelengths}                      % required when changes are made to page layout lengths
+
+% personal data
+\firstname{Raphael}
+\familyname{Javaux}
+%\title{Etudiant}                          % optional, remove the line if not wanted
+\address{447 Route du Condroz}{4031 Angleur (Belgium)}    % optional, remove the line if not wanted
+\mobile{0032 (0)479/44.20.91}                   % optional, remove the line if not wanted
+\phone{0032 (0)4/365.04.57}                    % optional, remove the line if not wanted
+%\fax{98 76 54 32 10}                      % optional, remove the line if not wanted
+\email{raphaeljavaux@gmail.com}               % optional, remove the line if not wanted
+\extrainfo{March 6$^{\textrm{th}}$ 1991 - Driving licence}    % optional, remove the line if not wanted
+\photo[64pt]{photo.jpg}                     % '64pt' is the height the picture must be resized to and 'picture' is the name of the picture file; optional, remove the line if not wanted
+%\quote{Some quote (optional)}            % optional, remove the line if not wanted
+
+%\nopagenumbers{}                         % uncomment to suppress automatic page numbering for CVs longer than one page
+
+
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+\maketitle
+3$^{\textrm{th}}$ year student in computer sciences, looking for student internship during the 1$^{\textrm{st}}$ half of 2012.
+
+\section{Education}
+  \cventry{2003--2007}{High school}
+          {Collège St Benoît St Servais}{Liège}{}
+          {Greek orientation}  % arguments 3 to 6 are optional
+  \cventry{2007--2009}{High school}
+          {Institut St Jean Berchmans}{Liège}{}
+          {Computer sciences orientation}  % arguments 3 to 6 are optional
+  \cventry{2009--In progress}{Bachelor in computer sciences}
+          {Haute école de la Province de Liège}{}{}
+	  {}
+
+\section{Informatique}
+  \cvcomputer{Advanced}{Python}{Good}{Haskell, C\# (Mono) and C}
+  \cvcomputer{Basic}{F\#, C\# (Windows), C++, Javascript and Java}{Libraries}{Django, Gtk+, XMPP ...}
+  \cvcomputer{DB}{PostgreSQL, Oracle, SQLite and MySQL}{Environnements}{Linux (Arch, Fedora and CentOS) and Windows}
+  \cvcomputer{Graphics}{Inkscape (vector graphics), CSS/HTML ...}{}{}
+
+\section{End of cursus work - Institut St Jean Berchmans}
+  \cvline{2008--2009}{\textbf{\href{http://files.getwebb.org/view-cre65qst.html}{WeShare}}}
+  \cvline{}{\small P2P client for files sharing accros local networks. Made with C\# with Mono and Gtk\#.}
+
+\section{Personal projects}
+  \cvline{2010--2011}{\textbf{\href{http://www.navistree.org}{Navi's Tree}}{ (being finalized)}}
+  \cvline{}{\small Websites hosting. Administration panel made with Python and Django.}
+
+  \cvline{}{\textbf{Various projects}{}}
+  \cvline{}{\small Websites (\href{http://files.getwebb.org}{files.getwebb.org}, \href{http://www.eperon.be}{www.eperon.be} ...),
+            \href{http://www.cowlan.be}{LAN-parties}, algorithmic,
+	    AI and computer vision (\href{https://github.com/RaphaelJ/Face-recognition}{faces detector}) ...}
+
+\section{Contest}
+  \cvline{}{\textbf{\href{http://www.prologin.org}{Prologin}}{ - French contest about algorithmic and artificial intelligence}}
+  \cvline{2009}{\small First involvement, final round (Paris), 58$^{\textrm{th}}$ (Python).}
+  \cvline{2010}{\small Final round (Paris), 82$^{\textrm{th}}$ (Python).}
+  \cvline{2011}{\small Final round (Paris), 14$^{\textrm{th}}$ (Python).}
+  \cvline{}{\textbf{\href{http://www.be-oi.be/}{First Belgian Informatics Olympiad}}{ - Algorithmic contest}}
+  \cvline{2010}{\small Best semifinals score, 5$^{\textrm{th}}$ during the final round.}
+
+\section{Languages}
+  \cvlanguage{French}{Advanced}{Mother tongue}
+  \cvlanguage{English}{Oral and written}{School level}
+% \section{Centres d'intérêt}
+%   \cvline{}{Informatique, sciences, musique et actualités internationales.}
+
+% \renewcommand{\listitemsymbol}{-} % change the symbol for lists
+
+% \section{Extra 1}
+%   \cvlistitem{Item 1}
+%   \cvlistitem{Item 2}
+%   \cvlistitem[+]{Item 3}            % optional other symbol
+% 
+% \section{Extra 2}
+%   \cvlistdoubleitem[\Neutral]{Item 1}{Item 4}
+%   \cvlistdoubleitem[\Neutral]{Item 2}{Item 5}
+%   \cvlistdoubleitem[\Neutral]{Item 3}{}
+% 
+% % Publications from a BibTeX file
+% \nocite{*}
+% \bibliographystyle{plain}
+% \bibliography{publications}       % 'publications' is the name of a BibTeX file
+
+\end{document}
+
+
+%% end of file `template_en.tex'.
