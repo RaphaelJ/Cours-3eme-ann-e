@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2012/dev/Arch Linux) (format=latex 2011.12.11)  14 DEC 2011 13:49
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2012/dev/Arch Linux) (format=latex 2011.12.11)  15 DEC 2011 13:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -273,26 +273,19 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 [1
 
 ]
-No file cahier_des_charges.toc.
-\tf@toc=\write3
-\openout3 = `cahier_des_charges.toc'.
-
-
-Overfull \hbox (119.0961pt too wide) in paragraph at lines 22--24
+Overfull \hbox (119.0961pt too wide) in paragraph at lines 19--21
  [] \OT1/cmr/m/n/12 dqsssssssssssssssssssssssssssssssssssssssssssssssssssssssss
 sssssssssssssssssssss ssssssssssssssssssssssssss 
  []
 
-[1
-
-] (./cahier_des_charges.aux) ) 
+[1] (./cahier_des_charges.aux) ) 
 Here is how much of TeX's memory you used:
- 441 strings out of 493634
- 4393 string characters out of 3148854
+ 440 strings out of 493634
+ 4375 string characters out of 3148854
  50730 words of memory out of 3000000
- 3807 multiletter control sequences out of 15000+200000
- 6063 words of font info for 22 fonts, out of 3000000 for 9000
+ 3806 multiletter control sequences out of 15000+200000
+ 5809 words of font info for 21 fonts, out of 3000000 for 9000
  831 hyphenation exceptions out of 8191
  23i,7n,19p,176b,191s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on cahier_des_charges.dvi (2 pages, 896 bytes).
+Output written on cahier_des_charges.dvi (2 pages, 824 bytes).
