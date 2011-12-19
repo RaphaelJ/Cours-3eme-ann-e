@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2012/dev/Arch Linux) (format=latex 2011.12.11)  15 DEC 2011 13:17
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2012/dev/Arch Linux) (format=pdflatex 2011.12.11)  16 DEC 2011 17:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -16,20 +16,19 @@ iya, panjabi, tamil, telugu, indonesian, interlingua, irish, italian, kurmanji,
 ish, portuguese, romanian, russian, sanskrit, serbian, serbianc, slovak, sloven
 ian, spanish, swedish, turkish, turkmen, ukrainian, uppersorbian, welsh, loaded
 .
-(/usr/share/texmf-dist/tex/latex/base/report.cls
-Document Class: report 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
 (/usr/share/texmf-dist/tex/latex/base/size12.clo
 File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
-\c@chapter=\count80
-\c@section=\count81
-\c@subsection=\count82
-\c@subsubsection=\count83
-\c@paragraph=\count84
-\c@subparagraph=\count85
-\c@figure=\count86
-\c@table=\count87
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
@@ -270,22 +269,29 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 12.
 
-[1
-
-]
-Overfull \hbox (119.0961pt too wide) in paragraph at lines 19--21
- [] \OT1/cmr/m/n/12 dqsssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-sssssssssssssssssssss ssssssssssssssssssssssssss 
+Overfull \hbox (5.23988pt too wide) in paragraph at lines 38--42
+\OT1/cmr/m/n/12 entr^^See. L'^^Setudiant de-vra exp^^Serimenter plusieurs tech-
+niques afin de s^^Selectionner
  []
 
-[1] (./cahier_des_charges.aux) ) 
-Here is how much of TeX's memory you used:
- 440 strings out of 493634
- 4375 string characters out of 3148854
- 50730 words of memory out of 3000000
- 3806 multiletter control sequences out of 15000+200000
- 5809 words of font info for 21 fonts, out of 3000000 for 9000
- 831 hyphenation exceptions out of 8191
- 23i,7n,19p,176b,191s stack positions out of 5000i,500n,10000p,200000b,50000s
+[1
 
-Output written on cahier_des_charges.dvi (2 pages, 824 bytes).
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+(./cahier_des_charges.aux) ) 
+Here is how much of TeX's memory you used:
+ 423 strings out of 493633
+ 4191 string characters out of 3148831
+ 52383 words of memory out of 3000000
+ 3789 multiletter control sequences out of 15000+200000
+ 5457 words of font info for 20 fonts, out of 3000000 for 9000
+ 831 hyphenation exceptions out of 8191
+ 23i,7n,19p,176b,197s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
+Output written on cahier_des_charges.pdf (1 page, 26851 bytes).
+PDF statistics:
+ 16 PDF objects out of 1000 (max. 8388607)
+ 10 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+

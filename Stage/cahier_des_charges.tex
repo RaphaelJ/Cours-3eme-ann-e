@@ -1,22 +1,43 @@
-\documentclass[a4paper,12pt]{report}
+\documentclass[a4paper,12pt]{article}
 \usepackage[utf8]{inputenc}
 
 \pagestyle{headings}
 
 \title{Cahier des charges}
 \author{Stage de fin d'études de Raphael Javaux}
-\date{December 2011}
+\date{}
 
 \begin{document}
 
 \maketitle 
 
 \paragraph{}
-L'étudiant sera inséré dans une équipe de recherche travaillant sur un projet
-de détection de la somnolence lors de la conduite.
+L'étudiant sera intégré dans une équipe de recherche travaillant sur un projet
+de détection de la somnolence lors de la conduite automobile.
 
 \paragraph{}
-dqssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
-ssssssssssssssssssssssssss
+L'objectif du travail sera l'élaboration d'un algorithme de détection et de
+suivi des caractéristiques de l'oeil humain (position de la paupière, de l'iris
+et de la pupille) afin d'établir le niveau de somnolence de la
+personne observée.
+L'image fournie en entrée sera au préalable ajustée sur l'oeil, l'étudiant ne
+devra pas gérer la détection et l'extraction de celui-ci. 
+
+\paragraph{}
+L'objectif final sera la mise en production de l'algorithme sur un matériel
+embarqué pour une utilisation en temps-réel, il est donc nécessaire que la
+méthode réalisée puisse fonctionner à plus de 200 images par seconde sur un
+ordinateur personnel moyen-haut de gamme.
+
+\paragraph{}
+L'étudiant utilisera la librairie de vision par ordinateur OpenCV à l'aide du
+langage de programmation C++. Il y aura donc une période d'apprentissage dédié
+à l'utilisation de celle-ci.
+
+\paragraph{}
+Un des critères importants pour le choix final des algorithmes concerne les
+performances de la détection en fonction de la qualité des images fournies en
+entrée. L'étudiant devra expérimenter plusieurs techniques afin de sélectionner
+la plus efficace (dans le cadre d'une utilisation en temps réel).
 
 \end{document}
