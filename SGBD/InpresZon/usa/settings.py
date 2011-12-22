@@ -18,10 +18,10 @@ DATABASES = {
     'oracle': {
         'ENGINE': 'django.db.backends.oracle',
         'NAME': 'oracle',
-        'USER': 'usa2',
+        'USER': 'usa',
         'PASSWORD': 'pass',
         'HOST': '127.0.0.1',
-        'PORT': '1521',
+        'PORT': '1523',
     }
 }
 DATABASES['default'] = DATABASES['oracle']

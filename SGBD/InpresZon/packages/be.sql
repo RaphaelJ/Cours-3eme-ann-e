@@ -4,7 +4,7 @@
 
 INSERT INTO site_fournisseur VALUES (1, 'Amazon');
 
-CREATE DATABASE LINK usa CONNECT TO usa2 IDENTIFIED BY pass USING 'oracle';
+CREATE DATABASE LINK usa CONNECT TO usa IDENTIFIED BY pass USING 'oracle';
 
 create or replace
 PACKAGE GESTION_SESSIONS AS

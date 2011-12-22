@@ -2,6 +2,10 @@
 -- USA
 ------------------------------------------------------
 
+INSERT INTO site_fournisseur VALUES (1, 'Amazon');
+
+CREATE DATABASE LINK be CONNECT TO be IDENTIFIED BY pass USING 'oracle';
+
 create or replace
 PACKAGE GESTION_SESSIONS AS
   PROCEDURE Ajouter (ArgCle IN SITE_SESSION.cle%TYPE,
@@ -284,7 +288,3 @@ BEGIN
     ;
   END IF;
 END;
-
-INSERT INTO site_fournisseur VALUES (1, 'Amazon');
-
-CREATE DATABASE LINK be CONNECT TO be IDENTIFIED BY pass USING 'oracle';

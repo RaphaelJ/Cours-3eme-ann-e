@@ -47,7 +47,7 @@ main = do
     disconnect connUk
   where
     oracleConn hote user =
-        connectODBC $ "DRIVER=oracle;Dbq=//"++hote++":1521/oracle.oracle;\
+        connectODBC $ "DRIVER=oracle;Dbq=//"++hote++":1523/oracle.oracle;\
                          \UID="++user++";PWD=pass"
                        
     mysqlConn hote user =

@@ -42,6 +42,8 @@ import javax.swing.event.ListSelectionListener;
  * @author rapha
  */
 public class MainForm extends javax.swing.JFrame {
+    public final int REFRESH_RATE = 30_000; // 30 Secondes
+    
     private Session _session;
     private final String _email;
     private Store _pop3Store = null;
@@ -80,7 +82,21 @@ public class MainForm extends javax.swing.JFrame {
         
         initComponents();
         
-        this.listerMessages();
+        // Lance un thread pour réactualiser la liste des messages
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    for (;;) {
+                        listerMessages();
+                        System.out.println("Actualisation des messages");
+                        Thread.sleep(REFRESH_RATE);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }).start();
         
         // Ecoute les sélections faites sur la liste des messages pour
         // ouvrir la fenêtre de lecture
@@ -199,7 +215,7 @@ private void messageSelected(ListSelectionEvent lse)
 {
 }
 
-private void listerMessages()
+private synchronized void listerMessages()
         throws MessagingException
 {
     if (this._pop3Store != null) {
