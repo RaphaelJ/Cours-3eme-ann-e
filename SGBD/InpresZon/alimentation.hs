@@ -34,7 +34,7 @@ data Connexion = Connexion Connection String -- DBConnection Origine
 
 main = do
     connBe <- oracleConn beHote "be"
-    connUsa <- oracleConn usaHote "usa2"
+    connUsa <- oracleConn usaHote "usa"
     connUk <- oracleConn ukHote "uk"
     menu True [ ("Insérer dans BE"
                 , insertionBe $ Connexion connBe "BE")
@@ -46,7 +46,8 @@ main = do
     disconnect connUsa
     disconnect connUk
   where
-    oracleConn hote user =
+    oracleConn hote user = do
+        print user
         connectODBC $ "DRIVER=oracle;Dbq=//"++hote++":1523/oracle.oracle;\
                          \UID="++user++";PWD=pass"
                        
