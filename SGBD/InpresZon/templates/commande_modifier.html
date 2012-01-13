@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block titre %}{% block titre-page %}
+    {% blocktrans with titre=caddie_produit.produit.titre|escape %}
+        Modifier la quantité d'un article
+    {% endblocktrans %}
+{% endblock %}{% endblock %}
+
+{% block contenu %}
+    <form action="" method="post">
+        <ul>
+            {{ form.as_ul }}
+        </ul>
+        {% csrf_token %}
+        <input type="submit" value="{% trans "Modifier" %}" />
+    </form>
+{% endblock %}

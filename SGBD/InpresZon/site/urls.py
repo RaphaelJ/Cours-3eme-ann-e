@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     url(r'^$', views.catalogue, name="catalogue"),
     url(r'^page/(\d+)/$', views.catalogue, name="catalogue-page"),
     url(r'^produit/(\d+)/$', views.produit, name="produit"),
+    
 
     # Utilisateur
     url(r'^utilisateur/inscription/$', views.inscription, name="inscription"),
@@ -17,8 +18,9 @@ urlpatterns = patterns('',
     }, name="connexion"),
     url(r'^utilisateur/profil/$', views.profil, name="profil"),
     url(r'^utilisateur/adresses/$', views.adresses, name="adresses"),
-    url(r'^utilisateur/adresses/(\d+)/$', views.adresse, name="adresse-modifier"),
-    url(r'^utilisateur/adresses/supprimer/(\d+)/$', views.adresse, name="adresse-supprimer"),
+    url(r'^utilisateur/adresses/supprimer/(\d+)/$', views.adresses,
+        name="adresse-supprimer"
+    ),
     url(r'^utilisateur/deconnexion/$', transaction.commit_on_success(logout), {
         'template_name': 'deconnexion.html',
         'next_page': '/utilisateur/connexion/',
@@ -31,16 +33,23 @@ urlpatterns = patterns('',
     url(r'^caddie/supprimer/(\d+)/$',
         views.caddie_supprimer, name="caddie-supprimer"
     ),
+    url(r'^caddie/vider/$',
+        views.caddie_vider, name="caddie-vider"
+    ),
     url(r'^caddie/modifier/(\d+)/$',
         views.caddie_modifier, name="caddie-modifier"
     ),
 
-    # Commande
-    url(r'^commande/$', views.commande, name="commande"),
+    # Commandes (historique)
     url(r'^commandes/$', views.commandes, name="commandes"),
+    url(r'^commandes/annuler/(\d+)/$', views.commandes, name="commande-annuler"),
+    url(r'^commandes/(\d+)/$', views.commande, name="commande"),
+    url(r'^commandes/(\d+)/modifier/(\d+)/$', views.commande_modifier,
+        name="commande-modifier"
+    ),
 
     # Fichiers statiques
-    (r'^static/(?P<path>.*)$', 'django.views.static.serve',
+    url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': '/static'}
     ),
 )

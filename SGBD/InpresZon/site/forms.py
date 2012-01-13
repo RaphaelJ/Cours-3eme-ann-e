@@ -82,11 +82,61 @@ class CaddieProduitForm(forms.Form):
             )
         
         return quantite
+        
+class CommandeForm(forms.Form):
+    """
+        Formulaire permettant la validation d'une commande et la sélection de
+        l'adresse.
+    """
+    
+    adresse = forms.ChoiceField(label=_(u"Adresse de livraison"))
+    
+    def __init__(self, adresses, *args, **kwargs):
+        super(CommandeForm, self).__init__(*args, **kwargs)
+        
+        self.fields["adresse"].choices = ((a.id, str(a)) for a in adresses)
+    
+class CommandeProduitForm(forms.Form):
+    """ 
+        Formulaire permettant la modification de la quantité d'un article
+        sur une command validée.
+    """
+    
+    quantite = forms.IntegerField(label=_(u"Quantité"))
+    
+    def __init__(self, stock, *args, **kwargs):
+        super(CommandeProduitForm, self).__init__(*args, **kwargs)
+        
+        self.stock = stock
 
-class Adresse(forms.ModelForm):
+    def clean_quantite(self):
+        """
+            Vérifie que la quantité introduite est positive, non nulle et
+            inférieure au stock.
+        """
+        quantite = self.cleaned_data['quantite']
+        if quantite <= 0:
+            raise forms.ValidationError(
+                _(u"La quantité du produit doit être supérieure à zéro")
+            )
+        elif quantite > self.stock:
+            raise forms.ValidationError(
+                _(u"Il n'y a pas assez de stock pour cet article")
+            )
+        
+        return quantite
+
+class AdresseForm(forms.Form):
     """
     Formulaire permettant d'entrer une nouvelle adresse
     """
 
-    class Meta:
-        model = Commande
+    adresse = forms.CharField(label=_(u"Adresse"), max_length=255)
+    ville = forms.CharField(label=_(u"Ville"), max_length=30)
+    code_postal = forms.CharField(label=_(u"Code postal"), max_length=10)
+    pays = forms.CharField(label=_(u"Pays"), max_length=30)
+    
+class CommentaireForm(forms.Form):
+    """ Formulaire permettant de poster un commentaire sur un article """
+    
+    message = forms.CharField(label=_(u"Message"), widget=forms.Textarea)

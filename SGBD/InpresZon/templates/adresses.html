@@ -6,19 +6,32 @@
 {% endblock %}{% endblock %}
 
 {% block contenu %}
+    {% if message != None %}
+        <p><strong>
+            {% if message == 'supprime' %}
+                {% trans "Adresse supprimée" %}
+            {% endif %}
+            {% if message == 'suppression impossible' %}
+                {% trans "Impossible de supprimer l'adresse. Elle est utilisée par une commande" %}
+            {% endif %}
+            {% if message == 'ajoute' %}
+                {% trans "Adresse ajoutée" %}
+            {% endif %}
+        </strong></p>
+    {% endif %}
+
     {% if adresses|length > 0 %}
-        <ul>
-            {% for adresse in adresses %}
+        {% for adresse in adresses %}
+            <ul>
                 <li><strong>{% trans "Adresse" %} :</strong> {{ adresse.adresse }}</li>
                 <li><strong>{% trans "Ville" %} :</strong> {{ adresse.ville }}</li>
                 <li><strong>{% trans "Code postal" %} :</strong> {{ adresse.code_postal }}</li>
-                <li><strong>{% trans "Pays" %} :</strong> {{ adresse.pays.nom }}</li>
+                <li><strong>{% trans "Pays" %} :</strong> {{ adresse.pays }}</li>
                 <li>
-                    <a href="{% url adresse-modifier adresse.id %}">Modifier</a>
                     <a href="{% url adresse-supprimer adresse.id %}">Supprimer</a>
                 </li>
-            {% endfor %}
-        </ul>
+            </ul>
+        {% endfor %}
     {% else %}
         <p>
             {% trans "Vous n'avez enregistré aucune adresse." %}

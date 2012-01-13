@@ -1,0 +1,347 @@
+\documentclass[a4paper,12pt,french]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[babel=true]{csquotes}
+\usepackage{url}
+\usepackage{listings}
+
+\pagestyle{headings}
+
+\title{InpresZon}
+\author{Raphaël Javaux}
+\date{}
+
+\begin{document}
+
+\maketitle 
+
+\begin{abstract}
+   Dossier d'aide à l'installation des différents composants de la plate-forme
+d'e-commerce \enquote{InpresZon}.
+\end{abstract}
+
+\tableofcontents
+
+\newpage
+
+\section{Présentation des différents composants}
+
+    \paragraph{}
+    La plate-forme d'e-commerce \enquote{InpresZon} utilise divers logiciels
+pour ses différents composants :
+
+    \paragraph{Site web}
+    Les deux instances du site web (une américaine et une belge) sont conçues à
+l'aide du framework web Django\footnote{\url{https://www.djangoproject.com/}},
+utilisant le langage de programmation
+Python\footnote{\url{http://www.python.org/}}. 
+
+    \paragraph{Bases de données}
+    Les quatre bases de données (une américaine, une belge, une anglaise ainsi
+qu'un dépôt de Data Warehouse) utilisent le SGBDR Oracle 11g Release
+2\footnote{\url{
+http://www.oracle.com/us/products/database/enterprise-edition/}}. La
+communication entre les bases de données et les sites web se fait à l'aide du
+pilote cxOracle\footnote{\url{http://cx-oracle.sourceforge.net/}}.
+
+    \paragraph{Importation CouchDB}
+    Un programme console permet l'importation de produits stockés dans une base
+de données CouchDB\footnote{\url{http://couchdb.apache.org/}}. Ce programme,
+écrit en Haskell\footnote{\url{http://www.haskell.org/}}, est compilable à
+l'aide de GHC\footnote{\url{http://www.haskell.org/ghc/}}.
+
+    \paragraph{Importation fnac.com}
+    Un second programme console permet l'importation d'articles (musiques, films
+ou livres) vendus sur le site \url{http://www.fnac.com}. Ce dernier est écrit en
+F\#\footnote{\url{http://research.microsoft.com/fsharp}} et extrait les
+informations des produits sous forme de documents XML. Un script Bash utilisant
+le programme ncftp\footnote{\url{http://www.ncftp.com/}} a été créé pour
+transmettre ces documents aux différents dépôts XDB des bases de données.
+
+    \paragraph{Nouveaux stocks}
+    L'envoi des fichiers XML représentant les nouveaux arrivages en stock se
+fait à l'aide d'un script Bash utilisant, à nouveau, ncftp.
+
+    \paragraph{Data Warehouse}
+    Un dépôt de Data Warehouse, utilisé à des fin de data mining, est alimenté
+à l'aide :
+    \begin{itemize}
+        \item de deux procédures stockées PL/SQL et de DB/LINK homogènes pour
+les bases de données belge et anglaise ;
+        \item d'un programme écrit avec le langage de programmation
+Clojure\footnote{\url{http://www.clojure.org/}} pour la base de données
+américaine, générant des fichiers XML pouvant être transmis au dépôt XDB de la
+base de données de Data Warehouse à l'aide d'un script Bash.
+    \end{itemize}
+
+    \paragraph{}
+    Les différentes opérations de data mining peuvent être effectuées à l'aide
+d'un programme console Scala\footnote{\url{http://www.scala-lang.org/}}.
+
+\section{Sites web}
+    \paragraph{Python}
+    Il est nécessaire d'installer la version 2 de l'interpréteur
+Python\footnote{Django et le pilote Oracle ne sont pas encore compatibles avec
+Python 3.}. Celui-ci est déjà installé sur la plupart des distributions
+GNU/Linux (il se trouve dans les dépôts le cas échéant) ainsi que sur Mac OS X.
+L'installeur pour Microsoft Windows est disponible sur
+\url{http://www.python.org/}\footnote{L'ensemble de l'installation n'a été
+testée que sous GNU/Linux. Il est fort probable que quelques démarches
+supplémentaires soient nécessaires sur d'autres systèmes.}.
+    
+    \paragraph{Django}
+    Le framework Django est disponible dans les dépôts des distributions
+GNU/Linux. Si ce n'est pas le cas, on peut l'obtenir sur le site officiel :
+\url{https://www.djangoproject.com/}.
+
+    \paragraph{Serveur web}
+    Un serveur web est fourni avec Django. Pour lancer le serveur web,
+il est nécessaire de se positionner dans le répertoire du site web à servir
+(\textit{be/} ou \textit{usa/}) et d'exécuter la commande suivante :
+    \begin{lstlisting}
+        $ python2 manage.py runserver 8080
+    \end{lstlisting}
+    Ceci va démarrer un serveur web sur le port 8080.
+    
+    \paragraph{}
+    Il est également possible d'utiliser un site web créé avec Django sur le
+serveur web Apache à l'aide du module
+WSGI\footnote{\url{http://code.google.com/p/modwsgi/}}.
+
+\section{Bases de données}
+    \paragraph{Installation}
+    La base de données Oracle 11g Release 2 est disponible en téléchargement
+sur le site
+d'Oracle\footnote{\url{
+http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.ht
+ml}} pour une utilisation non commerciale. 
+
+    \paragraph{Pilote cxOracle}
+    Il est nécessaire d'installer le pilote cxOracle pour faire communiquer les
+sites web avec les bases de données. Le pilote est téléchargeable à l'adresse
+\url{http://cx-oracle.sourceforge.net/}. Si la base de données Oracle n'est pas
+installée sur la même machine que celle hébergeant les sites web, il sera
+nécessaire d'installer l'InstantClient
+d'Oracle\footnote{\url{
+http://www.oracle.com/technetwork/database/features/instant-client/}}.
+
+    \paragraph{Utilisateurs}
+    Il est nécessaire de créer quatre utilisateurs pour les quatre bases de
+données :
+\textit{be}, \textit{usa}, \textit{uk} ainsi que \textit{marketing}. Par
+défaut, les différents composants sont configurés pour utiliser le mot de passe
+\textit{pass} pour l'ensemble de ces comptes. Celui-ci est modifiable dans les
+fichiers \textit{settings.py} des répertoires \textit{be}, \textit{usa},
+\textit{uk} et \textit{marketing}.
+    Les utilisateurs \textit{be}, \textit{usa} et \textit{marketing} doivent
+posséder les droits sur un dépôt XDB\footnote{Voir documentation sur
+l'installation et la configuration d'un dépôt XDB.}.
+
+    \paragraph{Tables}
+    Les tables sont créées à partir de classes Python à l'aide de Django. Cette
+manière de procéder a plusieurs avantages :
+   \begin{itemize}
+        \item la description des tables est indépendante du logiciel de gestion
+de base de données utilisé (Django est officiellement compatible avec Oracle,
+SQLite, PostgreSQL et MySQL) ;
+        \item Django est capable de générer des formulaires HTML à partir de
+ces classes ainsi que les vérifications associées (email valide, longueur des
+chaînes \dots), ce qui évite certaines tâches répétitives ainsi que les erreurs
+de programmation qui y sont associées ;
+        \item Django fournit un langage pour écrire des requêtes (utilisant
+des objets Python) indépendant du SGBD utilisé (fonctionnalité non employée
+pour InpresZon).
+    \end{itemize}
+
+    \paragraph{}
+    Pour créer les tables, il suffit de se positionner dans le répertoire de la
+base de données (\textit{be/}, \textit{usa/}, \textit{uk/} ou
+\textit{marketing/}) et d'exécuter la commande suivante :
+    \begin{lstlisting}
+        $ python2 manage.py syncdb
+    \end{lstlisting}
+
+    \paragraph{Packages}
+    Le répertoire \textit{packages/} contient les scripts SQL utilisés pour
+créer les différents packages des quatre bases de données. Le script
+\textit{exceptions.sql} doit être exécuté sur les bases \textit{be} et
+\textit{usa} et contient le module de gestion des exceptions.
+
+\section{Importation CouchDB}
+
+    \paragraph{Haskell}
+    Le programme d'importation doit être compilé avec un compilateur Haskell.
+GHC est le compilateur le plus utilisé et est disponible sur la plupart des
+systèmes d'exploitation. Un paquetage contenant GHC ainsi que divers outils est
+mis à disposition sous le nom d'\enquote{Haskell Platform} à cette adresse :
+\url{http://hackage.haskell.org/platform/}. La plupart du temps, ce dernier est
+directement disponible dans les dépôts des distributions GNU/Linux.
+
+    \paragraph{ODBC}
+    Le programme Haskell d'importation des articles utilise ODBC pour accéder
+aux bases de données Oracle. Sous GNU/Linux, c'est le programme unixODBC
+(disponible sur la plupart des distributions dans les dépôts) qui fournit la
+connexion ODBC.
+
+    \paragraph{}
+    Il est indispensable de configurer un driver nommé \enquote{oracle}, car
+c'est celui-ci qui sera utilisé par le programme d'importation, dans le fichier
+\textit{/etc/odbcinst.ini} :
+    \begin{lstlisting}
+        [oracle]
+        Description     = Oracle ODBC driver for Oracle 11g
+        Driver          = /opt/instantclient/libsqora.so.11.1
+        Setup           =
+        FileUsage       =
+        CPTimeout       =
+        CPReuse         = 
+    \end{lstlisting}
+    La variable \textit{Driver} doit pointer vers le pilote \textit{libsqora.so}
+de l'InstantClient ou de l'installation d'Oracle.
+
+    \paragraph{}
+    Haskell Platform n'est pas fourni avec les bibliothèques permettant la
+communication avec les drivers ODBC et la base CouchDB,  cependant on peut
+utiliser la commande \textit{cabal} (le gestionnaire des libraires de Haskell)
+pour installer celles-ci :
+    \begin{lstlisting}
+        $ cabal update
+        $ cabal install HDBC-odbc
+        $ cabal install CouchDB
+    \end{lstlisting}
+    Cabal va se charger de récupérer les sources des libraires, de les compiler
+et de les installer.
+
+    \paragraph{Utilisation}
+    Le programme d'importation CouchDB se nomme \textit{alimentation.hs} et se
+compile avec GHC :
+    \begin{lstlisting}
+        $ ghc -O2 alimentation.hs
+    \end{lstlisting}
+    Ceci va créer un exécutable nommé \textit{alimentation}.
+
+    \paragraph{}
+    Il est possible de changer les paramètres de connexion aux serveurs
+Oracle et CouchDB dans les premières lignes du ficher
+\textit{alimentation.hs}\footnote{Toute modification exigera une re-compilation
+du fichier \textit{alimentation.hs}.}.
+    
+\section{Importation fnac.com}
+
+    \paragraph{F\#}
+    Le programme d'importation est écrit en F\#. Le compilateur F\# est
+disponible sur le site de Microsoft :
+\url{http://research.microsoft.com/fsharp}. Celui-ci est déjà inclus avec
+Visual Studio 2010. Sous GNU/Linux, il faudra en plus installer
+Mono\footnote{\url{http://www.mono-project.com/}} (disponible dans la plupart
+des dépôts) pour exécuter des binaires .NET. Microsoft supporte F\# sous Windows
+et GNU/Linux.
+
+    \paragraph{ncftp}
+    ncftp est un programme console permettant de se connecter à un serveur FTP
+depuis le terminal. Il est installable depuis les dépôts de la plupart des
+distributions GNU/Linux.
+
+    \paragraph{Utilisation}
+    Le programme d'importation se nomme \textit{alimentation\_indep.fs} et se
+compile avec cette commande (ou via Visual Studio pour Windows) :
+    \begin{lstlisting}
+        $ fsharpc -O -r System.Xml.Linq.dll alimentation_indep.fs
+    \end{lstlisting}
+    Ceci va créer un exécutable console nommé \textit{alimentation\_indep.exe}
+exécutable directement sous Windows ou avec la commande \textit{mono} sous
+GNU/Linux.
+
+    \paragraph{}
+    L'envoi des fichiers XML sur le dépôt XDB se fait avec le script Bash
+\textit{alimentation\_indep\_xml.sh}.
+
+\section{Nouveaux stocks}
+    
+    L'arrivage de nouveaux stocks se fait à l'aide du script Bash utilisant
+ncftp. Le script se nomme \textit{nouveaux\_stocks.sh} et s'utilise comme suit :
+    \begin{lstlisting}
+        $ ./nouveaux_stocks.sh fichier_arrivage.xml
+    \end{lstlisting}
+
+\section{Data Warehouse}
+
+    \paragraph{Chargement des données depuis BE et UK}
+    Le package \textit{ChargementDonnees} contient deux procédures,
+\textit{ChargementBe} et \textit{ChargementUk} pour importer dans le Data
+Warehouse les données des bases belge et anglaise, respectivement.
+
+    \paragraph{Chargement des données depuis USA}
+    
+        \subparagraph{Clojure}
+        Le chargement des données se trouvant dans USA se fait à l'aide
+d'un programme écrit pour le langage de programmation Clojure. Clojure utilise
+la JVM. Le compilateur Clojure ainsi que la JVM sont disponibles dans la plupart
+des dépôts GNU/Linux. Il est de plus nécessaire d'installer et de configurer
+JDBC pour Oracle\footnote{Voir syllabus sur JDBC.}.
+
+        \subparagraph{Utilisation}
+        Le programme de chargement se nomme \textit{chargement\_usa.clj}  
+et s'exécute avec Clojure :
+        \begin{lstlisting}
+            $ clj chargement_usa.clj
+        \end{lstlisting}   
+
+    \paragraph{Consultation des résultats}
+
+        \subparagraph{Scala}
+        Le programme console écrit en Scala permet d'effectuer diverses
+opérations de forage de données sur le Data Warehouse. Tout comme Clojure, Scala
+utilise la JVM et JDBC et son compilateur est disponible sur la plupart des
+dépôts GNU/Linux.
+
+        \subparagraph{Utilisation}
+        Le programme de forage se nomme \textit{forage.scala}
+et s'exécute avec Scala :
+        \begin{lstlisting}
+            $ scala forage.scala
+        \end{lstlisting}
+
+\appendix
+
+\section{Sauvegardes}
+    
+    \paragraph{}
+    Etant donné la nature financière des transactions effectuées sur la
+plate-forme d'e-commerce, il est nécessaire d'établir des méthodes de
+sauvegardes robustes. 
+
+    \paragraph{}
+    Cependant, deux remarques viennent à l'esprit :
+    \begin{itemize}
+        \item les produits des bases de données américaine et anglaise sont
+recopiés sur le dépôt belge à une cadence de vingt articles ;
+        \item les commandes et les utilisateurs sont recopiés en temps réel
+entre les bases belge et américaine.
+    \end{itemize}
+
+    \paragraph{}
+    Ainsi, certaines données sont déjà dupliquées à deux endroits
+différents\footnote{A la condition que les différentes bases soient installées
+sur des machines distinctes.}. Ceci est particulièrement intéressant dans le
+cas des commandes et des utilisateurs, car il s'agit clairement des données les
+plus délicates du système, et elles sont répliquées en temps réel (c'est à
+dire sans risque de perte pour ces tables lorsque seulement l'un de ces deux
+dépôts rencontre un problème).
+
+    \paragraph{}
+    Néanmoins, ça n'est pas suffisant, car même s'il est très peu probable que
+les deux dépôts rencontrent une panne simultanément, il serait assez aisé à un
+pirate de s'attaquer à la seconde base s'il a réussi à s'introduire dans la
+première (celles-ci sont quasi identiques et de plus liées par un DBLINK).
+
+    \paragraph{}
+    La première chose à faire semble être de configurer les bases de données en
+mode ARCHIVELOG afin de permettre des sauvegardes à chaud\footnote{Il est
+impensable de stopper la plate-forme durant plusieurs minutes lors des
+sauvegardes.} incrémentales cohérentes. La sauvegarde à chaud devrait se faire
+durant les heures creuses. Les tables liées aux utilisateurs et leurs commandes
+devront être sauvegardées plus régulièrement, même si cela se fera au détriment
+des performances. 
+
+\end{document}

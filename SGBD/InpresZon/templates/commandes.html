@@ -6,24 +6,62 @@
 {% endblock %}{% endblock %}
 
 {% block contenu %}
-    <table width="95%">
-        <thead>
-            <tr>
-                <th>{% trans "Date commande" %}</th>
-                <th>{% trans "Adresse de livraison" %}</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for c in commandes %}
-            <tr>
-                <td>
-                    {{ c.date_commande }}
-                </td>
-                <td>
-                    Non renseignée
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% if confirmation_annulation %}
+        <p>
+            <strong>{% trans "Commande annulée" %}</strong>
+        </p>
+    {% endif %}
+
+    {% if commandes|length > 0 %}
+        <table width="95%">
+            <thead>
+                <tr>
+                    <th>{% trans "Date commande" %}</th>
+                    <th>{% trans "Site de commande" %}</th>
+                    <th colspan="2">{% trans "Adresse de livraison" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for c in commandes %}
+                <tr>
+                    <td>
+                        {{ c.date_commande }}
+                        {% if c.en_livraison %}
+                            <h4>Commande en cours de livraison:</h4>
+                            <ul>
+                                {% for p in c.paquets %}
+                                    <li>
+                                        Paquet #{{ p.id }}
+                                        {{ p.get_status_display }}
+                                        ({{ p.status_changement }})
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ c.origine }}
+                    </td>
+                    <td>
+                        {{ c.adresse_livraison }}
+                    </td>
+                    <td>
+                        {% if c.modifiable %}
+                            <a href="{% url commande-annuler c.id %}"/>
+                                {% trans "Annuler cette commande" %}
+                            </a><br />
+                            <a href="{% url commande c.id %}">
+                                {% trans "Modifier cette commande" %}
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>
+            {% trans "Vous n'avez enregistré aucune commande." %}
+        </p>
+    {% endif %}
 {% endblock %}

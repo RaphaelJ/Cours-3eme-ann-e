@@ -15,7 +15,8 @@ from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 
 from auth_backend import crypt_mdp
-from forms import UtilisateurForm, ProfilForm, CaddieProduitForm
+from forms import UtilisateurForm, ProfilForm, CaddieProduitForm, AdresseForm, \
+    CommandeForm, CommandeProduitForm, CommentaireForm
 from models import Produit, CaddieProduit, Commande, CommandePaquet
 from packages import GestionUtilisateurs, GestionCatalogue, GestionCommandes
 
@@ -44,8 +45,27 @@ def catalogue(request, page=1):
 def produit(request, produit_ean):
     """ Affiche la fiche d'un produit """
     
+    if request.user.is_authenticated() and \
+       GestionCatalogue.CommentaireAutorise(produit_ean, request.user.utilisateur.login):
+        if request.method == 'POST':
+            form = CommentaireForm(request.POST)
+
+            if form.is_valid():
+                GestionCatalogue.AjouterCommentaire(
+                    produit_ean, request.user.utilisateur.login, 
+                    form.cleaned_data['message']
+                )
+        else:
+            form = CommentaireForm()
+    else:
+        form = None
+        
+    produit = GestionCatalogue.Produit(produit_ean)
     return render_to_response("produit.html", {
-        'produit': GestionCatalogue.Produit(produit_ean),
+        'produit': produit,
+        'similaires': GestionCatalogue.ProduitsSimilaires(produit.ean),
+        'commentaires':  GestionCatalogue.Commentaires(produit.ean),
+        'form': form,
     }, context_instance=RequestContext(request))
     
 def inscription(request):
@@ -91,7 +111,7 @@ def profil(request):
     else:
         form = ProfilForm({
             'nom': request.user.utilisateur.nom,
-            'prenom': request.user.utilisateur.prenom
+            'prenom': request.user.utilisateur.prenom,
         })
 
     return render_to_response("profil.html", {
@@ -99,16 +119,41 @@ def profil(request):
     }, context_instance=RequestContext(request))
 
 @login_required
-def adresses(request):
-    """ Liste toutes les adresses enregistrées par l'utilisateur '"""
+def adresses(request, supprimer=None):
+    """ Liste toutes les adresses enregistrées par l'utilisateur """
+    
+    message = None
+    
+    if supprimer != None:
+        try:
+            GestionUtilisateurs.SupprimerAdresse(
+                request.user.utilisateur.login, supprimer
+            )
+            message = 'supprime' 
+        except:
+            message = 'suppression impossible'
+    
+    if request.method == 'POST':
+        form = AdresseForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            
+            GestionUtilisateurs.AjouterAdresse(
+                request.user.utilisateur.login, data['adresse'],
+                data['ville'], data['code_postal'], data['pays']
+            )
+            form = AdresseForm()
+            message = 'ajoute'
+    else:
+        form = AdresseForm()
 
     return render_to_response("adresses.html", {
-        'adresses': request.user.utilisateur.adresses.all(),
+        'message': message,
+        'adresses': GestionUtilisateurs.Adresses(
+            request.user.utilisateur.login
+        ),
+        'form': form,
     }, context_instance=RequestContext(request))
-
-@login_required
-def adresse(request):
-    pass
 
 def _cadie_produits_total(utilisateur, page):
     """
@@ -137,6 +182,24 @@ def caddie(request, page=1):
     
     cps, total = _cadie_produits_total(util, page)
     
+    adresses = GestionUtilisateurs.Adresses(util.login)
+    if request.method == 'POST': # Passer commande
+        form = CommandeForm(adresses, request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            
+            try:
+                print(form.cleaned_data['adresse'])
+                GestionCommandes.PasserCommande(
+                    request.user.utilisateur.login,
+                    form.cleaned_data['adresse']
+                )
+                return redirect('commandes')
+            except:
+                return redirect('caddie')
+    else:
+        form = CommandeForm(adresses)   
+    
     return render_to_response("caddie.html", {
         'caddie_produits': cps,
         'total': total,
@@ -144,6 +207,7 @@ def caddie(request, page=1):
         'page': page,
         'page_precedente': page-1 if page > 1 else False,
         'page_suivante': page+1 if page < nbre_pages else False,
+        'form': form,
     }, context_instance=RequestContext(request))
     
     
@@ -164,6 +228,16 @@ def caddie_supprimer(request, ean):
     """
     
     GestionCommandes.SupprimerCaddie(request.user.utilisateur.login, ean)
+    
+    return redirect('caddie')
+    
+@login_required
+def caddie_vider(request):
+    """
+    Supprime tous les éléments du caddie
+    """
+    
+    GestionCommandes.ViderCaddie(request.user.utilisateur.login)
     
     return redirect('caddie')
 
@@ -196,32 +270,75 @@ def caddie_modifier(request, ean):
     }, context_instance=RequestContext(request))
 
 @login_required
-def commande(request):
-    """
-    Demande une confirmation de l'adresse de livraison, propose un moyen de
-    paiement et crée une nouvelle commande
-    """
-    
-    try:
-        GestionCommandes.PasserCommande(request.user.utilisateur.login)
-    except:
-        pass
-    
-    return redirect('commandes')
-    #except:
-        #return render_to_response("commande.html", {
-            #'caddie_produits': cps,
-            #'form': form,
-        #}, context_instance=RequestContext(request))
-        
-@login_required
-def commandes(request):
+def commandes(request, annuler_commande=None):
     """
     Liste les commandes en cours
     """
     
+    if annuler_commande != None:
+        GestionCommandes.AnnulerCommande(
+            request.user.utilisateur.login, annuler_commande
+        )
+        
+        confirmation_annulation = True
+    else:
+        confirmation_annulation = False
+    
     return render_to_response("commandes.html", {
+        'confirmation_annulation': confirmation_annulation,
         'commandes': GestionCommandes.HistoriqueCommandes(
             request.user.utilisateur.login
         ),
+    }, context_instance=RequestContext(request))
+
+@login_required
+def commande(request, commande_id, supprimer_commande_produit_id=None):
+    """
+        Permet la modification des détails d'une commande
+    """
+    
+    paquets = GestionCommandes.PaquetsCommande(
+        request.user.utilisateur.login, commande_id
+    )
+    
+    if len(paquets) > 0: # Commande en livraison
+        return redirect('commandes')
+    else:
+        return render_to_response("commande.html", {
+            'commande_id': commande_id,
+            'commande_produits': GestionCommandes.ProduitsCommande(
+                request.user.utilisateur.login, commande_id
+            ),
+        }, context_instance=RequestContext(request))
+
+@login_required
+def commande_modifier(request, commande_id, commande_produit_id):
+    """ Modifie la quantité d'un produit de la commande """
+    commande_produit = GestionCommandes.ProduitCommande(
+        request.user.utilisateur.login, commande_produit_id
+    )
+    
+    if request.method == 'POST':
+        form = CommandeProduitForm(
+            commande_produit.produit.stock + commande_produit.quantite,
+            request.POST, {
+                'quantite': commande_produit.quantite
+        })
+        
+        if form.is_valid():    
+            GestionCommandes.ModifierCommandeQuantite(
+                request.user.utilisateur.login, commande_produit_id,
+                form.cleaned_data['quantite']
+            )
+            
+            return redirect('commande', commande_id)
+    else:
+        form = CommandeProduitForm(
+            commande_produit.produit.stock + commande_produit.quantite, {
+                'quantite': commande_produit.quantite
+            }
+        )
+    
+    return render_to_response("commande_modifier.html", {
+        'form': form,
     }, context_instance=RequestContext(request))

@@ -27,7 +27,9 @@
                     <td>
                         {{ p.quantite }}
                         {% if not p.en_stock %}
-                            (non disponible en stock)
+                            <strong>
+                                (non disponible en stock ({{ p.stock }} exemplaire(s) en stock))
+                            </strong>
                         {% endif %}
                     </td>
                     <td>{{ p.prix }} {{ p.devise }}</td>
@@ -58,6 +60,12 @@
         </ul>
 
         <p>
+            <a href="{% url caddie-vider %}">
+                {% trans "Videz-moi ce caddie !" %}
+            </a>
+        </p>
+
+        <p>
             <strong>{% trans "Prix total:" %}</strong>
             {% comment %} 
                 <ul>
@@ -68,17 +76,28 @@
             {% endcomment %} 
             {{ total }} €
         </p>
-
-        <p>
-            {% if en_stock %}
-                <a href="{% url commande %}">{% trans "Passer commande" %}</a>
-            {% else %}
+        
+        {% if en_stock %}
+            <h2>Passer commande</h2>
+            
+            <form method="post" action="">
+                <ul>
+                    {{ form.as_ul }}
+                </ul>
+                <a href="{% url adresses %}">{% trans "Gérer mes adresses" %}</a>
+                
+                {% csrf_token %}                
+                <input type="submit" value="{% trans "Commander" %}" />
+            </form>
+        {% else %}
+            <p>
                 {% blocktrans %}
                     Vous ne pouvez pas passer commande car certains articles
                     ne sont pas disponibles dans les stocks
                 {% endblocktrans %}
-            {% endif %}
-        </p>
+            </p>
+        {% endif %}
+        
     {% else %}
         <p>
             {% trans "Votre caddie est vide." %}

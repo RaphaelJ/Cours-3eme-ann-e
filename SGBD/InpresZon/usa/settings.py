@@ -8,6 +8,8 @@ import InpresZon
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+ORIGINE = 'USA'
+
 ADMINS = (
     ('Raphael Javaux', 'raphaeljavaux@gmail.com'),
 )

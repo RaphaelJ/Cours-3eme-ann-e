@@ -135,5 +135,54 @@
             {{ produit.get_langue_display }}
         </li>
     </ul>
+
+    <h3>{% trans "Les utilisateurs ayant commandé ce produit on également acheté les produits suivants: " %}</h3>
+    
+    {% if similaires|length > 0 %}
+        <ul>
+            {% for p in similaires %}
+                <li><a href="{% url produit p.ean %}">
+                    {% blocktrans with titre=p.titre|escape prix=p.prix|escape devise=p.devise|escape %}
+                        {{ titre }}</a> - {{ prix }} {{ devise }}
+                    {% endblocktrans %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>
+            <strong>Aucun produit similaire trouvé</strong>
+        </p>
+    {% endif %}
+
+    <h3>{% trans "Commentaires" %}</h3>
+   
+    {% for c in commentaires %}
+        <p>
+            <strong>{{ c.login }}</strong> ({{ c.creation }})
+            <blockquote>
+                {{ c.message }}
+            </blockquote>
+        </p>
+    {% endfor %}
+
+    {% if form %}
+        <h4>Ajouter un commentaire</h4>
+        
+        <form action="" method="post">
+            <ul>
+                {{ form.as_ul }}
+            </ul>
+            {% csrf_token %}
+            <input type="submit" value="{% trans "Ajouter" %}" />
+        </form>
+    {% else %}
+        <p>
+            {% if user.is_authenticated %}
+                {% trans "Vous devez avoir reçu cet objet pour poster un commentaire." %}
+            {% else %}
+                {% trans "Vous devez être connecté et avoir reçu cet objet pour poster un commentaire." %}
+            {% endif %}
+        </p>
+    {% endif %}
     
 {% endblock %}

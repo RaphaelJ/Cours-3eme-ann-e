@@ -4,7 +4,8 @@ import cx_Oracle
 
 from django.db import connection
 
-from models import Utilisateur, Session, Produit, Fournisseur, Commande
+from models import Utilisateur, Session, Produit, Fournisseur, Commande, \
+    Adresse, CommandePaquet, CommandeProduit, Commentaire
 
 class GestionUtilisateurs:
     @staticmethod
@@ -115,6 +116,71 @@ class GestionUtilisateurs:
             prenom=variables['prenom'].getvalue(),
             date_inscription=variables['date_inscription'].getvalue()
         )
+    
+    @staticmethod
+    def Adresses(login):
+        connection.cursor()
+        result = connection.connection.cursor()
+        cur = connection.connection.cursor()
+        
+        cur.execute("BEGIN :result := Gestion_Utilisateurs.Adresses(:login); END;",
+            result=result, login=login
+        )
+        
+        return [ Adresse(
+            id=p[0], adresse=p[1], ville=p[2], code_postal=p[3], pays=p[4]
+        ) for p in result ]
+        
+    @staticmethod
+    def Adresse(login, adresse_id):
+        connection.cursor()
+        cur = connection.connection.cursor()
+        
+        variables = {
+            'login': login,
+            'adresse_id': adresse_id,
+            'adresse': cur.var(cx_Oracle.STRING),
+            'ville': cur.var(cx_Oracle.STRING),
+            'code_postal': cur.var(cx_Oracle.STRING), 
+            'pays': cur.var(cx_Oracle.STRING),
+            'utilisateur_id': cur.var(cx_Oracle.STRING),
+        }
+
+        cur.execute("""
+            DECLARE
+                VarAdresse SITE_ADRESSE%ROWTYPE;
+            BEGIN
+                VarAdresse := GESTION_UTILISATEURS.Adresse(:login, :adresse_id);
+                :adresse := VarAdresse.adresse;
+                :ville := VarAdresse.ville;
+                :code_postal := VarAdresse.code_postal;
+                :pays := VarAdresse.pays;
+                :utilisateur_id := VarAdresse.utilisateur_id;
+            END;""", variables
+        )
+
+        return Adresse(
+            id=adresse_id, adresse=variables['adresse'].getvalue(),
+            ville=variables['ville'].getvalue(),
+            code_postal=variables['code_postal'].getvalue(),
+            pays=variables['pays'].getvalue()
+        )
+    
+    @staticmethod
+    def AjouterAdresse(login, adresse, ville, code_postal, pays):
+        connection.cursor()
+        cur = connection.connection.cursor()
+        return cur.callproc("GESTION_UTILISATEURS.AjouterAdresse", (
+            login, adresse, ville, code_postal, pays
+        ))
+        
+    @staticmethod
+    def SupprimerAdresse(login, adresse_id):
+        connection.cursor()
+        cur = connection.connection.cursor()
+        return cur.callproc("GESTION_UTILISATEURS.SupprimerAdresse", (
+            login, adresse_id
+        ))
 
 class GestionSessions:
     @staticmethod
@@ -183,7 +249,29 @@ class GestionCatalogue:
             fournisseur=GestionCatalogue.Fournisseur(p[7]), origine=p[8],
             replique=p[9]
         ) for p in result ]
+    
+    @staticmethod
+    def ProduitsSimilaires(produit_id):
+        connection.cursor()
+        result = connection.connection.cursor()
+        cur = connection.connection.cursor()
         
+        cur.execute("""
+            BEGIN
+                :result := Gestion_Catalogue.ProduitsSimilaires(
+                    :produit_id
+                );
+            END;""",
+            result=result, produit_id=produit_id
+        )
+        
+        return [ Produit(
+            ean=p[0], titre=p[1], description=p[2], langue=p[3], prix=p[4],
+            stock=p[5], devise=p[6],
+            fournisseur=GestionCatalogue.Fournisseur(p[7]), origine=p[8],
+            replique=p[9]
+        ) for p in result ]
+    
     @staticmethod
     def NbreProduits():
         connection.cursor()
@@ -260,6 +348,40 @@ class GestionCatalogue:
             ), origine=variables['origine'].getvalue(),
             replique=variables['replique'].getvalue()
         )
+        
+    @staticmethod
+    def Commentaires(produit_id):
+        connection.cursor()
+        result = connection.connection.cursor()
+        cur = connection.connection.cursor()
+        
+        cur.execute(
+            "BEGIN :result := Gestion_Catalogue.Commentaires(:produit_id); END;",
+            result=result, produit_id=produit_id
+        )
+        
+        def create_commentaire(c):
+            ret = Commentaire(id=c[0], creation=c[3], message=c[4])
+            ret.login = c[1]
+            return ret
+        
+        return [ create_commentaire(c) for c in result ]
+        
+    @staticmethod
+    def AjouterCommentaire(produit_id, utilisateur_id, message):
+        connection.cursor()
+        cur = connection.connection.cursor()
+        return cur.callproc("Gestion_Catalogue.AjouterCommentaire", (
+            produit_id, utilisateur_id, message
+        ))
+        
+    @staticmethod
+    def CommentaireAutorise(produit_id, utilisateur_id):
+        connection.cursor()
+        cur = connection.connection.cursor()
+        return cur.callfunc("Gestion_Catalogue.CommentaireAutorise",
+            cx_Oracle.NUMBER, [produit_id, utilisateur_id]
+        ) > 0
     
 class GestionCommandes:
     ARTICLES_PAGE = 5
@@ -329,6 +451,14 @@ class GestionCommandes:
         return cur.callproc("GESTION_COMMANDES.SupprimerCaddie", (
             utilisateur, ean
         ))
+        
+    @staticmethod
+    def ViderCaddie(utilisateur):
+        connection.cursor()
+        cur = connection.connection.cursor()
+        return cur.callproc("GESTION_COMMANDES.ViderCaddie", (
+            utilisateur,
+        ))
     
     @staticmethod
     def QuantiteProduit(utilisateur, ean):
@@ -347,11 +477,11 @@ class GestionCommandes:
         )
     
     @staticmethod
-    def PasserCommande(utilisateur):
+    def PasserCommande(utilisateur, adresse_id):
         connection.cursor()
         cur = connection.connection.cursor()
         return cur.callproc("GESTION_COMMANDES.PasserCommande",
-            [utilisateur]
+            [utilisateur, adresse_id]
         )
         
     @staticmethod
@@ -366,5 +496,108 @@ class GestionCommandes:
             END;""", result=result, utilisateur=utilisateur
         )
         
-        return [ Commande(c[1], None, date_commande=c[3]) for c in result ]
+        def create_command(c):
+            ret = Commande(
+                id=c[0], adresse_livraison=GestionUtilisateurs.Adresse(
+                    utilisateur, c[2]
+                ), origine=c[3], date_commande=c[4]
+            )
+            ret.paquets = GestionCommandes.PaquetsCommande(
+                    utilisateur, c[0]
+            )
+            return ret
+        
+        return [ create_command(c) for c in result ]
+        
+    @staticmethod
+    def ProduitsCommande(utilisateur_id, commande_id):
+        connection.cursor()
+        result = connection.connection.cursor()
+        cur = connection.connection.cursor()
+        
+        cur.execute("""
+            BEGIN
+                :result := Gestion_Commandes.ProduitsCommande(
+                    :utilisateur, :commande
+                );
+            END;""", result=result, utilisateur=utilisateur_id,
+            commande=commande_id
+        )
+        
+        def create_produit(p):
+            ret = Produit(
+                ean=p[0], titre=p[1], description=p[2], langue=p[3], prix=p[4],
+                stock=p[5], devise=p[6], origine=p[8], replique=p[9],
+            )
+            ret.quantite = p[10]
+            ret.commande_produit_id = p[11]
+            return ret
+        
+        return [ create_produit(p) for p in result]
     
+    @staticmethod
+    def PaquetsCommande(utilisateur_id, commande_id):
+        connection.cursor()
+        result = connection.connection.cursor()
+        cur = connection.connection.cursor()
+        
+        cur.execute("""
+            BEGIN
+                :result := Gestion_Commandes.PaquetsCommande(
+                    :utilisateur, :commande
+                );
+            END;""", result=result, utilisateur=utilisateur_id,
+            commande=commande_id
+        )
+        
+        return [
+            CommandePaquet(id=p[0], status=p[2], status_changement=p[3])
+            for p in result
+        ]
+    
+    @staticmethod
+    def AnnulerCommande(utilisateur_id, commande_id):
+        connection.cursor()
+        cur = connection.connection.cursor()
+        return cur.callproc("GESTION_COMMANDES.AnnulerCommande", (
+            utilisateur_id, commande_id
+        ))
+        
+    @staticmethod
+    def ProduitCommande(utilisateur_id, commande_produit_id):
+        connection.cursor()
+        cur = connection.connection.cursor()
+        
+        variables = {
+            'utilisateur_id': utilisateur_id,
+            'commande_produit_id': commande_produit_id,
+            'produit_id': cur.var(cx_Oracle.NUMBER),
+            'quantite': cur.var(cx_Oracle.NUMBER),
+        }
+
+        cur.execute("""
+            DECLARE
+                VarCommandeProduit SITE_COMMANDEPRODUIT%ROWTYPE;
+            BEGIN
+                VarCommandeProduit := GESTION_COMMANDES.ProduitCommande(
+                    :utilisateur_id, :commande_produit_id
+                );
+                :produit_id := VarCommandeProduit.produit_id;
+                :quantite := VarCommandeProduit.quantite;
+            END;""", variables
+        )
+
+        return CommandeProduit(
+            id=commande_produit_id,
+            produit=GestionCatalogue.Produit(
+                variables['produit_id'].getvalue()
+            ), quantite=variables['quantite'].getvalue()
+        )
+    
+    @staticmethod
+    def ModifierCommandeQuantite(utilisateur_id, commande_produit_id, quantite):
+        connection.cursor()
+        cur = connection.connection.cursor()
+        return cur.callproc("GESTION_COMMANDES.ModifierCommandeQuantite", (
+            utilisateur_id, commande_produit_id, quantite
+        ))

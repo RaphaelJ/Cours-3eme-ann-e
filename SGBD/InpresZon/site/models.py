@@ -24,27 +24,6 @@ MODES_LIVRAISON = (
 
 if settings.SITE:
     # Utilisateurs
-    class Pays(models.Model):
-        nom_fr = models.CharField(max_length=30)
-        nom_en = models.CharField(max_length=30)
-
-        @property
-        def nom(self):
-            """ Donne le nom du pays dans la langue du site """
-            if settings.LANGUAGE_CODE == 'fr_FR':
-                return self.nom_fr
-            else:
-                return self.nom_en
-
-        def __unicode__(self):
-            return self.nom
-
-    class Adresse(models.Model):
-        adresse = models.CharField(max_length=255)
-        ville = models.CharField(max_length=30)
-        code_postal = models.CharField(max_length=10)
-        pays = models.ForeignKey(Pays, related_name="adresses")
-
     class Utilisateur(models.Model):
         LANGUES = (
             ('BE', _(u"Site belge")),
@@ -65,8 +44,6 @@ if settings.SITE:
             max_length=4, choices=MODES_PAIEMENT, editable=False
         )
 
-        adresses = models.ManyToManyField(Adresse, null=True, editable=False)
-
         mode_paiement = models.CharField(
             max_length=4, choices=MODES_PAIEMENT, blank=True, editable=False
         )
@@ -81,6 +58,37 @@ if settings.SITE:
 
         class Meta:
             ordering = ['login']
+            
+    
+    #class Pays(models.Model):
+        #nom_fr = models.CharField(max_length=30)
+        #nom_en = models.CharField(max_length=30)
+
+        #@property
+        #def nom(self):
+            #""" Donne le nom du pays dans la langue du site """
+            #if settings.LANGUAGE_CODE == 'fr_FR':
+                #return self.nom_fr
+            #else:
+                #return self.nom_en
+
+        #def __unicode__(self):
+            #return self.nom
+
+    class Adresse(models.Model):
+        adresse = models.CharField(max_length=255)
+        ville = models.CharField(max_length=30)
+        code_postal = models.CharField(max_length=10)
+        pays = models.CharField(max_length=30)
+        utilisateur = models.ForeignKey(
+            Utilisateur, related_name="adresses", null=True, default=None
+        )
+        #pays = models.ForeignKey(Pays, related_name="adresses")
+        
+        def __unicode__(self):
+            return u"{0} {1} {2} ({3})".format(
+                self.adresse, self.code_postal, self.ville, self.pays
+            )
 
     class Session(models.Model):
         """
@@ -99,6 +107,13 @@ LIVRE = "LIVRE"
 FILM = "FILM"
 MUSIQUE = "MUSIQUE"
 
+
+ORIGINES = (
+    ('BE', _(u"Centrale belge")),
+    ('USA', _(u"Centrale américaine")),
+    ('UK', _(u"Centrale anglaise")),
+)
+
 class Fournisseur(models.Model):
     nom = models.CharField(max_length=30)
     
@@ -106,11 +121,6 @@ class Produit(models.Model):
     LANGUES = (
         ('FR', _(u"Français")),
         ('EN', _(u"Anglais")),
-    )
-    ORIGINES = (
-        ('BE', _(u"Centrale belge")),
-        ('USA', _(u"Centrale américaine")),
-        ('UK', _(u"Centrale anglaise")),
     )
     
     ean = models.BigIntegerField(primary_key=True)
@@ -214,7 +224,6 @@ if 'musique' in settings.CATEGORIES:
         publication = models.CharField(max_length=64, blank=True)
 
 if settings.SITE:
-    
     # Caddies, listes d'envies, commandes et livraisons
     class CaddieProduit(models.Model):
         utilisateur = models.ForeignKey(Utilisateur, editable=False)
@@ -253,15 +262,32 @@ if settings.SITE:
 
     class Commande(models.Model):
         utilisateur = models.ForeignKey(Utilisateur, editable=False)
-
-        adresse_livraison = models.ForeignKey(Adresse, null=True)
-
+        
+        adresse_livraison = models.ForeignKey(Adresse)
+        origine = models.CharField(max_length=3, choices=ORIGINES)
         date_commande = models.DateTimeField(auto_now_add=True, editable=False)
-
+        
         produits = models.ManyToManyField(
             Produit, through='CommandeProduit', editable=False
         )
-
+        
+        @property
+        def commande_locale(self):
+            """ Retourne True si la commande a été fait sur ce site web """
+            return self.origine == settings.ORIGINE
+            
+        @property
+        def en_livraison(self):
+            return len(self.paquets) > 0
+            
+        @property
+        def modifiable(self):
+            """
+                Retourne true si la commande n'est pas en livraison et a 
+                étée commandée sur le site local.
+            """            
+            return self.commande_locale and not self.en_livraison
+    
     class CommandeProduit(models.Model):
         commande = models.ForeignKey(Commande)
         produit = models.ForeignKey(Produit)
@@ -301,6 +327,13 @@ if settings.SITE:
 
         class Meta:
             unique_together = ('paquet', 'produit')
+            
+    class Commentaire(models.Model):
+        utilisateur = models.ForeignKey(Utilisateur, editable=False)
+        produit = models.ForeignKey(Produit, editable=False)
+        creation = models.DateField(auto_now_add=True)        
+        
+        message = models.TextField(blank=False, null=False)
 
     # Gestion des erreurs
     class Erreur(models.Model):

@@ -7,6 +7,7 @@
     <meta charset="utf-8" />
     <title>{% block titre %}{% endblock %} - InpresZon</title>
     <link rel="stylesheet" title="Default" type="text/css" href="/static/screen.css" media="screen" />
+    <link rel="shortcut icon" href="/static/favicon.png" />
 </head>
 <body>
     <div id="entete">
@@ -25,7 +26,7 @@
                     <li><a href="{% url profil %}">{% trans "Profil" %}</a></li>
                     <li><a href="{% url deconnexion %}">
                         {% blocktrans with login=user.username %}
-                            Déconnexion ({{ login }})
+                            Déconnexion (<strong>{{ login }}</strong>)
                         {% endblocktrans %}
                     </a></li>
                 {% else %}

@@ -2,52 +2,34 @@
 {% load i18n %}
 
 {% block titre %}{% block titre-page %}
-    {% trans "Aperçu de ma commande" %}
+    {% trans "Détails d'une commande" %}
 {% endblock %}{% endblock %}
 
 {% block contenu %}
-    <table>
+    <table width="95%">
         <thead>
             <tr>
                 <th>{% trans "Produit" %}</th>
                 <th>{% trans "Quantité" %}</th>
                 <th>{% trans "Prix unitaire" %}</th>
-                <th>{% trans "Prix total" %}</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-        {% for cp in caddie_produits %}
+        {% for cp in commande_produits %}
             <tr>
-                <td><a href="{% url produit cp.produit.ean %}">
-                    {{ cp.produit.titre|escape }}
+                <td><a href="{% url produit cp.ean %}">
+                    {{ cp.titre|escape }}
                 </a></td>
                 <td>
                     {{ cp.quantite }}
                 </td>
-                <td>{{ cp.produit.prix }} {{ cp.produit.devise }}</td>
-                <td>{{ cp.prix_total }} {{ cp.produit.devise }}</td>
+                <td>{{ cp.prix }} {{ cp.devise }}</td>
+                <td><a href="{% url commande-modifier commande_id cp.commande_produit_id %}">
+                    {% trans "Modifier la quantité" %}
+                </a></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-    <p>
-        <strong>{% trans "Prix total:" %}</strong>
-        <ul>
-        {% for devise, total_devise in total.items %}
-            <li>{{ total_devise }} {{ devise }}</li>
-        {% endfor %}
-        </ul>
-    </p>
-
-    <form method="post" action="">
-        <ul>
-            {{ form.as_ul }}
-        </ul>
-        {% csrf_token %}
-        <input type="submit"
-               value="{% trans "Valider la commande et effecter le paiement" %}"
-        />
-    </form>
 {% endblock %}
