@@ -114,114 +114,127 @@ ORIGINES = (
     ('UK', _(u"Centrale anglaise")),
 )
 
-class Fournisseur(models.Model):
-    nom = models.CharField(max_length=30)
-    
-class Produit(models.Model):
-    LANGUES = (
-        ('FR', _(u"Français")),
-        ('EN', _(u"Anglais")),
-    )
-    
-    ean = models.BigIntegerField(primary_key=True)
-    titre = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, blank=True, default="")
-    langue = models.CharField(max_length=25, choices=LANGUES, blank=True)
-    
-    prix = models.DecimalField(max_digits=10, decimal_places=2)
-    
-    stock = models.IntegerField(default=0)
-    devise = models.CharField(max_length=3, choices=DEVISES)
+if not settings.DATAWAREHOUSE:
+    class Fournisseur(models.Model):
+        nom = models.CharField(max_length=30)
+        
+    class Produit(models.Model):
+        LANGUES = (
+            ('FR', _(u"Français")),
+            ('EN', _(u"Anglais")),
+        )
+        
+        ean = models.BigIntegerField(primary_key=True)
+        titre = models.CharField(max_length=255)
+        description = models.CharField(max_length=255, blank=True, default="")
+        langue = models.CharField(max_length=25, choices=LANGUES, blank=True)
+        
+        prix = models.DecimalField(max_digits=10, decimal_places=2)
+        
+        stock = models.IntegerField(default=0)
+        devise = models.CharField(max_length=3, choices=DEVISES)
 
-    fournisseur = models.ForeignKey(Fournisseur)
+        fournisseur = models.ForeignKey(Fournisseur)
 
-    origine = models.CharField(max_length=3, choices=ORIGINES)
+        origine = models.CharField(max_length=3, choices=ORIGINES)
 
-    # Défini si l'article a été synchronisé avec une autre base
-    replique = models.BooleanField(default=False, editable=False)
-    
-    class Meta:
-        ordering = ('titre',)
+        # Défini si l'article a été synchronisé avec une autre base
+        replique = models.BooleanField(default=False, editable=False)
+        
+        class Meta:
+            ordering = ('titre',)
 
-    @property
-    def type_produit(self):
-        try:
-            self.livre
-            return LIVRE
-        except:
+        @property
+        def type_produit(self):
             try:
-                self.film
-                return FILM
+                self.livre
+                return LIVRE
             except:
                 try:
-                    self.musique
-                    return MUSIQUE
+                    self.film
+                    return FILM
                 except:
-                    return None
+                    try:
+                        self.musique
+                        return MUSIQUE
+                    except:
+                        return None
 
-class Artiste(models.Model):
-    nom = models.CharField(max_length=255, primary_key=True)
+    class Artiste(models.Model):
+        nom = models.CharField(max_length=255, primary_key=True)
 
-    class Meta:
-        ordering = ('nom',)
+        class Meta:
+            ordering = ('nom',)
 
-class Editeur(models.Model):
-    nom = models.CharField(max_length=255, primary_key=True)
+    class Editeur(models.Model):
+        nom = models.CharField(max_length=255, primary_key=True)
 
-    class Meta:
-        ordering = ('nom',)
+        class Meta:
+            ordering = ('nom',)
 
-if 'livre' in settings.CATEGORIES:
-    class Livre(Produit):
-        isbn = models.CharField(max_length=13, unique=True)
-        auteurs = models.ManyToManyField(Artiste, related_name="livres")
-        editeur = models.ForeignKey(Editeur, related_name="livres")
+    if 'livre' in settings.CATEGORIES:
+        class Livre(Produit):
+            isbn = models.CharField(max_length=13, unique=True)
+            auteurs = models.ManyToManyField(Artiste, related_name="livres")
+            editeur = models.ForeignKey(Editeur, related_name="livres")
 
-        reliure = models.CharField(max_length=30)
-        pages = models.IntegerField(null=True)
-        publication = models.CharField(max_length=64, blank=True)
-        num_edition = models.CharField(max_length=64, blank=True)
+            reliure = models.CharField(max_length=30)
+            pages = models.IntegerField(null=True)
+            publication = models.CharField(max_length=64, blank=True)
+            num_edition = models.CharField(max_length=64, blank=True)
 
-if 'film' in settings.CATEGORIES:
-    class Film(Produit):
-        SUPPORTS = (
-            ('DVD', u"DVD"),
-            ('BLR', u"Blue-Ray"),
-            ('NUM', _(u"En ligne (contenu numérique)")),
-            ('AUT', _(u"Autre")),
-        )
+    if 'film' in settings.CATEGORIES:
+        class Film(Produit):
+            SUPPORTS = (
+                ('DVD', u"DVD"),
+                ('BLR', u"Blue-Ray"),
+                ('NUM', _(u"En ligne (contenu numérique)")),
+                ('AUT', _(u"Autre")),
+            )
 
-        NOTATIONS = (
-            ('G', _(u"Tout public")),
-            ('PG', _(u"Surveillance parentale recommandée")),
-            ('PG-13', _(u"13 ans ou plus")),
-            ('R', _(u"Enfants de moins de 17 ans accompagnés")),
-            ('NC-17', _(u"17 ans ou plus")),
-        )
+            NOTATIONS = (
+                ('G', _(u"Tout public")),
+                ('PG', _(u"Surveillance parentale recommandée")),
+                ('PG-13', _(u"13 ans ou plus")),
+                ('R', _(u"Enfants de moins de 17 ans accompagnés")),
+                ('NC-17', _(u"17 ans ou plus")),
+            )
 
-        acteurs = models.ManyToManyField(Artiste, related_name="films_acteur")
-        realisateurs = models.ManyToManyField(Artiste, related_name="films_realisateur")
-        studio = models.ForeignKey(Editeur, related_name="films")
+            acteurs = models.ManyToManyField(
+                Artiste, related_name="films_acteur"
+            )
+            realisateurs = models.ManyToManyField(
+                Artiste, related_name="films_realisateur"
+            )
+            studio = models.ForeignKey(Editeur, related_name="films")
 
-        support = models.CharField(max_length=64, choices=SUPPORTS, blank=True)
-        disques = models.IntegerField(null=True)
-        notation = models.CharField(max_length=64, choices=NOTATIONS, blank=True)
-        duree = models.CharField(max_length=64) # Durée du film
+            support = models.CharField(
+                max_length=64, choices=SUPPORTS, blank=True
+            )
+            disques = models.IntegerField(null=True)
+            notation = models.CharField(
+                max_length=64, choices=NOTATIONS, blank=True
+            )
+            duree = models.CharField(max_length=64) # Durée du film
 
-if 'musique' in settings.CATEGORIES:
-    class Musique(Produit):
-        SUPPORTS = (
-            ('CD', _(u"CD audio")),
-            ('NUM', _(u"En ligne (numérique)")),
-            ('AUT', _(u"Autre")),
-        )
+    if 'musique' in settings.CATEGORIES:
+        class Musique(Produit):
+            SUPPORTS = (
+                ('CD', _(u"CD audio")),
+                ('NUM', _(u"En ligne (numérique)")),
+                ('AUT', _(u"Autre")),
+            )
 
-        auteurs = models.ManyToManyField(Artiste, related_name="musiques")
-        label = models.ForeignKey(Editeur, related_name="musiques", null=True)
+            auteurs = models.ManyToManyField(Artiste, related_name="musiques")
+            label = models.ForeignKey(
+                Editeur, related_name="musiques", null=True
+            )
 
-        support = models.CharField(max_length=16, choices=SUPPORTS, blank=True)
-        disques = models.IntegerField(null=True)
-        publication = models.CharField(max_length=64, blank=True)
+            support = models.CharField(
+                max_length=16, choices=SUPPORTS, blank=True
+            )
+            disques = models.IntegerField(null=True)
+            publication = models.CharField(max_length=64, blank=True)
 
 if settings.SITE:
     # Caddies, listes d'envies, commandes et livraisons
@@ -340,3 +353,82 @@ if settings.SITE:
         date_erreur = models.DateTimeField(auto_now_add=True)
         erreur = models.TextField()
         utilisateur = models.ForeignKey(Utilisateur, null=True)
+        
+# DataWarehouse
+
+if settings.DATAWAREHOUSE:
+    class Utilisateur(models.Model):
+        login = models.CharField(max_length=30, primary_key=True)
+        nom = models.CharField(max_length=30)
+        prenom = models.CharField(max_length=30)
+        date_inscription = models.DateTimeField(
+            auto_now_add=True, editable=False
+        )
+        
+        class Meta:
+            ordering = ['login']
+    
+    class Fournisseur(models.Model):
+        nom = models.CharField(max_length=30)
+       
+    class Produit(models.Model):
+        TYPES = (
+            ('LIVRE', _(u"Livre")),
+            ('MUSIQUE', _(u"Musique")),
+            ('FILM', _(u"Film")),            
+        )
+        LANGUES = (
+            ('FR', _(u"Français")),
+            ('EN', _(u"Anglais")),
+        )
+        
+        ean = models.BigIntegerField(primary_key=True)
+        titre = models.CharField(max_length=255)
+        
+        type = models.CharField(max_length=25, choices=TYPES, blank=False)
+        langue = models.CharField(max_length=25, choices=LANGUES, blank=True)
+        
+        prix = models.DecimalField(max_digits=10, decimal_places=2)
+        
+        livraisons = models.ManyToManyField(
+            Fournisseur, through='Livraison', editable=False
+        )
+        
+        class Meta:
+            ordering = ('titre',)
+   
+    class Commande(models.Model):
+        utilisateur = models.ForeignKey(Utilisateur, editable=False)
+        
+        origine = models.CharField(max_length=3, choices=ORIGINES)
+        date_commande = models.DateTimeField(auto_now_add=True, editable=False)
+        
+        produits = models.ManyToManyField(
+            Produit, through='CommandeProduit', editable=False
+        )
+    
+    class CommandeProduit(models.Model):
+        commande = models.ForeignKey(Commande)
+        produit = models.ForeignKey(Produit)
+        quantite = models.IntegerField(default=1)
+        
+        dans_liste_envie = models.BooleanField()
+        
+        # Copie du prix d'achat
+        prix = models.DecimalField(max_digits=10, decimal_places=2)
+        devise = models.CharField(max_length=3, choices=DEVISES)
+
+        class Meta:
+            unique_together = ('commande', 'produit')
+    
+    class Commentaire(models.Model):
+        utilisateur = models.ForeignKey(Utilisateur, editable=False)
+        produit = models.ForeignKey(Produit, editable=False)
+        creation = models.DateField(auto_now_add=True)
+        
+    class Livraison(models.Model):
+        fournisseur = models.ForeignKey(Fournisseur)
+        produit = models.ForeignKey(Produit)
+        
+        stock = models.IntegerField()
+        date_inscription = models.DateTimeField(auto_now_add=True)

@@ -29,6 +29,8 @@ DATABASES = {
 DATABASES['default'] = DATABASES['oracle']
 
 SITE = True
+DATAWAREHOUSE = False
+
 CATEGORIES = (
     'livre'
 )

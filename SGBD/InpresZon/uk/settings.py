@@ -8,6 +8,8 @@ import InpresZon
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+ORIGINE = 'MARKETING'
+
 ADMINS = (
     ('Raphael Javaux', 'raphaeljavaux@gmail.com'),
 )
@@ -30,8 +32,9 @@ DATABASES = {
 }
 DATABASES['default'] = DATABASES['oracle']
 
-
 SITE = False
+DATAWAREHOUSE = False
+
 CATEGORIES = (
     'film'
 )

@@ -39,6 +39,25 @@ is
 end err_pkg;
 
 create or replace
+package errnums_pkg
+is
+    no_data_ex exception;
+    no_data_const constant number := -20002;
+    
+    caddie_vide_ex exception;
+    caddie_vide_const constant number := -20003;
+    
+    pas_en_stock_ex exception;
+    pas_en_stock_const constant number := -20004;
+    
+    utilisateur_existant_ex exception;
+    utilisateur_existant_const constant number := -20005;
+    
+    utilisateur_inexistant_ex exception;
+    utilisateur_inexistant_const constant number := -20006;
+end errnums_pkg;
+
+create or replace
 package body err_pkg is
    g_target pls_integer     := c_table;
    g_file   varchar2 (2000) := 'errors.log';
@@ -284,9 +303,3 @@ package body err_pkg is
         --end get_error_message;
 end;
 
-CREATE OR REPLACE package errnums_pkg
-is
-    fournisseur_not_found_ex exception;
-    fournisseur_const number := := -20002;
-    pragma exception_init (fournisseur_not_found_ex, -20002);
-end errnums_pkg;
