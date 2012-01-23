@@ -243,6 +243,45 @@ public class DatabaseBean implements Serializable {
         
         return voyageurs;
     }
+    
+    // Retourne true si agent authorisé
+    public boolean utilisateurAuthorise(String numeroCarte) throws SQLException {
+        PreparedStatement instruc = this.getConn().prepareStatement(
+            "SELECT * FROM agents WHERE id = ?"
+        );
+        
+        instruc.setString(1, numeroCarte);
+        ResultSet rs = instruc.executeQuery();
+        
+        return rs.next();
+    }
+    
+    // Retourne le nom du ferry et le numero de traversée du véhicule. Null si 
+    // le véhicule n'est pas enregistré.
+    public Object[] emplacementVehicule(String immatriculation, String nationalite)
+            throws SQLException
+    {
+        PreparedStatement instruc = this.getConn().prepareStatement(
+            "SELECT n.nom, f.traversee_id " +
+            "FROM file AS f "+
+            "INNER JOIN traversee AS t "+
+            "   ON t.id = f.traversee_id "+
+            "INNER JOIN navire AS n " +
+            "   ON n.id = t.navire " +
+            "WHERE f.immatriculation = ?"
+        );
+        
+        instruc.setString(1, immatriculation);
+        ResultSet rs = instruc.executeQuery();
+        
+        if (rs.next()) {
+            return new Object[] {
+                rs.getString("nom"), rs.getString("traversee_id")
+            };
+        } else
+            return null;
+        
+    }
 
     /**
      * @return the _conn

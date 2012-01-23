@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/rapha/Cours/Reseaux/FerryInpres/IniParser/IniParser.cpp
+IniParser.h
+/home/rapha/Cours/Reseaux/FerryInpres/IniParser/IniParser.h
+
+/home/rapha/Cours/Reseaux/FerryInpres/IniParser/IniParser.h
+stdlib.h
+-
+stdio.h
+-
+string.h
+-
+fstream
+-
+map
+-
+string
+-
+Utils/Exception.h
+/home/rapha/Cours/Reseaux/FerryInpres/IniParser/Utils/Exception.h
+
+Utils/Exception.h
+exception
+-
+string
+-
+

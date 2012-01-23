@@ -33,9 +33,9 @@ data Langue = Fr | En deriving (Show)
 data Connexion = Connexion Connection String -- DBConnection Origine
 
 main = do
-    connBe <- oracleConn beHote "be"
-    connUsa <- oracleConn usaHote "usa"
-    connUk <- oracleConn ukHote "uk"
+    connBe <- oracleConn beHote "be_new"
+    connUsa <- oracleConn usaHote "usa_new"
+    connUk <- oracleConn ukHote "uk_new"
     menu True [ ("Insérer dans BE"
                 , insertionBe $ Connexion connBe "BE")
               , ("Insérer dans USA"

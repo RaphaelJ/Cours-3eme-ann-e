@@ -18,4 +18,7 @@ target_link_libraries (serveur Sockets Utils IniParser)
 add_executable (terminal_client TerminalClient.cpp) 
 target_link_libraries (terminal_client Sockets Utils IniParser)
 
+add_executable (chat_client ChatClient.cpp) 
+target_link_libraries (chat_client Sockets Utils)
+
 set (CMAKE_CXX_FLAGS "-g -Wall -std=gnu++0x")

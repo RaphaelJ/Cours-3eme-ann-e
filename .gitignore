@@ -2,3 +2,8 @@
 *.pyc
 *.o
 *kate-swp
+/Java/ApplicWebFreeTaxShop/nbproject/private/
+/Java/ApplicWebFreeTaxShop/dist/
+/Java/ApplicWebFreeTaxShop/build/
+/Java/ApplicWebFreetaxShop/nbproject/private/
+/Java/ApplicWebFreetaxShop/build/
