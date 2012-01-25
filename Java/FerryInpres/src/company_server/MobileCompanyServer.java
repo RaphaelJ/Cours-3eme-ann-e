@@ -142,7 +142,7 @@ class MobileServerThread extends Thread {
                 emplacement
             );
             
-            //this.envoiPoliceEmail(immatriculation, emplacement, modele);
+            this.envoiPoliceEmail(immatriculation, emplacement, modele);
             
             System.out.println(
                 "Services de police contactés"

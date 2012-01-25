@@ -16,7 +16,7 @@ import javax.microedition.lcdui.*;
  * @author rapha
  */
 public class Main extends MIDlet implements CommandListener {
-    private static final String SERVER_HOST = "192.168.10.53";
+    private static final String SERVER_HOST = "10.59.22.48";
     private static final int SERVER_PORT = 39018;
     
     private DataInputStream in;

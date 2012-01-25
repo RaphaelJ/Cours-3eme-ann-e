@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class Main {
     public static final int PORT_SERVEUR = 39020;
     public static final String HOTE_SERVEUR = "127.0.0.1";
-    public static final String CHAT_GROUP = "228.5.6.7";
+    public static final String CHAT_GROUP = "224.0.0.1";
     
     public static final byte ACK = (byte) 'A';
     public static final byte FAIL = (byte) 'F';

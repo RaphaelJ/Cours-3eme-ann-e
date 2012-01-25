@@ -16,7 +16,7 @@ import javax.microedition.lcdui.*;
  * @author rapha
  */
 public class Main extends MIDlet implements CommandListener {
-    private static final String SERVER_HOST = "192.168.10.53";
+    private static final String SERVER_HOST = "10.59.22.48";
     private static final int SERVER_PORT = 39018;
     
     private DataInputStream in;
@@ -486,7 +486,7 @@ public class Main extends MIDlet implements CommandListener {
     public StringItem getStringItem1() {
         if (stringItem1 == null) {//GEN-END:|47-getter|0|47-preInit
             // write pre-init user code here
-            stringItem1 = new StringItem("Police appel\u00E9e", "Un email a \u00E9t\u00E9 envoy\u00E9 \u00E0 au poste de police le plus proche.");//GEN-LINE:|47-getter|1|47-postInit
+            stringItem1 = new StringItem("Police appel\u00E9e", "Un email a \u00E9t\u00E9 envoy\u00E9 \u00E0 au poste de police le plus proche. Appuyez sur OK lorsque les policiers sont sur place.");//GEN-LINE:|47-getter|1|47-postInit
             // write post-init user code here
         }//GEN-BEGIN:|47-getter|2|
         return stringItem1;

@@ -8,6 +8,7 @@
 
 #define PORT_SERVEUR 39020
 #define HOTE_SERVEUR "127.0.0.1"
+#define CHAT_GROUP "224.0.0.1"
 
 typedef enum _protocol_type : char {
     ACK = 'A',
@@ -67,14 +68,22 @@ int identificationAgent(char *user)
     return port_chat;
 }
 
+typedef struct _arg_reception {
+    int socket;
+    int port_chat;
+} arg_reception;
+
 void chat(char *user, int port_chat)
 {
     int sock = socket_utils::socket(AF_INET, SOCK_DGRAM, 0);
-
+    
     struct sockaddr_in dest = {0};
-    dest.sin_addr.s_addr = htonl(INADDR_ANY);;
-    dest.sin_port = htons(port_chat);
     dest.sin_family = AF_INET;
+    dest.sin_addr.s_addr = inet_addr(CHAT_GROUP);
+    dest.sin_port = htons(port_chat);
+    
+    unsigned char ttl = 1;
+    setsockopt(sock, IPPROTO_IP, IP_MULTICAST_TTL, (char *) &ttl, sizeof(ttl));
 
     char help[] = 
             "Précédez votre message par Q pour une question, par A suivi de "
@@ -87,7 +96,17 @@ void chat(char *user, int port_chat)
         sock, (struct sockaddr*) &dest, sizeof (struct sockaddr_in)
     );
     
-    async_call(receptionMessages, (void *) &sock);
+    // S'inscrit au groupe
+    struct ip_mreq mreq;
+    memcpy(&mreq.imr_multiaddr, &dest.sin_addr, sizeof (struct sockaddr_in));
+    mreq.imr_interface.s_addr = htonl(INADDR_ANY);
+    setsockopt (sock, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mreq, sizeof mreq);
+    
+    arg_reception *arg = new arg_reception;
+    arg->port_chat = port_chat;
+    arg->socket = sock; 
+    
+    async_call(receptionMessages, arg);
     
     for (;;) {
             char message[1000];
@@ -138,16 +157,22 @@ void chat(char *user, int port_chat)
         }
 }
 
-void* receptionMessages(void *v_sock)
+void* receptionMessages(void *v_arg)
 {
-    int sock = *((int *) v_sock);
+    arg_reception *arg = (arg_reception *) v_arg;
+    int port_chat = arg->port_chat;
+    int sock = arg->socket;
     
     for (;;) {
         char *user;
         char buf[1000];
         struct sockaddr_in client = {0};
+        client.sin_addr.s_addr = htonl(INADDR_ANY);
+        client.sin_port = htons(port_chat);
+        client.sin_family = AF_INET;
         
         socklen_t clientLen = sizeof client;
+        
         recvfrom(
             sock, buf, 1000, 0, (struct sockaddr*) &client, &clientLen
         );
@@ -183,6 +208,8 @@ void* receptionMessages(void *v_sock)
             break;
         }
     }
+    
+    delete arg;
     
     return NULL;
 }
