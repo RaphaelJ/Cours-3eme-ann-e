@@ -1,0 +1,55 @@
+\documentclass[a4paper,12pt,french]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[babel=true]{csquotes}
+\usepackage{url}
+\usepackage{listings}
+
+\pagestyle{headings}
+
+\title{Labo 4 : Web Service REST}
+\author{Raphaël Javaux}
+\date{}
+
+\begin{document}
+
+\maketitle 
+
+\paragraph{Création du projet}
+Dans NetBeans, créer un projet \textit{Application Web}.
+Il est ensuite possible de rajouter des Web Services REST via \textit{Nouveau
+fichier}. Dans le cadre du laboratoire, j'ai créé un Web Service REST depuis la
+base de données existante.
+
+\paragraph{Définition du Web Service}
+Les différentes annotations \textit{@Path, @Produces, @Consumes, @POST,
+@GET, @PUT et @DELETE} permettent de spécifier les attributs des opérations.
+\textit{@PathParam} permet de récupérer les paramètres du chemin de l'URL
+et \textit{@QueryParam} permet de récupérer les paramètres de l'URL
+(\textit{?page=} par exemple). Les méthodes doivent être publiques.
+
+\begin{lstlisting}
+@Path("webservicerest.vol")
+public class VolFacadeREST extends AbstractFacade<Vol> {
+    public VolFacadeREST() {
+        super(Vol.class);
+    }
+
+    @PUT
+    @Path("{id}")
+    public void edit(
+        @PathParam("id") Integer id,
+        @QueryParam("landed") Integer
+landed
+    ) {
+        [...]
+    }
+}
+\end{lstlisting}
+
+\paragraph{Test du Web Service}
+Tout comme pour les Web Services SOAP, Netbeans permet de directement
+déployer et tester les Web Services sur un serveur d'application dans une
+application JSP.
+
+\end{document}

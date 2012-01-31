@@ -1,0 +1,101 @@
+\documentclass[a4paper,12pt,french]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[babel=true]{csquotes}
+\usepackage{url}
+\usepackage{listings}
+
+\pagestyle{headings}
+
+\title{Labo 3 : Web Service SOAP}
+\author{Raphaël Javaux}
+\date{}
+
+\begin{document}
+
+\maketitle 
+
+\paragraph{Création du projet}
+Dans NetBeans, créer un projet \textit{Application Web}.
+Il est ensuite possible de rajouter des Web Services SOAP via \textit{Nouveau
+fichier}. Sélectionner création d'un nouveau Web Service et non basé sur un
+fichier WSDL existant.
+
+\paragraph{Définition du Web Service}
+La classe qui contiendra le Web Service aura l'annotation
+\textit{@WebService} et toutes ses méthodes d'opération devront porter
+l'annotation \textit{@WebMethod}. Ces méthodes doivent être publiques.
+
+\begin{lstlisting}
+@WebService(serviceName = "WebServiceSOAP")
+public class WebServiceSOAP {
+    @WebMethod(operationName = "HistoriqueVols")
+    public @WebResult(name="Vol") Vol[] HistoriqueVol() 
+    {
+        [...]
+    }
+}
+\end{lstlisting}
+
+\paragraph{Classes de retour}
+Les classes utilisées comme valeur de retour pour les opérations du Web
+Service devront comporter un constructeur par défaut ainsi qu'une annotation
+\textit{@XmlElement} sur les accesseurs. 
+
+\begin{lstlisting}
+public class Vol {
+    private Date _depart; 
+    @XmlElement(name="depart")
+    public Date getDepart() {
+        return _depart;
+    }
+
+    public void setDepart(Date depart) {
+        this._depart = depart;
+    }
+}
+\end{lstlisting}
+
+\paragraph{Handler}
+La classe utilisée comme handler pour les messages SOAP doit dériver de la
+classe générique \textit{SOAPHandler} (le paramètre générique de la classe
+définit le type du handler).
+Le handler doit ensuite être enregistré. Cela peut se faire à l'aide de
+l'opération \textit{Configurer les handlers} du menu clic-droit du Web Service.
+
+\begin{lstlisting}
+public class AuthHandler
+        implements SOAPHandler<SOAPMessageContext>
+{
+    public boolean handleMessage(SOAPMessageContext context)
+    {
+        [...]
+        return true;
+    }
+}
+\end{lstlisting}
+
+\paragraph{Test du Web Service}
+Netbeans permet de directement déployer et tester le Web Service sur un
+serveur d'application (Glassfish, Tomcat \dots{}) dans une application JSP
+(via un clic droit sur le Web Service). Les exceptions qui seraient apparues
+lors d'exécution du Web Service se trouveront dans les logs du serveur
+d'application.
+
+\paragraph{Utilisation du Web Service en Ruby}
+La bibliothèque \textit{Savon} peut être utilisée pour accéder à des Web
+Services SOAP en Ruby. Il suffit de lui fournir l'URI du fichier WSDL. Les
+exemples sur le site officiel sont suffisants pour utiliser l'API.
+
+\begin{lstlisting}
+require "savon"
+
+client = Savon::Client.new do |wsdl, http, wsse|
+    wsdl.document = wsdl_uri
+    wsse.credentials user, pass
+end
+
+client.request(:wsdl, :historique_vols)
+\end{lstlisting}
+
+\end{document}
