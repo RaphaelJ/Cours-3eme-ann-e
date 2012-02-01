@@ -31,13 +31,13 @@ ThreadPool& ThreadPool::operator=(const ThreadPool& other)
     return *this;
 }
 
-// Attends des procédures à exécuter dans la queue.
+// Attend des procédures à exécuter dans la queue.
 void *_executor(void *v_arg) 
 {
     executor_args *arg = (executor_args *) v_arg;
     
     for (;;) {
-        // Attends une nouvelle routine
+        // Attend une nouvelle routine
         sem_wait(&arg->sem_waiting);
         
         // Retire la nouvelle routine
