@@ -1,2 +1,0 @@
-/usr/bin/ar cr libIniParser.a  CMakeFiles/IniParser.dir/IniParser.cpp.o
-/usr/bin/ranlib libIniParser.a

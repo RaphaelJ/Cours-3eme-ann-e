@@ -2,6 +2,13 @@
 *.pyc
 *.o
 *kate-swp
+*.swp
+*.hi
+*.log
+*.aux
+*.dvi
+*.toc
+.directory
 /Java/ApplicWebFreeTaxShop/nbproject/private/
 /Java/ApplicWebFreeTaxShop/dist/
 /Java/ApplicWebFreeTaxShop/build/

@@ -1,0 +1,8 @@
+serveur
+terminal_client
+chat_client
+build
+Makefile
+cmake_install.cmake
+CMakeFiles
+*.a

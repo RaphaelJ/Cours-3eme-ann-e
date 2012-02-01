@@ -1,6 +1,0 @@
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/IniParser/CMakeFiles/IniParser.dir
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Sockets/CMakeFiles/Sockets.dir
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/ThreadPool/CMakeFiles/ThreadPool.dir
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/Utils/CMakeFiles/Utils.dir
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles/serveur.dir
-/home/rapha/Desktop/Cours/Reseaux/FerryInpres/build/CMakeFiles/terminal_client.dir
