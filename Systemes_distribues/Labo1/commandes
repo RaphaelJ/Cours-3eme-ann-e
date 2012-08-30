@@ -1,0 +1,10 @@
+jar cvfM ./dist/applic.ear ./META-INF/* -C ./client/dist . -C ./ejb/dist .
+../../../glassfish3/bin/asadmin deploy --user admin --host localhost --port 4848 --passwordfile ../pass.properties dist/applic.ear 
+http://localhost:4848/
+../../../glassfish3/bin/asadmin get-client-stubs --user admin --appname applic .
+../../../glassfish3/glassfish/bin/appclient -client applicClient.jar
+../../../glassfish3/glassfish/bin/package-appclient
+cp /home/rapha/BackupCours/glassfish3/glassfish/lib/appclient.jar appclient.jar
+ark appclient.jar
+vim appclient/appclient/glassfish/domains/domain1/config/sun-acc.xml
+./appclient/appclient/glassfish/bin/appclient -client applicClient.jar

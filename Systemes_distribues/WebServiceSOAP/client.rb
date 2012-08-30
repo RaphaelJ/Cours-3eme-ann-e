@@ -1,6 +1,6 @@
 require "savon"
 
-debug = true
+debug = false
 wsdl_uri = "http://localhost:8080/WebServiceSOAP/WebServiceSOAP?wsdl"
 user = "rapha"
 pass = "pass"
@@ -14,19 +14,25 @@ client = Savon::Client.new do |wsdl, http, wsse|
     wsse.credentials user, pass
 end
 
+def afficher_vol(vol)   
+    puts "Aeroport de depart: #{vol[:aeroport_depart]}"
+    puts "Heure de depart: #{vol[:depart]}"
+    puts "Aeroport d'arrivee: #{vol[:aeroport_arrivee]}"
+    puts "Heure d'arrivee: #{vol[:arrivee]}"
+    puts "ID pilote: #{vol[:pilote]}"
+    puts "ID Avion: #{vol[:avion]}"
+end
+
 def afficher_vols(vols)
-    puts "Reponse: "
+    puts "- - - - - - -"
+    puts "- Reponse : -"
+    puts "- - - - - - -"
     
-    if vols != nil 
-        vols.each do |vol|
-            puts
-            puts "Aeroport de depart: #{vol[:aeroport_depart]}"
-            puts "Heure de depart: #{vol[:depart]}"
-            puts "Aeroport d'arrivee: #{vol[:aeroport_arrivee]}"
-            puts "Heure d'arrivee: #{vol[:arrivee]}"
-            puts "Aeroport de depart: #{vol[:aeroport_depart]}"
-            puts "ID pilote: #{vol[:pilote]}"
-            puts "ID Avion: #{vol[:avion]}"
+    if vols != nil
+        if vols.kind_of?(Array)
+            vols.each afficher_vol
+        else
+            afficher_vol vols
         end
     else
         puts "Aucun vol"
@@ -38,13 +44,21 @@ puts "-------------------"
 afficher_vols client.request(:wsdl, :historique_vols)\
                      [:historique_vols_response][:vol]
 
+puts
+puts "-------------------------------------------------------------------------"
+puts
+
 puts "Vols programmes"
 puts "---------------"
 afficher_vols client.request(:wsdl, :prochains_vols)\
-                     [:prochains_vols_response][:vol]
+                    [:prochains_vols_response][:vol]
+
+puts
+puts "-------------------------------------------------------------------------"
+puts ""
 
 puts "Vols pour une date"
 puts "------------------"
 afficher_vols client.request(:wsdl, :vols, {
-                        :date => Date.new(2013, 10, 10)
+                        :date => Date.new(2011, 12, 10)
                     })[:vols_response][:vol]

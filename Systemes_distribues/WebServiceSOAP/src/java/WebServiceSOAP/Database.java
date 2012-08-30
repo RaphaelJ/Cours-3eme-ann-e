@@ -74,6 +74,7 @@ public class Database {
                 "FROM view_vols " +
                 "WHERE CAST(heureArrivee AS DATE) = ?;"
         );
+        System.err.println(date);
         instruc.setDate(1, new Date(date.getTime()));
         ResultSet rs = instruc.executeQuery();
         

@@ -12,121 +12,132 @@ import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author rapha
  */
-@DeclareRoles({"grh", "infra", "plan"})
+//@DeclareRoles({"grh", "infra", "plan"})
 @Stateless
 public class SysDistBean implements SysDistBeanRemote {
-    @PersistenceContext(unitName="LibraryPU")
+    @PersistenceContext(unitName="Application-PU")
     EntityManager em;
     
     @RolesAllowed({"grh", "plan"})
-    @Override
     public Pilote[] listerPilotes()
     {        
-        return (Pilote[]) em.createNamedQuery("Pilotes.findAll")
-                            .getResultList().toArray();
+        return (Pilote[]) em.createNamedQuery("Pilote.findAll")
+                            .getResultList().toArray(new Pilote[0]);
     }
 
-    @RolesAllowed("grh")
-    @Override
+    @RolesAllowed({"grh", "plan"})
     public Pilote rechercherPilote(String nom) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Query nq = em.createNamedQuery("Pilote.findByNom");
+        nq.setParameter("nom", nom);
+        return (Pilote) nq.getSingleResult();
     }
 
     @RolesAllowed("grh")
-    @Override
     public void ajouterPilote(Pilote p) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        em.persist(p);
     }
 
     @RolesAllowed("grh")
-    @Override
     public void modifierPilote(Pilote p) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        em.merge(p);
     }
 
     @RolesAllowed("grh")
-    @Override
-    public void supprimerPilote(Pilote p) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void supprimerPilote(int idPilote) {
+        Query nq = em.createNamedQuery("Pilote.findByIdPilote");
+        nq.setParameter("idPilote", idPilote);
+        em.remove((Pilote) nq.getSingleResult());
     }
 
     @RolesAllowed({"infra", "plan"})
-    @Override
     public Aeroport[] listerAeroports() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return (Aeroport[]) em.createNamedQuery("Aeroport.findAll")
+                              .getResultList().toArray(new Aeroport[0]);
+    }
+    
+    @RolesAllowed({"infra", "plan"})
+    public Aeroport rechercherAeroport(String nom) {
+        Query nq = em.createNamedQuery("Aeroport.findByNom");
+        nq.setParameter("nom", nom);
+        return (Aeroport) nq.getSingleResult();
     }
 
     @RolesAllowed("infra")
-    @Override
     public void ajouterAeroport(Aeroport a) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        em.persist(a);
     }
 
     @RolesAllowed("infra")
-    @Override
     public void modifierAeroport(Aeroport a) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        em.merge(a);
     }
 
     @RolesAllowed("infra")
-    @Override
-    public void supprimerAeroport(Aeroport a) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void supprimerAeroport(int idAeroport) {
+        Query nq = em.createNamedQuery("Aeroport.findByIdAeroport");
+        nq.setParameter("idAeroport", idAeroport);
+        em.remove((Aeroport) nq.getSingleResult());
     }
 
     @RolesAllowed({"infra", "plan"})
-    @Override
     public Avion[] listerAvions() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return (Avion[]) em.createNamedQuery("Avion.findAll")
+                           .getResultList().toArray(new Avion[0]);      
+    }
+    
+    @RolesAllowed({"infra", "plan"})
+    public Avion rechercherAvion(int idAvion) {
+        Query nq = em.createNamedQuery("Avion.findByIdAvion");
+        nq.setParameter("idAvion", idAvion);
+        return (Avion) nq.getSingleResult();
     }
 
     @RolesAllowed("infra")
-    @Override
     public void ajouterAvion(Avion a) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        em.persist(a);
     }
 
     @RolesAllowed("infra")
-    @Override
     public void modifierAvion(Avion a) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        em.merge(a);
     }
 
     @RolesAllowed("infra")
-    @Override
-    public void supprimerAvion(Avion a) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void supprimerAvion(int idAvion) {
+        Query nq = em.createNamedQuery("Avion.findByIdAvion");
+        nq.setParameter("idAvion", idAvion);
+        em.remove((Avion) nq.getSingleResult());
     }
 
     @RolesAllowed("plan")
-    @Override
     public Vol[] listerVols() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return (Vol[]) em.createNamedQuery("Vol.findAll")
+                         .getResultList().toArray(new Vol[0]);  
     }
 
     @RolesAllowed("plan")
-    @Override
     public void ajouterVol(Vol v) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        em.persist(v);
     }
 
     @RolesAllowed("plan")
-    @Override
     public void modifierVol(Vol v) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        em.merge(v);
     }
 
     @RolesAllowed("plan")
-    @Override
-    public void supprimerVol(Vol v) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void supprimerVol(int idVol) {
+        Query nq = em.createNamedQuery("Vol.findByIdVol");
+        nq.setParameter("idVol", idVol);
+        em.remove((Vol) nq.getSingleResult());        
     }
 }

@@ -2,8 +2,9 @@
 -- MARKETING
 ------------------------------------------------------
 
-CREATE DATABASE LINK be CONNECT TO be IDENTIFIED BY pass USING 'oracle';
-CREATE DATABASE LINK uk CONNECT TO uk IDENTIFIED BY pass USING 'oracle';
+CREATE DATABASE LINK be CONNECT TO be IDENTIFIED BY pass USING 'orcl';
+CREATE DATABASE LINK usa CONNECT TO usa IDENTIFIED BY pass USING 'orcl';
+CREATE DATABASE LINK uk CONNECT TO uk IDENTIFIED BY pass USING 'orcl';
 
 CREATE OR REPLACE 
 PACKAGE CHARGEMENTDONNEES AS 
@@ -11,7 +12,7 @@ PACKAGE CHARGEMENTDONNEES AS
   PROCEDURE ChargementUk;
 END CHARGEMENTDONNEES;
 
-CREATE OR REPLACE
+create or replace
 PACKAGE BODY CHARGEMENTDONNEES AS
 
   PROCEDURE ChargementBe AS
@@ -58,7 +59,7 @@ PACKAGE BODY CHARGEMENTDONNEES AS
       ON (c.id = c_imp.id)
     WHEN NOT MATCHED THEN
       INSERT VALUES (
-        null, c_imp.utilisateur_id, c_imp.produit_id, c_imp.creation
+        null, c_imp.utilisateur_id, c_imp.produit_id, 'BE', c_imp.creation
       );
             
     MERGE INTO site_commande c
@@ -68,7 +69,7 @@ PACKAGE BODY CHARGEMENTDONNEES AS
       INSERT VALUES (c_imp.id, c_imp.utilisateur_id, 'BE', c_imp.date_commande);
       
     MERGE INTO site_commandeproduit c
-    USING (SELECT cp.*, ( -- Inspecte si le produit est présente dans la liste d'envies
+    USING (SELECT cp.*, ( -- Inspecte si le produit est présent dans la liste d'envies
           SELECT COUNT(*)
           FROM be.site_listeenviesproduit lp
           INNER JOIN be.site_listeenvies l
@@ -86,7 +87,6 @@ PACKAGE BODY CHARGEMENTDONNEES AS
         c_imp.id, c_imp.commande_id, c_imp.produit_id, c_imp.quantite,
         c_imp.dans_liste_envies, c_imp.prix , c_imp.devise
       );
-    
   END ChargementBe;
 
   PROCEDURE ChargementUk AS

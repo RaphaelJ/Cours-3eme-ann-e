@@ -62,9 +62,9 @@ public class VolFacadeREST extends AbstractFacade<Vol> {
     {
         String status;
         if (landed.intValue() != 0)
-            status = "ATERRE";
+            status = "landed";
         else
-            status = "ENVOL";
+            status = "envol";
         
         List<Vol> volsAll = this.findVols(from, to);
         LinkedList<Vol> vols = new LinkedList<Vol>();
@@ -80,16 +80,17 @@ public class VolFacadeREST extends AbstractFacade<Vol> {
 
     // Changer le status
     @PUT
-    @Path("{id}")
-    public void edit(@PathParam("id") Integer id, @QueryParam("landed") Integer landed)
+    @Path("{id}/status/{status}")
+    public void edit(@PathParam("id") Integer id,
+        /*@QueryParam("landed")*/ @PathParam("status") Integer landed)
     {
         Vol v = this.find(id);
         
         String status;
         if (landed.intValue() != 0)
-            status = "ATERRE";
+            status = "landed";
         else
-            status = "ENVOL";
+            status = "envol";
         
         v.setStatus(status);
         super.edit(v);

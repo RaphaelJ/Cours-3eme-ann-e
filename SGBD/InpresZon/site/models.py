@@ -394,6 +394,8 @@ if settings.DATAWAREHOUSE:
             Fournisseur, through='Livraison', editable=False
         )
         
+        auteur = models.CharField(max_length=255)
+        
         class Meta:
             ordering = ('titre',)
    
@@ -424,6 +426,8 @@ if settings.DATAWAREHOUSE:
     class Commentaire(models.Model):
         utilisateur = models.ForeignKey(Utilisateur, editable=False)
         produit = models.ForeignKey(Produit, editable=False)
+        origine = models.CharField(max_length=3, choices=ORIGINES)
+        
         creation = models.DateField(auto_now_add=True)
         
     class Livraison(models.Model):
@@ -431,4 +435,5 @@ if settings.DATAWAREHOUSE:
         produit = models.ForeignKey(Produit)
         
         stock = models.IntegerField()
-        date_inscription = models.DateTimeField(auto_now_add=True)
+        origine = models.CharField(max_length=3, choices=ORIGINES)
+        date_livraison = models.DateTimeField(auto_now_add=True)

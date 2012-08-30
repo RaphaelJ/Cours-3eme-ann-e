@@ -11,7 +11,7 @@ http://java.sun.com/xml/ns/javaee/application-client_5.xsd">
 <ejb-link>ejb-labo1B.jar#CalculsBean</ejb-link>
 <injection-target>
 <injection-target-class>calculs.Main</injection-target-class>
-<injection-target-name>CalulsRemote</injection-target-name>
+<injection-target-name>calculsRemote</injection-target-name>
 </injection-target>
 </ejb-ref>
 </application-client>

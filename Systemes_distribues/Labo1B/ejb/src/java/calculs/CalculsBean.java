@@ -2,6 +2,7 @@ package calculs;
 
 import java.util.*;
 import javax.ejb.Stateful;
+//import javax.ejb.Stateless;
 
 @Stateful
 public class CalculsBean implements CalculsRemote

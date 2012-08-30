@@ -55,7 +55,7 @@ public class WebServiceSOAP {
     @WebMethod(operationName = "Vols")
     public @WebResult(name="Vol") Vol[] VolsDate(@WebParam(name = "date") Date date)
             throws AuthException
-    {        
+    {
         try {
             return new Database().volsDate(date);
         } catch (Exception ex) {

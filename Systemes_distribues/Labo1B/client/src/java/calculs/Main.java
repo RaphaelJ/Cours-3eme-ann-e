@@ -12,13 +12,13 @@ public class Main
 	{
 	}
 
-//    public static int readInt() throws IOException
-  //  {
-    //    BufferedReader inStream = new BufferedReader (
-      //      new InputStreamReader(System.in)
-       // );
-        //return Integer.parseInt(inStream.readLine()); 
-//    }
+   public static int readInt() throws IOException
+   {
+       BufferedReader inStream = new BufferedReader (
+           new InputStreamReader(System.in)
+       );
+        return Integer.parseInt(inStream.readLine()); 
+   }
 
 	public static void main(String[] args) throws Exception
 	{
@@ -29,11 +29,11 @@ public class Main
 			System.out.println("4. Calculer le minimum");	
 			System.out.println("5. Calculer le maximum");	
 			System.out.println("Choix: ");
-			int choix = 1; //readInt(); 
+			int choix = readInt(); 
 
 			if (choix == 1) {
 				System.out.println("Nombre à rajouter: ");
-				calculsRemote.add(1); //readInt());
+				calculsRemote.add(readInt());
 			} else if (choix == 2) {
 				System.out.println("Somme: " + calculsRemote.sum());
 			} else if (choix == 3) {

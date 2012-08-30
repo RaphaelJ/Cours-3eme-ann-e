@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
-Ant-Version: Apache Ant 1.8.2
-Created-By: 1.7.0_147-icedtea-b147 (Oracle Corporation)
+Ant-Version: Apache Ant 1.8.3
+Created-By: 1.6.0_24-b24 (Sun Microsystems Inc.)
 X-COMMENT: Main-Class will be added automatically by build
-Class-Path: Library.jar lib/Library.jar 
-Main-Class: client.Main
+Class-Path: Application-ejb.jar 
+Main-Class: client.MainFrame
 

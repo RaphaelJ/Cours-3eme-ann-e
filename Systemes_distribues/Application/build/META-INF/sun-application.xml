@@ -7,10 +7,10 @@
   </security-role-mapping>
   <security-role-mapping>
     <role-name>plan</role-name>
-    <group-name>grh</group-name>
+    <group-name>plan</group-name>
   </security-role-mapping>
   <security-role-mapping>
     <role-name>infra</role-name>
-    <group-name>grh</group-name>
+    <group-name>infra</group-name>
   </security-role-mapping>
 </sun-application>

@@ -6,7 +6,7 @@
 
 INSERT INTO site_fournisseur VALUES (1, 'Amazon');
 
-CREATE DATABASE LINK be CONNECT TO be IDENTIFIED BY pass USING 'oracle';
+CREATE DATABASE LINK be CONNECT TO be IDENTIFIED BY pass USING 'orcl';
 
 ----------------------------------------------
 -- DECLENCHEURS

@@ -33,9 +33,9 @@ data Langue = Fr | En deriving (Show)
 data Connexion = Connexion Connection String -- DBConnection Origine
 
 main = do
-    connBe <- oracleConn beHote "be_new"
-    connUsa <- oracleConn usaHote "usa_new"
-    connUk <- oracleConn ukHote "uk_new"
+    connBe <- oracleConn beHote "be"
+    connUsa <- oracleConn usaHote "usa"
+    connUk <- oracleConn ukHote "uk"
     menu True [ ("Insérer dans BE"
                 , insertionBe $ Connexion connBe "BE")
               , ("Insérer dans USA"
@@ -48,7 +48,7 @@ main = do
   where
     oracleConn hote user = do
         print user
-        connectODBC $ "DRIVER=oracle;Dbq=//"++hote++":1523/oracle.oracle;\
+        connectODBC $ "DRIVER=oracle;Dbq=//"++hote++":1521/orcl;\
                          \UID="++user++";PWD=pass"
                        
     mysqlConn hote user =
@@ -179,7 +179,7 @@ inserer id_docs (Connexion conn origine) = do
         produit_ean <- insererProduit doc
         
         when (isJust produit_ean) $ do
-            insererArtistes $ fromJust $ lookup "artist" doc
+            insererArtistes (fromJust $ lookup "artist" doc) produit_ean "site_musique_auteurs" "musique_id"
             let label = stringOrDefault "label" doc "Unknown"
             insererEditeur label
             let support = stringOrDefault "support" doc "Unknown"
@@ -199,7 +199,7 @@ inserer id_docs (Connexion conn origine) = do
 
         when (isJust produit_ean) $ do
             case lookup "authors" doc of
-                Just e  -> insererArtistes e
+                Just e  -> insererArtistes e produit_ean "site_livre_auteurs" "livre_id"
                 Nothing -> return ()
             let editeur = stringOrDefault "publisher" doc "Unknown"
             insererEditeur editeur
@@ -222,12 +222,6 @@ inserer id_docs (Connexion conn origine) = do
         produit_ean <- insererProduit doc
 
         when (isJust produit_ean) $ do
-            case lookup "actors" doc of
-                 Just acs  -> insererArtistes acs
-                 Nothing  -> return ()
-            case lookup "directors" doc of
-                 Just ds  -> insererArtistes ds
-                 Nothing  -> return ()
             let studio = stringValue "studio" doc
             insererEditeur studio
             let support = stringOrDefault "format" doc "Unknown"
@@ -239,17 +233,27 @@ inserer id_docs (Connexion conn origine) = do
             execute req [ SqlInteger $ fromJust $ produit_ean, SqlString studio
                         , SqlString support, SqlInteger disques
                         , SqlString note, SqlString duree ]
+            case lookup "actors" doc of
+                 Just acs  -> insererArtistes acs produit_ean "site_film_acteurs" "film_id"
+                 Nothing  -> return ()
+            case lookup "directors" doc of
+                 Just ds  -> insererArtistes ds produit_ean "site_film_realisateurs" "film_id"
+                 Nothing  -> return ()
             return ()
             
     -- Insère les artistes non existants
-    insererArtistes (JSArray artistes) = do
+    insererArtistes (JSArray artistes) produit_ean join_table link_id = do
         req_insert <- prepare conn "INSERT INTO site_artiste \
                                    \(SELECT ? FROM DUAL WHERE NOT EXISTS \
                                    \    (SELECT * FROM site_artiste WHERE nom = ?));"
+        req_insert_join <- prepare conn ("INSERT INTO " ++ join_table ++ " \
+                                   \VALUES (NULL, ?, ?);")
         forM_ artistes $ \a -> do
             let a_str = toString a
             putStrLn $ "    Insertion artiste: " ++ a_str
             execute req_insert [SqlString a_str, SqlString a_str]
+            let ean' = SqlInteger $ fromJust $ produit_ean
+            execute req_insert_join [ean', SqlString a_str]
             return ()
 
     -- Insère l'editeur s'il n'exite pas
