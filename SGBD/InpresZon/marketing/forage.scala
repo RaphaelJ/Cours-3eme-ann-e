@@ -1,4 +1,3 @@
-
 import java.sql.{Connection, DriverManager, ResultSet}
 
 object Forage {
@@ -115,15 +114,21 @@ object Forage {
         // (titre de la colonne, nom dans la table)
         val colonnes_vues = vues map champs_vue
         val colonnes = (fait.nom, fait.champ) :: colonnes_vues.toList
+
         val group_by =
             if (colonnes_vues.length > 0) 
                 "GROUP BY " + joindre_champs(champs(colonnes_vues))
             else 
                 " "
+        val order_by =
+            if (colonnes_vues.length > 0) 
+                "ORDER BY " + joindre_champs(champs(colonnes_vues))
+            else 
+                " "
         
         ("SELECT " + joindre_champs(champs(colonnes)) + " " +
          "FROM "+ fait.table + " " +
-         group_by, colonnes)
+         group_by + " " + order_by, colonnes)
     }
 
     // Exécute la requête SQL et affiche un tableau avec les titres et les noms
@@ -140,7 +145,10 @@ object Forage {
         while (resultSet.next) {
             // Affiche toutes les colonnes
             for ((col, i) <- requete._2 zipWithIndex) {
-                val res = resultSet.getString(i+1)
+                var res = resultSet.getString(i+1)
+                if (res == null)
+                    res = "0" // SUM() of an empty set returns null on Oracle
+
                 val padding = col._1.length - res.length + 3
                 print(res + " " * padding)
             }
@@ -152,65 +160,62 @@ object Forage {
     
     def main(args: Array[String]) {
         // Vues utilisées
-        val vue_type_media = new Vue(
-            "Type de média", Array(new Detail(null, "type"))
+        val vue_media = new Vue(
+            "Média", Array(
+                new Detail("Type de média", "media_type"),
+                new Detail("EAN du média", "ean")
+            )
         )
-        val vue_origine = new Vue(
-            "Origine", Array(new Detail(null, "origine"))
-        )
-        val vue_periode_trimestre_annee = new Vue("Période", Array(
+        val vue_auteur = new Vue("Auteur", Array(new Detail(null, "auteur")))
+        val vue_site = new Vue("Site", Array(new Detail(null, "origine")))
+        val vue_date = new Vue("Date", Array(
+            new Detail("Année", "EXTRACT(YEAR FROM datetime)"),
             new Detail(
                 "Trimestre", 
-                "floor(EXTRACT(MONTH FROM date_commande) / 3) + 1"
+                "floor(EXTRACT(MONTH FROM datetime) / 3) + 1"
             ),
-            new Detail("Année", "EXTRACT(YEAR FROM date_commande)")
-        ))
-        val vue_periode_mois_annee = new Vue("Période", Array(
-            new Detail("Mois", "EXTRACT(MONTH FROM date_commande)"),
-            new Detail("Année", "EXTRACT(YEAR FROM date_commande)")
+            new Detail("Mois", "EXTRACT(MONTH FROM datetime)")
         ))
         val vue_langue = new Vue("Langue", Array(new Detail(null, "langue")))
-        val vue_article = new Vue("Article", Array(new Detail(null, "ean")))
         val vue_utilisateur = new Vue(
             "Utilisateur", Array(new Detail(null, "login"))
         ) 
+        val vue_commande = new Vue(
+            "Commande", Array(new Detail(null, "commande_id"))
+        )
         
         // Faits disponibles
         val faits = Array(
             new Fait(
                 "Quantité de vente des médias", "vue_ventes", "SUM(quantite)",
-                Array(vue_type_media, vue_origine, vue_periode_trimestre_annee)
+                Array(vue_media, vue_auteur, vue_date, vue_site)
             ),
             new Fait(
                 "Pourcentage des ventes des livres", "vue_ventes_livres",
-                "SUM(quantite_livres) / SUM(quantite) * 100",
-                Array(vue_langue, vue_origine, vue_periode_mois_annee)
+                "ROUND(SUM(quantite_livres) / SUM(quantite) * 100, 4)",
+                Array(vue_date, vue_site, vue_langue)
             ),
             new Fait(
                 "Fréquence des nouveaux stocks", "vue_frequence_stocks",
-                "COUNT(*)", Array(
-                    vue_type_media, vue_article, vue_periode_trimestre_annee
-                )
+                "COUNT(*)", Array(vue_media, vue_date, vue_site)
             ),
             new Fait(
                 "Commentaires apportés", "vue_commentaires_apportes",
                 "COUNT(*)", Array(
-                    vue_utilisateur, vue_type_media/*, vue_origine*/,
-                    vue_periode_mois_annee
+                    vue_media, vue_date, vue_site, vue_utilisateur
                 )
             ),
             new Fait(
-                "Quantité moyene d'article commandés par commande",
-                "vue_ventes", "AVG(quantite)", Array(
-                    vue_utilisateur, vue_type_media, vue_origine
+                "Quantité moyene d'article commandés",
+                "vue_ventes", "ROUND(AVG(quantite), 4)", Array(
+                    vue_media, vue_site, vue_commande
                 )
             ),
             new Fait(
-                "Proportion des ventes depuis les listes d'envies",
-                "vue_ventes", "SUM(dans_liste_envie) / COUNT(*)",
+                "Proportion des ventes dans les listes d'envies",
+                "vue_ventes", "ROUND(SUM(dans_liste_envie) / COUNT(*), 4)",
                 Array(
-                    vue_utilisateur, vue_type_media, vue_origine,
-                    vue_periode_mois_annee
+                    vue_media, vue_date, vue_site, vue_utilisateur
                 )
             )
         )

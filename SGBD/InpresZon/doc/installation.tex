@@ -64,15 +64,7 @@ fait à l'aide d'un script Bash utilisant, à nouveau, ncftp.
 
     \paragraph{Data Warehouse}
     Un dépôt de Data Warehouse, utilisé à des fin de data mining, est alimenté
-à l'aide :
-    \begin{itemize}
-        \item de deux procédures stockées PL/SQL et de DB/LINK homogènes pour
-les bases de données belge et anglaise ;
-        \item d'un programme écrit avec le langage de programmation
-Clojure\footnote{\url{http://www.clojure.org/}} pour la base de données
-américaine, générant des fichiers XML pouvant être transmis au dépôt XDB de la
-base de données de Data Warehouse à l'aide d'un script Bash.
-    \end{itemize}
+à l'aide de trois procédures stockées PL/SQL et de DB/LINK homogènes.
 
     \paragraph{}
     Les différentes opérations de data mining peuvent être effectuées à l'aide
@@ -161,11 +153,23 @@ base de données (\textit{be/}, \textit{usa/}, \textit{uk/} ou
         $ python2 manage.py syncdb
     \end{lstlisting}
 
+    \paragraph{}
+    Le script \textit{packages/remove\_tables.sql} peut être utilisé pour 
+supprimer les tables.
+
     \paragraph{Packages}
     Le répertoire \textit{packages/} contient les scripts SQL utilisés pour
 créer les différents packages des quatre bases de données. Le script
-\textit{exceptions.sql} doit être exécuté sur les bases \textit{be} et
-\textit{usa} et contient le module de gestion des exceptions.
+\textit{exceptions.sql} doit être exécuté sur les bases \textit{be}, 
+\textit{usa} et \textit{marketing} et contient le module de gestion des 
+exceptions.
+
+    \paragraph{Scripts d'insertion}
+    Le répertoire \textit{data/} contient les scripts SQL utilisés pour
+remplir les tables des quatre bases de données.
+    
+    Le fichier \textit{delete\_tuples.sql} permet de supprimer les tuples des
+trois bases de données.
 
 \section{Importation CouchDB}
 
@@ -266,41 +270,33 @@ ncftp. Le script se nomme \textit{nouveaux\_stocks.sh} et s'utilise comme suit :
 
 \section{Data Warehouse}
 
-    \paragraph{Chargement des données depuis BE et UK}
-    Le package \textit{ChargementDonnees} contient deux procédures,
-\textit{ChargementBe} et \textit{ChargementUk} pour importer dans le Data
-Warehouse les données des bases belge et anglaise, respectivement.
+    \paragraph{MDD}
+    Les fichiers du répertoire \textit{marketing/MDD} contiennent tous les 
+documents relatifs aux modèles du Data Warehouse.
 
-    \paragraph{Chargement des données depuis USA}
-    
-        \subparagraph{Clojure}
-        Le chargement des données se trouvant dans USA se fait à l'aide
-d'un programme écrit pour le langage de programmation Clojure. Clojure utilise
-la JVM. Le compilateur Clojure ainsi que la JVM sont disponibles dans la plupart
-des dépôts GNU/Linux. Il est de plus nécessaire d'installer et de configurer
-JDBC pour Oracle\footnote{Voir syllabus sur JDBC.}.
-
-        \subparagraph{Utilisation}
-        Le programme de chargement se nomme \textit{chargement\_usa.clj}  
-et s'exécute avec Clojure :
-        \begin{lstlisting}
-            $ clj chargement_usa.clj
-        \end{lstlisting}   
+    \paragraph{Chargement des données}
+    Le package \textit{ChargementDonnees} contient les trois procédures pour 
+importer dans le Data Warehouse les données des bases belge, américaine et 
+anglaise. Le script \textit{marketing/reload\_views.sql} permet de régénérer 
+les vues matérialisées après une importation.
 
     \paragraph{Consultation des résultats}
 
         \subparagraph{Scala}
         Le programme console écrit en Scala permet d'effectuer diverses
-opérations de forage de données sur le Data Warehouse. Tout comme Clojure, Scala
-utilise la JVM et JDBC et son compilateur est disponible sur la plupart des
-dépôts GNU/Linux.
+opérations de forage de données sur le Data Warehouse. Scala utilise la JVM et 
+JDBC et son compilateur est disponible sur la plupart des dépôts GNU/Linux.
 
         \subparagraph{Utilisation}
-        Le programme de forage se nomme \textit{forage.scala}
-et s'exécute avec Scala :
+        Le programme de forage se nomme \textit{forage.scala}, se trouve dans
+le répertoire \textit{marketing/} et s'exécute avec Scala :
         \begin{lstlisting}
             $ scala forage.scala
         \end{lstlisting}
+
+\section{Documentation}
+
+    Le répertoire \textit{doc/} contient les sources \LaTeX{} de ce document.
 
 \appendix
 

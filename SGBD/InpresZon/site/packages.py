@@ -187,6 +187,7 @@ class GestionSessions:
     def Ajouter(cle, donnees, expiration):
         connection.cursor()
         cur = connection.connection.cursor()
+        print (cle, donnees, expiration)
         cur.callproc("GESTION_SESSIONS.Ajouter", (
             cle, donnees, expiration
         ))

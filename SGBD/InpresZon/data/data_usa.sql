@@ -1,0 +1,128 @@
+INSERT INTO SITE_UTILISATEUR VALUES ('Raphael', '9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684', 'raphael@email.com', 0, 'Nom', 'Prenom', current_date, null, null, null);
+INSERT INTO SITE_UTILISATEUR VALUES ('Maxime', '9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684', 'maxime@email.com', 0, 'Nom', 'Prenom', current_date, null, null, null);
+INSERT INTO SITE_UTILISATEUR VALUES ('David', '9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684', 'david@email.com', 0, 'Nom', 'Prenom', current_date, null, null, null);
+INSERT INTO SITE_UTILISATEUR VALUES ('Michel', '9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684', 'michel@email.com', 0, 'Nom', 'Prenom', current_date, null, null, null);
+INSERT INTO SITE_UTILISATEUR VALUES ('Marc', '9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684', 'marc@email.com', 0, 'Nom', 'Prenom', current_date, null, null, null);
+INSERT INTO SITE_UTILISATEUR VALUES ('Eric', '9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684', 'eric@email.com', 0, 'Nom', 'Prenom', current_date, null, null, null);
+INSERT INTO SITE_UTILISATEUR VALUES ('Jack', '9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684', 'jack@email.com', 0, 'Nom', 'Prenom', current_date, null, null, null);
+INSERT INTO SITE_UTILISATEUR VALUES ('Kim', '9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684', 'kim@email.com', 0, 'Nom', 'Prenom', current_date, null, null, null);
+INSERT INTO SITE_UTILISATEUR VALUES ('Tom', '9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684', 'tom@email.com', 0, 'Nom', 'Prenom', current_date, null, null, null);
+INSERT INTO SITE_UTILISATEUR VALUES ('Georges', '9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684', 'georges@email.com', 0, 'Nom', 'Prenom', current_date, null, null, null);
+INSERT INTO SITE_UTILISATEUR VALUES ('Paul', '9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684', 'paul@email.com', 0, 'Nom', 'Prenom', current_date, null, null, null);
+INSERT INTO SITE_UTILISATEUR VALUES ('John', '9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684', 'john@email.com', 0, 'Nom', 'Prenom', current_date, null, null, null);
+INSERT INTO SITE_UTILISATEUR VALUES ('Moi', '9d4e1e23bd5b727046a9e3b4b7db57bd8d6ee684', 'moi@email.com', 0, 'Nom', 'Prenom', current_date, null, null, null);
+
+INSERT INTO site_adresse VALUES (1, '48 rue de la Belgique', 'Ville', '5485', 'Belgique', 'Raphael');
+INSERT INTO site_adresse VALUES (2, '17 rue de la France', 'Ville', '78852', 'France', 'Maxime');
+INSERT INTO site_adresse VALUES (3, '87 rue du Luxembourg', 'Ville', 'A365', 'Luxembourg', 'David');
+INSERT INTO site_adresse VALUES (4, '48 rue des USA', 'Ville', 'AX585', 'Etats-Unis', 'Michel');
+INSERT INTO site_adresse VALUES (5, '48 rue de la GB', 'Ville', 'AZ5485', 'Royaume-Uni', 'Marc');
+INSERT INTO site_adresse VALUES (6, '48 rue de l''Allemagne', 'Ville', '5485', 'Allemagne', 'Eric');
+INSERT INTO site_adresse VALUES (7, '48 rue des Pays Bas', 'Ville', 'AZA5485', 'Pays-Bas', 'Jack');
+INSERT INTO site_adresse VALUES (8, '48 rue de l''Espagne', 'Ville', '5485', 'Espagne', 'Kim');
+INSERT INTO site_adresse VALUES (9, '48 rue de la Suède', 'Ville', '8884', 'Suède', 'Tom');
+INSERT INTO site_adresse VALUES (10, '48 rue du Portugal', 'Ville', '5485', 'Portugal', 'Georges');
+
+-- INSERT INTO site_fournisseur VALUES (1, 'Amazon');
+INSERT INTO site_fournisseur VALUES (2, 'LDLC');
+INSERT INTO site_fournisseur VALUES (3, 'Rue du Commerce');
+INSERT INTO site_fournisseur VALUES (4, 'Pixmania');
+INSERT INTO site_fournisseur VALUES (5, 'Ebay');
+INSERT INTO site_fournisseur VALUES (6, 'Fnac');
+INSERT INTO site_fournisseur VALUES (7, 'Alternate');
+INSERT INTO site_fournisseur VALUES (8, 'Kelkoo');
+INSERT INTO site_fournisseur VALUES (9, 'Cdiscount');
+INSERT INTO site_fournisseur VALUES (10, 'Oka');
+
+INSERT INTO SITE_LISTEENVIES VALUES (11, 'Raphael', 'My favorites list');
+INSERT INTO SITE_LISTEENVIES VALUES (12, 'Kim', 'My favorites list');
+INSERT INTO SITE_LISTEENVIES VALUES (13, 'Maxime', 'My favorites list');
+INSERT INTO SITE_LISTEENVIES VALUES (14, 'David', 'My favorites list');
+INSERT INTO SITE_LISTEENVIES VALUES (15, 'Tom', 'My favorites list');
+INSERT INTO SITE_LISTEENVIES VALUES (16, 'Paul', 'My favorites list');
+INSERT INTO SITE_LISTEENVIES VALUES (17, 'John', 'My favorites list');
+INSERT INTO SITE_LISTEENVIES VALUES (18, 'Raphael', 'My favorites list 2');
+INSERT INTO SITE_LISTEENVIES VALUES (19, 'Maxime', 'My favorites list 2');
+
+commit;
+
+-- IMPORTER LES ARTICLES DE COUCHDB ICI
+
+INSERT INTO site_listeenviesproduit VALUES (21, 11, 2008515376342, 26);
+INSERT INTO site_listeenviesproduit VALUES (22, 12, 2004432806863, 26);
+INSERT INTO site_listeenviesproduit VALUES (23, 13, 2002525990642, 26);
+INSERT INTO site_listeenviesproduit VALUES (24, 14, 2000950737740, 26);
+INSERT INTO site_listeenviesproduit VALUES (25, 15, 2004186983360, 26);
+INSERT INTO site_listeenviesproduit VALUES (26, 16, 2009055934917, 1);
+INSERT INTO site_listeenviesproduit VALUES (27, 17, 2001343603383, 26);
+INSERT INTO site_listeenviesproduit VALUES (28, 18, 2005268587049, 26);
+INSERT INTO site_listeenviesproduit VALUES (29, 19, 2000606563471, 26);
+INSERT INTO site_listeenviesproduit VALUES (30, 11, 2004634769829, 26);
+INSERT INTO site_listeenviesproduit VALUES (31, 12, 2009910151428, 26);
+INSERT INTO site_listeenviesproduit VALUES (32, 13, 2009259339853, 26);
+INSERT INTO site_listeenviesproduit VALUES (33, 14, 2001318977501, 26);
+INSERT INTO site_listeenviesproduit VALUES (34, 15, 2002525990642, 26);
+INSERT INTO site_listeenviesproduit VALUES (35, 16, 2004432806863, 26);
+INSERT INTO site_listeenviesproduit VALUES (36, 17, 2008515376342, 26);
+INSERT INTO site_listeenviesproduit VALUES (37, 18, 2000465908529, 26);
+INSERT INTO site_listeenviesproduit VALUES (38, 19, 2002525990642, 26);
+INSERT INTO site_listeenviesproduit VALUES (39, 11, 2000465908529, 26);
+INSERT INTO site_listeenviesproduit VALUES (40, 12, 2008536623357, 26);
+
+INSERT INTO site_commande VALUES (21, 'Raphael', 1, 'USA', TO_TIMESTAMP('2011-05-02 12:00', 'YYYY-MM-DD HH:MI'));
+INSERT INTO site_commande VALUES (22, 'Maxime', 2, 'USA', TO_TIMESTAMP('2011-05-06 12:00', 'YYYY-MM-DD HH:MI'));
+INSERT INTO site_commande VALUES (23, 'David', 3, 'USA', TO_TIMESTAMP('2011-03-14 12:00', 'YYYY-MM-DD HH:MI'));
+INSERT INTO site_commande VALUES (24, 'Tom', 9, 'USA', TO_TIMESTAMP('2011-02-03 12:00', 'YYYY-MM-DD HH:MI'));
+INSERT INTO site_commande VALUES (25, 'Kim', 8, 'USA', TO_TIMESTAMP('2011-03-16 12:00', 'YYYY-MM-DD HH:MI'));
+INSERT INTO site_commande VALUES (26, 'Raphael', 1, 'USA', TO_TIMESTAMP('2012-05-12 12:00', 'YYYY-MM-DD HH:MI'));
+INSERT INTO site_commande VALUES (27, 'Kim', 8, 'USA', TO_TIMESTAMP('2011-05-12 12:00', 'YYYY-MM-DD HH:MI'));
+INSERT INTO site_commande VALUES (28, 'Raphael', 1, 'USA', TO_TIMESTAMP('2011-07-12 12:00', 'YYYY-MM-DD HH:MI'));
+INSERT INTO site_commande VALUES (29, 'Maxime', 2, 'USA', TO_TIMESTAMP('2011-06-12 12:00', 'YYYY-MM-DD HH:MI'));
+INSERT INTO site_commande VALUES (30, 'David', 3, 'USA', TO_TIMESTAMP('2011-05-06 12:00', 'YYYY-MM-DD HH:MI'));
+INSERT INTO site_commande VALUES (31, 'Tom', 9, 'USA', TO_TIMESTAMP('2011-02-12 12:00', 'YYYY-MM-DD HH:MI'));
+INSERT INTO site_commande VALUES (32, 'Maxime', 2, 'USA', TO_TIMESTAMP('2012-05-02 12:00', 'YYYY-MM-DD HH:MI'));
+INSERT INTO site_commande VALUES (33, 'David', 3, 'USA', TO_TIMESTAMP('2011-06-15 12:00', 'YYYY-MM-DD HH:MI'));
+INSERT INTO site_commande VALUES (34, 'Kim', 8, 'USA', TO_TIMESTAMP('2012-01-12 12:00', 'YYYY-MM-DD HH:MI'));
+
+INSERT INTO site_commandeproduit VALUES (31, 21, 2002525990642, 3, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (32, 21, 2000950737740, 5, 1.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (33, 22, 2000465908529, 1, 152.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (34, 22, 2000606563471, 2, 122.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (35, 22, 2008056851179, 6, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (36, 23, 2008328851272, 2, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (37, 24, 2008550459703, 1, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (38, 24, 2004634769829, 7, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (39, 25, 2008303196107, 8, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (40, 25, 2005268587049, 1, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (41, 25, 2003526290052, 1, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (42, 25, 2001318977501, 9, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (43, 26, 2002525990642, 1, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (44, 26, 2009259339853, 2, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (45, 27, 2008056851179, 1, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (46, 27, 2009122280404, 2, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (47, 28, 2004432806863, 3, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (48, 29, 2000950737740, 1, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (49, 30, 2000465908529, 1, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (50, 31, 2004765324423, 1, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (51, 31, 2003526290052, 3, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (52, 32, 2009055934917, 5, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (53, 32, 2005268587049, 3, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (54, 33, 2004432806863, 2, 12.6, 'EUR');
+INSERT INTO site_commandeproduit VALUES (55, 34, 2008536623357, 4, 12.6, 'EUR');
+
+INSERT INTO site_commentaire VALUES (21, 'Raphael', 2004765324423, TO_DATE('2011-05-02', 'YYYY-MM-DD'), null);
+INSERT INTO site_commentaire VALUES (22, 'Maxime', 2000465908529, TO_DATE('2011-05-06', 'YYYY-MM-DD'), null);
+INSERT INTO site_commentaire VALUES (23, 'David', 2008056851179, TO_DATE('2011-03-14', 'YYYY-MM-DD'), null);
+INSERT INTO site_commentaire VALUES (24, 'Tom', 2003526290052, TO_DATE('2011-02-24', 'YYYY-MM-DD'), null);
+INSERT INTO site_commentaire VALUES (25, 'Kim', 2004432806863, TO_DATE('2011-03-16', 'YYYY-MM-DD'), null);
+INSERT INTO site_commentaire VALUES (26, 'Raphael', 2008550459703, TO_DATE('2012-05-12', 'YYYY-MM-DD'), null);
+INSERT INTO site_commentaire VALUES (27, 'Kim', 2004634769829, TO_DATE('2011-05-12', 'YYYY-MM-DD'), null);
+INSERT INTO site_commentaire VALUES (28, 'Raphael', 2008303196107, TO_DATE('2011-07-12', 'YYYY-MM-DD'), null);
+INSERT INTO site_commentaire VALUES (29, 'Maxime', 2009259339853, TO_DATE('2011-06-12', 'YYYY-MM-DD'), null);
+INSERT INTO site_commentaire VALUES (30, 'David', 2009259339853, TO_DATE('2011-05-06', 'YYYY-MM-DD'), null);
+INSERT INTO site_commentaire VALUES (31, 'Tom', 2004271320360, TO_DATE('2011-02-12', 'YYYY-MM-DD'), null);
+INSERT INTO site_commentaire VALUES (32, 'Maxime', 2009259339853, TO_DATE('2012-05-02', 'YYYY-MM-DD'), null);
+INSERT INTO site_commentaire VALUES (33, 'David', 2009259339853, TO_DATE('2011-06-15', 'YYYY-MM-DD'), null);
+INSERT INTO site_commentaire VALUES (34, 'Kim', 2004271320360, TO_DATE('2012-01-12', 'YYYY-MM-DD'), null);
+COMMIT;
+

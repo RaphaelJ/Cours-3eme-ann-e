@@ -18,11 +18,14 @@ class SessionStore(DBStore):
     
     def load(self):
         try:
+            print s
             s = GestionSessions.Chercher(self.session_key)
             d = self.decode(force_unicode(s.donnees))
+            print "ok1"
             return d
         except:
             self.create()
+            print "ok2"
             return {}
 
     def exists(self, session_key):

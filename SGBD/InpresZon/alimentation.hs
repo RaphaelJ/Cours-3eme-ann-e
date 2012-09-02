@@ -47,9 +47,10 @@ main = do
     disconnect connUk
   where
     oracleConn hote user = do
-        print user
-        connectODBC $ "DRIVER=oracle;Dbq=//"++hote++":1521/orcl;\
+        con <- connectODBC $ "DRIVER=oracle;Dbq=//"++hote++":1521/orcl;\
                          \UID="++user++";PWD=pass"
+        print $ user ++ " connected"
+        return con
                        
     mysqlConn hote user =
         connectODBC $ "DRIVER=mysql;SERVER="++hote++";DATABASE="++user++";\
