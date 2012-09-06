@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="" href="">
+    <information>
+        <title>Mail client</title>
+        <vendor><!-- Application Vendor -->
+        </vendor>
+    </information>
+    <resources>
+        <j2se version="1.7"/>
+        <jar href="file:///home/rapha/BackupCours/Cours/Java/FerryInpres/dist/FerryInpres.jar" main="true"/>
+        <jar href="file:///home/rapha/BackupCours/Cours/Java/javamail/mail.jar" main="false"/>
+        <jar href="file:///home/rapha/BackupCours/Cours/Java/bcprov.jar" main="false"/>
+    </resources>
+    <application-desc main-class="mail_client.MainForm">
+    </application-desc>
+</jnlp>

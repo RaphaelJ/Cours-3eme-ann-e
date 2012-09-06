@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="" href="">
+    <information>
+        <title>Information client</title>
+        <vendor><!-- Application Vendor -->
+        </vendor>
+    </information>
+    <resources>
+        <j2se version="1.7"/>
+        <jar href="file:///home/rapha/BackupCours/Cours/Java/FerryInpres/dist/FerryInpres.jar" main="true"/>
+    </resources>
+    <application-desc main-class="information_client.MainForm">
+    </application-desc>
+</jnlp>
