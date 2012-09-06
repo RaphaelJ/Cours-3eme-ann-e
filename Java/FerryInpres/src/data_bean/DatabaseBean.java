@@ -5,9 +5,12 @@
 package data_bean;
 
 import company_server.Config;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.*;
 import java.util.LinkedList;
+import java.util.Properties;
 
 /**
  *
@@ -15,14 +18,18 @@ import java.util.LinkedList;
  */
 public class DatabaseBean implements Serializable {
     private Connection _conn;
+    private final Properties prop;
     
     // Se connecte à la base de données MySQL
     public DatabaseBean()
             throws ClassNotFoundException, InstantiationException,
-            IllegalAccessException, SQLException
+            IllegalAccessException, SQLException, IOException
     {   
+        prop = new Properties();
+        prop.load(new FileInputStream("ferryinpres.properties"));
+        
         Class.forName("com.mysql.jdbc.Driver").newInstance();
-        String url = "jdbc:mysql://"+Config.MYSQL_HOST+"/ferryinpres";
+        String url = "jdbc:mysql://"+prop.getProperty("MYSQL_HOST")+"/ferryinpres";
         this._conn = DriverManager.getConnection(url, "ferryinpres", "pass");
     }
     

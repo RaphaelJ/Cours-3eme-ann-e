@@ -7,6 +7,7 @@ package company_server;
 import data_bean.DatabaseBean;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,16 +22,23 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+
 /**
  *
  * @author rapha
  */
 public class MobileCompanyServer {
+    public static Properties prop;
     public static void main(String[] args)
             throws IOException, ClassNotFoundException, InstantiationException,
             IllegalAccessException, SQLException
     {
-        ServerSocket server_sock = new ServerSocket(Config.MOBILE_COMPANY_PORT);
+        prop = new Properties();
+        prop.load(new FileInputStream("ferryinpres.properties"));
+        
+        ServerSocket server_sock = new ServerSocket(
+            Integer.parseInt(prop.getProperty("MOBILE_COMPANY_PORT"))
+        );
         
         DatabaseBean data = new DatabaseBean();
         System.out.println("Connecté à la base de données");
@@ -44,7 +52,6 @@ public class MobileCompanyServer {
         }
     }
 }
-
 class MobileServerThread extends Thread {
     private Socket _sock;
     private DatabaseBean _data;
@@ -161,15 +168,19 @@ class MobileServerThread extends Thread {
     private void envoiPoliceEmail(String immatriculation, String emplacement, String modele) {
         try {
             Properties property = System.getProperties();
-            property.put("mail.smtp.host", Config.SMTP_SERVER);
+            property.put("mail.smtp.host", MobileCompanyServer.prop.getProperty("MAIL_SMTP"));
             property.put("file.encoding", "iso-8859-1");
             Session smtpSession = Session.getDefaultInstance(property, null);
             
             MimeMessage msg = new MimeMessage(smtpSession);
-            msg.setFrom(new InternetAddress(Config.EMAIL_SERVICE));
+            msg.setFrom(new InternetAddress(
+                    MobileCompanyServer.prop.getProperty("EMAIL_SERVICE")
+            ));
             msg.setRecipient(
                 Message.RecipientType.TO,
-                new InternetAddress(Config.EMAIL_POLICE)
+                new InternetAddress(
+                    MobileCompanyServer.prop.getProperty("EMAIL_POLICE")
+               )
             );
             
             msg.setSubject("Nouvelle constatation d'infraction");

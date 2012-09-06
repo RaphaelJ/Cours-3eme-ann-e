@@ -4,6 +4,7 @@
  */
 package information_server;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -16,9 +17,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Properties;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.jdbc.JDBCCategoryDataset;
 import org.jfree.data.jdbc.JDBCPieDataset;
 import org.jfree.data.jdbc.JDBCXYDataset;
@@ -29,15 +32,22 @@ import org.jfree.data.statistics.Statistics;
  * @author rapha
  */
 public class FreetaxStatsServer {
+    private static Properties prop;
     public static void main(String args[])
             throws IOException, ClassNotFoundException, SQLException,
             InstantiationException, IllegalAccessException
     {
+        prop = new Properties();
+        prop.load(new FileInputStream("ferryinpres.properties"));
+        
+        String MYSQL_HOST = prop.getProperty("MYSQL_HOST");
+        int FREETAXSTATS_PORT = Integer.parseInt(prop.getProperty("FREETAXSTATS_PORT"));
+        
         Class.forName("com.mysql.jdbc.Driver").newInstance();
-        String url = "jdbc:mysql://"+Config.MYSQL_HOST+"/freetax";
+        String url = "jdbc:mysql://"+ MYSQL_HOST +"/freetax";
         Connection con = DriverManager.getConnection(url, "ferryinpres", "pass");
         
-        ServerSocket server_sock = new ServerSocket(Config.FREETAXSTATS_PORT);
+        ServerSocket server_sock = new ServerSocket(FREETAXSTATS_PORT);
         
         for (;;) {
             System.out.println("En attente d'un nouveau client");
@@ -53,7 +63,6 @@ public class FreetaxStatsServer {
             
             // Vérifie les identifiants de connexion
             FreetaxStatsLogin login = (FreetaxStatsLogin) obj_in.readObject();
-            login.getLogin();
             
             System.out.println("Pass: "+ login.getHashedPassword());
             
@@ -245,16 +254,18 @@ public class FreetaxStatsServer {
     private static JFreeChart graphHistogrammeCompare(Connection con,
             FreetaxStatsGraph query) throws SQLException
     {
-        String instruc;
+        PreparedStatement instruc;
 
         if (query.getSemaine() != null) {
             // Recherche par semaine
-            instruc = 
-                "SELECT marque, SUM(count) AS quantite " +
+            instruc = con.prepareStatement(
+                "SELECT jour, marque, SUM(count) AS quantite " +
                 "FROM stats_ventes_marque " +
-                "WHERE categorie = '"+ query.getCategorie() +"' " +
-                "  AND semaine = " + query.getSemaine() + " " +
-                "GROUP BY marque";
+                "WHERE categorie = ? " +
+                "  AND semaine = ? " +
+                "GROUP BY jour, marque");
+            
+            instruc.setInt(2, query.getSemaine().intValue());
         } else {
             // Recherche par mois
             if (query.getMois() == null) {
@@ -262,16 +273,26 @@ public class FreetaxStatsServer {
                 query.setMois(moisPrec());
             }
 
-            instruc = 
-                "SELECT marque, SUM(count) AS quantite " +
+            instruc = con.prepareStatement(
+                "SELECT jour, marque, SUM(count) AS quantite " +
                 "FROM stats_ventes_marque " +
-                "WHERE categorie = '"+ query.getCategorie() +"' " +
-                "  AND mois = " + query.getMois() + " " +
-                "GROUP BY marque";
+                "WHERE categorie = ? " +
+                "  AND mois = ? " +
+                "GROUP BY jour, marque");
+            
+            instruc.setInt(2, query.getMois().intValue());
         }
         
-        JDBCCategoryDataset ds = new JDBCCategoryDataset(con);
-        ds.executeQuery(instruc);
+        instruc.setString(1, query.getCategorie());
+        
+        DefaultCategoryDataset ds = new DefaultCategoryDataset();
+        
+        ResultSet rs = instruc.executeQuery();while (rs.next()) {
+            ds.addValue(
+                    rs.getInt("quantite"), rs.getString("marque"),
+                    rs.getString("jour")
+            );
+        }
 
         return ChartFactory.createBarChart(
             "Vente de produits par marque", "Marque", "Ventes", ds,
@@ -344,8 +365,8 @@ public class FreetaxStatsServer {
 
         JDBCXYDataset ds = new JDBCXYDataset(con);
         ds.executeQuery(instruc);
-
-        return ChartFactory.createXYLineChart(
+        
+        return ChartFactory.createScatterPlot(
             "Vente de produits par age", "Age", "Ventes", ds,
             PlotOrientation.VERTICAL, true, true, true
         );

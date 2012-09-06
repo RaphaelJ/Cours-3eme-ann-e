@@ -21,6 +21,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocket;
@@ -33,6 +34,7 @@ import javax.net.ssl.TrustManagerFactory;
  * @author rapha
  */
 public class InternationalServer {
+    private static Properties prop;
     public static void main(String[] args)
             throws KeyStoreException, FileNotFoundException, IOException,
             NoSuchAlgorithmException, CertificateException,
@@ -40,8 +42,13 @@ public class InternationalServer {
             ClassNotFoundException, InstantiationException,
             IllegalAccessException, SQLException
     {
+        prop = new Properties();
+        prop.load(new FileInputStream("ferryinpres.properties"));
+        
+        String MYSQL_HOST = prop.getProperty("MYSQL_HOST");
+        
         Class.forName("com.mysql.jdbc.Driver").newInstance();
-        String url = "jdbc:mysql://"+Config.MYSQL_HOST+"/frontier";
+        String url = "jdbc:mysql://"+MYSQL_HOST+"/frontier";
         Connection con = DriverManager.getConnection(url, "ferryinpres", "pass");
         
         KeyStore store = KeyStore.getInstance("JKS");
@@ -62,7 +69,7 @@ public class InternationalServer {
         SSLServerSocketFactory factory = context.getServerSocketFactory();
         
         SSLServerSocket server_sock = (SSLServerSocket) factory.createServerSocket(
-            Config.INTERNATIONAL_PORT
+            Integer.parseInt(prop.getProperty("INTERNATIONAL_PORT"))
         );
                  
         for (;;) {

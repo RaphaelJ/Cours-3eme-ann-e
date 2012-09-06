@@ -54,58 +54,89 @@ public class LireMessage extends javax.swing.JDialog {
         this.emetteurLabel.setText(msg.getFrom()[0].toString());
         this.sujetLabel.setText(msg.getSubject());
         
-        // Récupération du texte et des pièces jointes
-        Multipart parts = (Multipart) msg.getContent();
+        Object content = msg.getContent();
+        
+        if (content instanceof Multipart) { // Récupération du texte et des pièces jointes
+            Multipart parts = (Multipart) content;
 
-        for (int i = 0; i < parts.getCount(); i++) {
-            Part p = parts.getBodyPart(i);
-            
-            if (p.isMimeType("text/plain")) {
-                // Texte du message
-                
-                if (msg.getSubject().startsWith("FRONTIER_WANTED")) {
-                    // Texte crypté
-                    
-                    // Décode le message en Base64
-                    System.out.println("Base64: " + (String) p.getContent());
-                    BASE64Decoder decoder = new BASE64Decoder();
-                    byte[] crypted_bytes = decoder.decodeBuffer((String) p.getContent());
-                    
-                    // Décrypte le message
-                    byte[] bytes_message = this._decryptor.doFinal(crypted_bytes);
-                    System.out.println(bytes_message.length);
-                    ByteArrayInputStream bis = new ByteArrayInputStream(bytes_message);
-                    ObjectInput in = new ObjectInputStream(bis);   
-                    MessageCrypte obj_message = (MessageCrypte) in.readObject();
-                    
-                    // Vérifie le digest
-                    if (obj_message.getHash() == obj_message.getMessage().hashCode()) {
-                        // Message complet
-                        this.messagearea.setText(obj_message.getMessage());
+            for (int i = 0; i < parts.getCount(); i++) {
+                Part p = parts.getBodyPart(i);
+
+                if (p.isMimeType("text/plain")) {
+                    // Texte du message
+
+                    if (msg.getSubject().startsWith("FRONTIER_WANTED")) {
+                        // Texte crypté
+
+                        // Décode le message en Base64
+                        System.out.println("Base64: " + (String) p.getContent());
+                        BASE64Decoder decoder = new BASE64Decoder();
+                        byte[] crypted_bytes = decoder.decodeBuffer((String) p.getContent());
+
+                        // Décrypte le message
+                        byte[] bytes_message = this._decryptor.doFinal(crypted_bytes);
+                        System.out.println(bytes_message.length);
+                        ByteArrayInputStream bis = new ByteArrayInputStream(bytes_message);
+                        ObjectInput in = new ObjectInputStream(bis);   
+                        MessageCrypte obj_message = (MessageCrypte) in.readObject();
+
+                        // Vérifie le digest
+                        if (obj_message.getHash() == obj_message.getMessage().hashCode()) {
+                            // Message complet
+                            this.messagearea.setText(obj_message.getMessage());
+                        } else {
+                            this.messagearea.setText("Message corrompu !");
+                        }
+
                     } else {
-                        this.messagearea.setText("Message corrompu !");
+                         this.messagearea.setText((String) p.getContent());
                     }
-                            
-                } else {
-                     this.messagearea.setText((String) p.getContent());
+                } else if (p.getDisposition() != null
+                    && p.getDisposition().equalsIgnoreCase(Part.ATTACHMENT)) {
+                    // Enregistre la pièce jointe
+
+                    InputStream is = p.getInputStream();
+                    FileOutputStream fos = new FileOutputStream(
+                        new File("pieces_jointes", p.getFileName())
+                    );
+
+                    int c;
+                    while ((c = is.read()) != -1)
+                        fos.write(c);
+
+                    fos.close();
+
+                    DefaultListModel model = (DefaultListModel) this.piecesJointesList.getModel();
+                    model.addElement(p.getFileName());
                 }
-            } else if (p.getDisposition() != null
-                && p.getDisposition().equalsIgnoreCase(Part.ATTACHMENT)) {
-                // Enregistre la pièce jointe
-                
-                InputStream is = p.getInputStream();
-                FileOutputStream fos = new FileOutputStream(
-                    new File("pieces_jointes", p.getFileName())
-                );
-                
-                int c;
-                while ((c = is.read()) != -1)
-                    fos.write(c);
-                
-                fos.close();
-                        
-                DefaultListModel model = (DefaultListModel) this.piecesJointesList.getModel();
-                model.addElement(p.getFileName());
+            }
+        } else { // Message texte
+            // Texte du message
+            if (msg.getSubject().startsWith("FRONTIER_WANTED")) {
+                // Texte crypté
+
+                // Décode le message en Base64
+                System.out.println("Base64: " + (String) content);
+                BASE64Decoder decoder = new BASE64Decoder();
+                byte[] crypted_bytes = decoder.decodeBuffer((String) content);
+
+                // Décrypte le message
+                byte[] bytes_message = this._decryptor.doFinal(crypted_bytes);
+                System.out.println(bytes_message.length);
+                ByteArrayInputStream bis = new ByteArrayInputStream(bytes_message);
+                ObjectInput in = new ObjectInputStream(bis);   
+                MessageCrypte obj_message = (MessageCrypte) in.readObject();
+
+                // Vérifie le digest
+                if (obj_message.getHash() == obj_message.getMessage().hashCode()) {
+                    // Message complet
+                    this.messagearea.setText(obj_message.getMessage());
+                } else {
+                    this.messagearea.setText("Message corrompu !");
+                }
+
+            } else {
+                 this.messagearea.setText((String) content);
             }
         }
     }

@@ -8,18 +8,18 @@ object Forage {
     val ORACLE_PASS = "pass"
 
     // Un fait représente une source d'informations. Chaque fait peut être
-    // accédé via différentes vues.
+    // accédé via différentes dimensions.
     // i.e.: nombre de ventes.
     class Fait(
         val nom: String, val table: String, val champ: String,
-        val vues: Array[Vue]
+        val dimensions: Array[Dimension]
     )
-    // Chaque vue permet de spécifier un groupement (avec, éventuellement, 
+    // Chaque dimension permet de spécifier un groupement (avec, éventuellement, 
     // plusieurs niveaux de détail).
     // i.e.: groupement par date. 
-    class Vue(val nom: String, val details: Array[Detail])
-    // Permet de spécifier le détail d'une vue
-    // i.e.: détails par moispour une vue par date.
+    class Dimension(val nom: String, val details: Array[Detail])
+    // Permet de spécifier le détail d'une dimension
+    // i.e.: détails par moispour une dimension par date.
     class Detail(val nom: String, val champ: String)
     
     val connection = init_connexion()
@@ -54,34 +54,34 @@ object Forage {
         chaines.reduceLeft(_ + glue + _)
 
     // Permet d'effectuer un forage sur un fait en questionnant l'utilisateur 
-    // sur les vues à appliquer.
+    // sur les dimensions à appliquer.
     def forer(fait: Fait) {
-        // Demande les vues à activer
-        val vues = fait.vues.foldLeft(Nil: List[(Vue, Detail)])((acc, vue) => {
-            val config_vue = configurer_vue(vue)
-            if (config_vue != null)
-                (vue, config_vue) :: acc
-            else // Vue désactivée
+        // Demande les dimensions à activer
+        val dimensions = fait.dimensions.foldLeft(Nil: List[(Dimension, Detail)])((acc, dimension) => {
+            val config_dimension = configurer_dimension(dimension)
+            if (config_dimension != null)
+                (dimension, config_dimension) :: acc
+            else // Dimension désactivée
                 acc
         })
         
         // Affiche les résultats
-        executer_sql(construire_sql(fait, vues))
+        executer_sql(construire_sql(fait, dimensions))
     }
 
-    // Demande à l'utilisateur la configuration éventuelle d'une vue et retourne
+    // Demande à l'utilisateur la configuration éventuelle d'une dimension et retourne
     // le détail choisi.
-    def configurer_vue(vue: Vue) = {
-        println("Souhaitez-vous activer la vue « "+vue.nom+" » ? (O/N)")
+    def configurer_dimension(dimension: Dimension) = {
+        println("Souhaitez-vous activer la dimension « "+dimension.nom+" » ? (O/N)")
         
         val choix = Console.readChar()
         if (choix == 'O' || choix == 'o') 
-            configurer_details(vue.details)
+            configurer_details(dimension.details)
         else
             null 
     }
 
-    // Demande à l'utilisateur ne niveau de détail d'une vue
+    // Demande à l'utilisateur ne niveau de détail d'une dimension
     def configurer_details(details: Array[Detail]) = {
         if (details.length > 1) {
             println("Niveau de détail: ")
@@ -95,16 +95,16 @@ object Forage {
     }
 
     // Retourne la requête SQL avec les titres des champs retournés depuis la
-    // configuration du fait et de ses vues.
-    def construire_sql(fait: Fait, vues: List[(Vue, Detail)]) = {
+    // configuration du fait et de ses dimensions.
+    def construire_sql(fait: Fait, dimensions: List[(Dimension, Detail)]) = {
         val joindre_champs = joindre(_: Iterable[String], ", ")
         
-        // Retourne le titre et te champ de la vue
-        def champs_vue(vue: (Vue, Detail)) = {
-            if (vue._2.nom == null)
-                (vue._1.nom, vue._2.champ)
+        // Retourne le titre et te champ de la dimension
+        def champs_dimension(dimension: (Dimension, Detail)) = {
+            if (dimension._2.nom == null)
+                (dimension._1.nom, dimension._2.champ)
             else
-                (vue._1.nom+" ("+vue._2.nom+")", vue._2.champ)
+                (dimension._1.nom+" ("+dimension._2.nom+")", dimension._2.champ)
         }
 
         // Retourne les noms des champs dans la table
@@ -112,17 +112,17 @@ object Forage {
             colonnes.map(i => i._2)
         
         // (titre de la colonne, nom dans la table)
-        val colonnes_vues = vues map champs_vue
-        val colonnes = (fait.nom, fait.champ) :: colonnes_vues.toList
+        val colonnes_dimensions = dimensions map champs_dimension
+        val colonnes = (fait.nom, fait.champ) :: colonnes_dimensions.toList
 
         val group_by =
-            if (colonnes_vues.length > 0) 
-                "GROUP BY " + joindre_champs(champs(colonnes_vues))
+            if (colonnes_dimensions.length > 0) 
+                "GROUP BY " + joindre_champs(champs(colonnes_dimensions))
             else 
                 " "
         val order_by =
-            if (colonnes_vues.length > 0) 
-                "ORDER BY " + joindre_champs(champs(colonnes_vues))
+            if (colonnes_dimensions.length > 0) 
+                "ORDER BY " + joindre_champs(champs(colonnes_dimensions))
             else 
                 " "
         
@@ -159,28 +159,29 @@ object Forage {
     }
     
     def main(args: Array[String]) {
-        // Vues utilisées
-        val vue_media = new Vue(
+        // Dimensions utilisées
+        val dimension_media = new Dimension(
             "Média", Array(
                 new Detail("Type de média", "media_type"),
                 new Detail("EAN du média", "ean")
             )
         )
-        val vue_auteur = new Vue("Auteur", Array(new Detail(null, "auteur")))
-        val vue_site = new Vue("Site", Array(new Detail(null, "origine")))
-        val vue_date = new Vue("Date", Array(
+        val dimension_auteur = new Dimension("Auteur", Array(new Detail(null, "auteur")))
+        val dimension_site = new Dimension("Site", Array(new Detail(null, "origine")))
+        val dimension_date = new Dimension("Date", Array(
             new Detail("Année", "EXTRACT(YEAR FROM datetime)"),
             new Detail(
                 "Trimestre", 
                 "floor(EXTRACT(MONTH FROM datetime) / 3) + 1"
             ),
-            new Detail("Mois", "EXTRACT(MONTH FROM datetime)")
+            new Detail("Mois", "EXTRACT(MONTH FROM datetime)"),
+            new Detail("Jour", "EXTRACT(DAY FROM datetime)")
         ))
-        val vue_langue = new Vue("Langue", Array(new Detail(null, "langue")))
-        val vue_utilisateur = new Vue(
+        val dimension_langue = new Dimension("Langue", Array(new Detail(null, "langue")))
+        val dimension_utilisateur = new Dimension(
             "Utilisateur", Array(new Detail(null, "login"))
         ) 
-        val vue_commande = new Vue(
+        val dimension_commande = new Dimension(
             "Commande", Array(new Detail(null, "commande_id"))
         )
         
@@ -188,34 +189,34 @@ object Forage {
         val faits = Array(
             new Fait(
                 "Quantité de vente des médias", "vue_ventes", "SUM(quantite)",
-                Array(vue_media, vue_auteur, vue_date, vue_site)
+                Array(dimension_media, dimension_auteur, dimension_date, dimension_site)
             ),
             new Fait(
                 "Pourcentage des ventes des livres", "vue_ventes_livres",
                 "ROUND(SUM(quantite_livres) / SUM(quantite) * 100, 4)",
-                Array(vue_date, vue_site, vue_langue)
+                Array(dimension_date, dimension_site, dimension_langue)
             ),
             new Fait(
                 "Fréquence des nouveaux stocks", "vue_frequence_stocks",
-                "COUNT(*)", Array(vue_media, vue_date, vue_site)
+                "COUNT(*)", Array(dimension_media, dimension_date, dimension_site)
             ),
             new Fait(
                 "Commentaires apportés", "vue_commentaires_apportes",
                 "COUNT(*)", Array(
-                    vue_media, vue_date, vue_site, vue_utilisateur
+                    dimension_media, dimension_date, dimension_site, dimension_utilisateur
                 )
             ),
             new Fait(
                 "Quantité moyene d'article commandés",
                 "vue_ventes", "ROUND(AVG(quantite), 4)", Array(
-                    vue_media, vue_site, vue_commande
+                    dimension_media, dimension_site, dimension_commande
                 )
             ),
             new Fait(
                 "Proportion des ventes dans les listes d'envies",
                 "vue_ventes", "ROUND(SUM(dans_liste_envie) / COUNT(*), 4)",
                 Array(
-                    vue_media, vue_date, vue_site, vue_utilisateur
+                    dimension_media, dimension_date, dimension_site, dimension_utilisateur
                 )
             )
         )

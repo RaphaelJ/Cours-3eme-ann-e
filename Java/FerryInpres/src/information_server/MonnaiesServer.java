@@ -4,21 +4,30 @@
  */
 package information_server;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Properties;
 
 /**
  *
  * @author rapha
  */
 public class MonnaiesServer {
+    private static Properties prop;
+    
     public static void main(String args[])
             throws IOException, ClassNotFoundException
     {
-        ServerSocket server_sock = new ServerSocket(Config.MONNAIES_PORT);
+        prop = new Properties();
+        prop.load(new FileInputStream("ferryinpres.properties"));
+        
+        int MONNAIES_PORT = Integer.parseInt(prop.getProperty("MONNAIES_PORT"));
+        System.out.println(MONNAIES_PORT);
+        ServerSocket server_sock = new ServerSocket(MONNAIES_PORT);
         
         for (;;) {
             System.out.println("En attente d'un nouveau client");

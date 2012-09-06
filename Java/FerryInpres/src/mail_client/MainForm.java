@@ -297,18 +297,23 @@ private synchronized void listerMessages()
 
             public void run() {
                 try {
-//                    System.out.println("Utilisateur: ");
-//                    String utilisateur = readLine();
-                    String utilisateur = "javauxr";
-//                    System.out.println("Mot de passe: ");
-//                    String mot_de_passe = readLine();
-                    String mot_de_passe = "password";
+                    Properties prop = new Properties();
+                    prop.load(new FileInputStream("ferryinpres.properties"));
+                    
+////                    System.out.println("Utilisateur: ");
+////                    String utilisateur = readLine();
+//                    String utilisateur = prop.getProperty("MAIL_USER");
+////                    System.out.println("Mot de passe: ");
+////                    String mot_de_passe = readLine();
+//                    String mot_de_passe = prop.getProperty("MAIL_PASS");
                     
                     new MainForm(
                         //inxs.aileinfo
-                        "u2.wildness.loc", "u2.wildness.loc",
-                        utilisateur, mot_de_passe,
-                        utilisateur + "@u2.wildness.loc"
+                        prop.getProperty("MAIL_POP3"), 
+                        prop.getProperty("MAIL_SMTP"),
+                        prop.getProperty("MAIL_USER"), 
+                        prop.getProperty("MAIL_PASS"),
+                        prop.getProperty("MAIL_EMAIL")
                     ).setVisible(true);
                 } catch (Exception ex) {
                     Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -330,8 +335,7 @@ private synchronized void listerMessages()
             CertificateException, UnrecoverableKeyException,
             NoSuchPaddingException, InvalidKeyException
     {
-        KeyStore ks = null;
-        ks = KeyStore.getInstance("JCEKS");
+        KeyStore ks = KeyStore.getInstance("JCEKS");
         SecretKey key;
         try {          
             // Tente de charger une clé existante

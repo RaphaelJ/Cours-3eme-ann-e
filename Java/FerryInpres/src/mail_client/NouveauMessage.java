@@ -250,8 +250,6 @@ private void envoyerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             + this.sujetText.getText()
         );
         
-        Multipart parts = new MimeMultipart();
-        
         String message;
         // Crypte le message si FRONTIER_WANTED
         if (this.messageTypeCombo.getSelectedItem().equals("FRONTIER_WANTED")) {
@@ -281,22 +279,28 @@ private void envoyerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN
             // Ajout de la partie texte du message
             message = this.messageText.getText();
         }
+        
+        if (this._piecesJointes.size() > 0) { // Envoi multipart
+            Multipart parts = new MimeMultipart();
 
-        MimeBodyPart body = new MimeBodyPart();
-        body.setText(message);
-        parts.addBodyPart(body);
-        
-        // Ajout des pièces jointes
-        for (String path : this._piecesJointes) {
-            System.out.println("Piece jointe: " + path);
-            MimeBodyPart piece = new MimeBodyPart();
-            DataSource so = new FileDataSource(path);
-            piece.setDataHandler(new DataHandler(so));
-            piece.setFileName(new File(path).getName());
-            parts.addBodyPart(piece);
+            MimeBodyPart body = new MimeBodyPart();
+            body.setText(message);
+            parts.addBodyPart(body);
+
+            // Ajout des pièces jointes
+            for (String path : this._piecesJointes) {
+                System.out.println("Piece jointe: " + path);
+                MimeBodyPart piece = new MimeBodyPart();
+                DataSource so = new FileDataSource(path);
+                piece.setDataHandler(new DataHandler(so));
+                piece.setFileName(new File(path).getName());
+                parts.addBodyPart(piece);
+            }
+
+            msg.setContent(parts);
+        } else { // Texte simple
+            msg.setText(message);
         }
-        
-        msg.setContent(parts);
         
         Transport.send(msg);
         

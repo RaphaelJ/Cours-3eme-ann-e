@@ -1,6 +1,6 @@
 package information_client;
 
-import information_server.Config;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.Socket;
 import java.util.Calendar;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -34,8 +35,12 @@ import org.w3c.dom.Element;
 
 
 public class MainForm extends javax.swing.JFrame {
+    private final Properties prop;
     /** Creates new form MainForm */
     public MainForm() throws IOException {
+        prop = new Properties();
+        prop.load(new FileInputStream("ferryinpres.properties"));
+        
         initComponents();
         
         // Désactive les contrôles par défaut
@@ -306,7 +311,7 @@ private void envoieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         DOMImplementation domImpl = parser.getDOMImplementation();
 
         DocumentType type = domImpl.createDocumentType(
-            "demande_infos", null, "demande_infos.dtd"
+            "demande_infos", null, null //"demande_infos.dtd"
         );
         Document doc = domImpl.createDocument(null, "demande_infos", type);
         Element root = doc.getDocumentElement();
@@ -363,8 +368,11 @@ private void envoieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
             throws TransformerConfigurationException, TransformerException,
                    IOException, ClassNotFoundException
     {
+        String MAIN_SERVEUR = prop.getProperty("MAIN_SERVEUR");
+        int MAIN_PORT = Integer.parseInt(prop.getProperty("MAIN_PORT"));
+        
         // Se connecte au serveur
-        Socket sock = new Socket(Config.MAIN_SERVEUR, Config.MAIN_PORT);
+        Socket sock = new Socket(MAIN_SERVEUR, MAIN_PORT);
         InputStream sock_in = sock.getInputStream();
         OutputStream sock_out = sock.getOutputStream();
         
@@ -381,7 +389,9 @@ private void envoieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         
         // Envoie le vecteur de bytes
         ObjectOutputStream obj_out = new ObjectOutputStream(sock_out);
-        obj_out.writeObject(out.toString());
+        String xml_str = out.toString();
+        System.out.println(xml_str);
+        obj_out.writeObject(xml_str);
         sock_out.flush();
         
         try {

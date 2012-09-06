@@ -6,6 +6,7 @@ package information_server;
 
 import information_server.MeteoResponseProtocol.Temps;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -40,13 +41,20 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author rapha
  */
 public class MainServer {
+    public static Properties prop;
         
     public static void main(String args[])
             throws IOException, ParserConfigurationException, SAXException,
                    ClassNotFoundException, TransformerConfigurationException, 
                    TransformerException
     {
-        ServerSocket server_sock = new ServerSocket(Config.MAIN_PORT);
+        prop = new Properties();
+        prop.load(new FileInputStream("ferryinpres.properties"));
+        
+        int MAIN_PORT = Integer.parseInt(prop.getProperty("MAIN_PORT"));
+        System.out.println(MAIN_PORT);
+        
+        ServerSocket server_sock = new ServerSocket(MAIN_PORT);
         
         for (;;) {
             System.out.println("En attente d'un nouveau client");
@@ -59,7 +67,9 @@ public class MainServer {
             );
             
             try {
+                // Exception si le parsing ne réussit pas
                 SaxParsingHandler handler = parseDemande(in);
+                System.out.println("Demande pour le ferry " + handler.ferry + " reçue.");
                 TreeMap<String, Double> monnaies = demandeMonnaies(
                     handler.monnaies.toArray(new String[0])
                 );
@@ -71,7 +81,9 @@ public class MainServer {
                 );
                 String filename = exportXSLT(monnaies, temps, produits);
                 out.writeObject(filename);
-            } catch (Exception e) { }
+            } catch (Exception e) { 
+                System.err.println("Demande non valide.");
+            }
             
             sock.close();
         }
@@ -104,11 +116,14 @@ public class MainServer {
     private static TreeMap<String, Double> demandeMonnaies(String[] monnaies)
             throws IOException, ClassNotFoundException 
     {        
+        String MONNAIES_SERVEUR = prop.getProperty("MONNAIES_SERVEUR");
+        int MONNAIES_PORT = Integer.parseInt(prop.getProperty("MONNAIES_PORT"));
+        
         if (monnaies.length > 0) {
             System.out.println("Demande au serveur des monnaies");
             
             Socket monnaies_sock = new Socket(
-                Config.MONNAIES_SERVEUR, Config.MONNAIES_PORT
+                MONNAIES_SERVEUR, MONNAIES_PORT
             );
             ObjectInputStream monnaies_in = new ObjectInputStream(
                 monnaies_sock.getInputStream()
@@ -137,11 +152,14 @@ public class MainServer {
     private static TreeMap<Integer, Temps> demandeMeteo(Integer[] meteo_jours)
             throws IOException, ClassNotFoundException 
     {        
+        String METEO_SERVEUR = prop.getProperty("METEO_SERVEUR");
+        int METEO_PORT = Integer.parseInt(prop.getProperty("METEO_PORT"));
+        
         if (meteo_jours.length > 0) {
             System.out.println("Demande au serveur météo");
             
             Socket meteo_sock = new Socket(
-                Config.METEO_SERVEUR, Config.METEO_PORT
+                METEO_SERVEUR, METEO_PORT
             );
             ObjectInputStream meteo_in = new ObjectInputStream(
                 meteo_sock.getInputStream()
@@ -171,11 +189,14 @@ public class MainServer {
             boolean parfums, boolean tabacs)
             throws UnknownHostException, IOException, ClassNotFoundException
     {
+        String FREETAX_SERVEUR = prop.getProperty("FREETAX_SERVEUR");
+        int FREETAX_PORT = Integer.parseInt(prop.getProperty("FREETAX_PORT"));
+        
         if (alcools || parfums || tabacs) {
             System.out.println("Demande au serveur freetax");
             
             Socket freetax_sock = new Socket(
-                Config.FREETAX_SERVEUR, Config.FREETAX_PORT
+                FREETAX_SERVEUR, FREETAX_PORT
             );
             ObjectInputStream freetax_in = new ObjectInputStream(
                 freetax_sock.getInputStream()
@@ -212,6 +233,8 @@ public class MainServer {
             throws ParserConfigurationException,
             TransformerConfigurationException, TransformerException, IOException
     {
+        String TOMCAT = prop.getProperty("TOMCAT");
+        
         // Construit le document XML
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder parser = factory.newDocumentBuilder();
@@ -274,7 +297,7 @@ public class MainServer {
         // Utilise le hash comme nom de fichier
         String html_str = html_str_buffer.toString();
         File filename = new File(
-            new File(Config.TOMCAT),
+            new File(TOMCAT),
             String.valueOf(html_str.hashCode()) +".html"
         );
         FileWriter destFile = new FileWriter(filename);

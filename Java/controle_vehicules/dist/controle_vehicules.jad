@@ -1,5 +1,5 @@
 MIDlet-1: HelloMIDlet, ,hello.Main
-MIDlet-Jar-Size: 9164
+MIDlet-Jar-Size: 9152
 MIDlet-Jar-URL: controle_vehicules.jar
 MIDlet-Name: controle_vehicules
 MIDlet-Vendor: Vendor

@@ -5,6 +5,7 @@
 package identity_server;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -19,6 +20,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.util.Properties;
 import java.util.Random;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -35,16 +37,23 @@ import javax.crypto.spec.SecretKeySpec;
  * @author rapha
  */
 public class IdentityApplic {
+    private static Properties prop;
     public static void main(String[] args)
             throws UnknownHostException, IOException, ClassNotFoundException,
             NoSuchAlgorithmException, NoSuchPaddingException,
             IllegalBlockSizeException, BadPaddingException, InvalidKeyException
     {
+        prop = new Properties();
+        prop.load(new FileInputStream("ferryinpres.properties"));
+        
         Security.addProvider(
             new org.bouncycastle.jce.provider.BouncyCastleProvider()
         );
         
-        Socket sock = new Socket(Config.IDENTITY_SERVER, Config.IDENTITY_PORT);
+        Socket sock = new Socket(
+                prop.getProperty("IDENTITY_SERVER"), 
+                Integer.parseInt(prop.getProperty("IDENTITY_PORT"))
+        );
         ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
         

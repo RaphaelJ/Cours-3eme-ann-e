@@ -4,22 +4,31 @@
  */
 package information_server;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
+import java.util.Properties;
 
 /**
  *
  * @author rapha
  */
 public class FreetaxServer {
+    private static Properties prop;
     public static void main(String args[])
             throws IOException, ClassNotFoundException
-    {
-        ServerSocket server_sock = new ServerSocket(Config.FREETAX_PORT);
+    {        
+        prop = new Properties();
+        prop.load(new FileInputStream("ferryinpres.properties"));
+        
+        int FREETAX_PORT = Integer.parseInt(prop.getProperty("FREETAX_PORT"));
+        System.out.println(FREETAX_PORT);
+        
+        ServerSocket server_sock = new ServerSocket(FREETAX_PORT);
         
         for (;;) {
             System.out.println("En attente d'un nouveau client");

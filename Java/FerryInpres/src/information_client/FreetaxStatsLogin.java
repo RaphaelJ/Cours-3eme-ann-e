@@ -10,11 +10,12 @@
  */
 package information_client;
 
-import information_server.Config;
 import information_server.FreetaxStatsAck;
 import information_server.FreetaxStatsFail;
 import information_server.FreetaxStatsProtocol;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -22,6 +23,9 @@ import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Security;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bouncycastle.util.encoders.Base64;
 import org.bouncycastle.util.encoders.Base64Encoder;
 
@@ -30,8 +34,12 @@ import org.bouncycastle.util.encoders.Base64Encoder;
  * @author rapha
  */
 public class FreetaxStatsLogin extends javax.swing.JFrame {
+    private final Properties prop;
     /** Creates new form FreetaxStatsLogin */
-    public FreetaxStatsLogin() {
+    public FreetaxStatsLogin() throws IOException {
+        prop = new Properties();
+        prop.load(new FileInputStream("ferryinpres.properties"));
+        
         Security.addProvider(
             new org.bouncycastle.jce.provider.BouncyCastleProvider()
         );
@@ -149,9 +157,11 @@ private String hashedPassword()
    
 private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
     try {
+        int FREETAXSTATS_PORT = Integer.parseInt(prop.getProperty("FREETAXSTATS_PORT"));
+        
         // Tente de se connecter
         Socket sock = new Socket(
-            this.serveurText.getText(),Config.FREETAXSTATS_PORT
+            this.serveurText.getText(), FREETAXSTATS_PORT
         );
         ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
@@ -214,7 +224,11 @@ private void serveurTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                new FreetaxStatsLogin().setVisible(true);
+                try {
+                    new FreetaxStatsLogin().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(FreetaxStatsLogin.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

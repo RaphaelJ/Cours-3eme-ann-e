@@ -27,6 +27,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -43,25 +44,33 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
 
+
 /**
  *
  * @author rapha
  */
 public class IdentityServer {
-    
+    public static Properties prop;
     
     public static void main(String[] args)
             throws IOException, ClassNotFoundException, InstantiationException,
             IllegalAccessException, SQLException
     {
+        prop = new Properties();
+        prop.load(new FileInputStream("ferryinpres.properties"));
+        
+        String MYSQL_HOST = prop.getProperty("MYSQL_HOST");
+        
         Security.addProvider(
             new org.bouncycastle.jce.provider.BouncyCastleProvider()
         );
         
-        ServerSocket server_sock = new ServerSocket(Config.IDENTITY_PORT);
+        ServerSocket server_sock = new ServerSocket(
+            Integer.parseInt(prop.getProperty("IDENTITY_PORT"))
+        );
         
         Class.forName("com.mysql.jdbc.Driver").newInstance();
-        String url = "jdbc:mysql://"+Config.MYSQL_HOST+"/frontier";
+        String url = "jdbc:mysql://"+MYSQL_HOST+"/frontier";
         Connection con = DriverManager.getConnection(url, "ferryinpres", "pass");
         
         ExecutorService pool = Executors.newFixedThreadPool(12);
@@ -76,7 +85,6 @@ public class IdentityServer {
     }
     private Connection _conn;
 }
-
 class ServerThread implements Runnable {
     private Socket _sock;
     private Connection _con;
@@ -252,7 +260,10 @@ class ServerThread implements Runnable {
                 SSLSocketFactory factory = context.getSocketFactory();
                 
                 SSLSocket sock = (SSLSocket) factory.createSocket(
-                    Config.INTERNATIONAL_SERVER, Config.INTERNATIONAL_PORT 
+                    IdentityServer.prop.getProperty("INTERNATIONAL_SERVER"),
+                    Integer.parseInt(
+                        IdentityServer.prop.getProperty("INTERNATIONAL_PORT")
+                    )
                 );
                 
                 ObjectInputStream ssl_in = new ObjectInputStream(

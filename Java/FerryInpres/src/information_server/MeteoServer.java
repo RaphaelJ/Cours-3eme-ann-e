@@ -4,17 +4,26 @@
  */
 package information_server;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Properties;
 
 public class MeteoServer {    
+    private static Properties prop;
+    
     public static void main(String args[])
             throws IOException, ClassNotFoundException
     {
-        ServerSocket server_sock = new ServerSocket(Config.METEO_PORT);
+        prop = new Properties();
+        prop.load(new FileInputStream("ferryinpres.properties"));
+        int METEO_PORT = Integer.parseInt(prop.getProperty("METEO_PORT"));
+        System.out.println(METEO_PORT);
+        
+        ServerSocket server_sock = new ServerSocket(METEO_PORT);
         
         for (;;) {
             System.out.println("En attente d'un nouveau client");
