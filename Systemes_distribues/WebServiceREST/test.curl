@@ -1,0 +1,17 @@
+-- Liste des vols entre deux aeroports
+curl -i -H "Accept: application/xml" http://localhost:8080/WebServiceREST/resources/webservicerest.vol/1/2
+
+-- Liste des vols entre deux aeroports avec le status
+curl -i -H "Accept: application/xml" http://localhost:8080/WebServiceREST/resources/webservicerest.vol/1/2/status?landed=1
+curl -i -H "Accept: application/xml" http://localhost:8080/WebServiceREST/resources/webservicerest.vol/1/2/status?landed=0
+curl -i -H "Accept: application/json" http://localhost:8080/WebServiceREST/resources/webservicerest.vol/1/2/status?landed=1
+curl -i -H "Accept: application/json" http://localhost:8080/WebServiceREST/resources/webservicerest.vol/1/2/status?landed=0
+
+-- Modifier le status d'un vol
+curl -i -H "Accept: application/jX PUT -i -H "Accept: application/json" http://localhost:8080/WebServiceREST/resources/webservicerest.vol/1/status/1
+
+-- Obtenir les informations sur un vol
+curl -i -H "Accept: application/xml" http://localhost:8080/WebServiceREST/resources/webservicerest.vol/1
+
+-- Supprimer un vols
+curl -X DELETE -i -H "Accept: application/xml" http://localhost:8080/WebServiceREST/resources/webservicerest.vol/4
